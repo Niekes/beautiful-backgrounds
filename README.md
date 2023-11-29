@@ -4,9 +4,9 @@ The "Beautiful Backgrounds" library offers a collection of customizable web comp
 
 ## Features
 
-- **Multiple Background Components**: A variety of background components, each offering unique visual effects.
-- **Customizable and Interactive**: Each component comes with customizable properties to suit different design needs.
-- **Responsive and Efficient**: Components are responsive to screen size changes and optimized for performance.
+-   **Multiple Background Components**: A variety of background components, each offering unique visual effects.
+-   **Customizable and Interactive**: Each component comes with customizable properties to suit different design needs.
+-   **Responsive and Efficient**: Components are responsive to screen size changes and optimized for performance.
 
 ## Installation
 
@@ -41,16 +41,16 @@ An animated star field background component.
 
 #### Attributes for bb-star-field
 
-- ´data-num-stars´: Number of stars to be rendered.
-- ´data-star-size-min´: Minimum size of a star.
-- ´data-star-size-max´: Maximum size of a star.
-- ´data-star-speed-min´: Minimum speed of a star.
-- ´data-star-speed-max´: Maximum speed of a star.
-- ´data-star-color-hue-start´: Starting hue for star color.
-- ´data-star-color-hue-end´: Ending hue for star color.
-- ´data-orbit-radius-min´: Minimum radius for star orbit.
-- ´data-orbit-radius-max´: Maximum radius for star orbit.
-- ´data-star-lifespan-min´: Minimum lifespan of a star in milliseconds.
-- ´data-star-lifespan-max´: Maximum lifespan of a star in milliseconds.
+-   `data-num-stars`: Number of stars to be rendered.
+-   `data-star-size-min`: Minimum size of a star.
+-   `data-star-size-max`: Maximum size of a star.
+-   `data-star-speed-min`: Minimum speed of a star.
+-   `data-star-speed-max`: Maximum speed of a star.
+-   `data-star-color-hue-start`: Starting hue for star color.
+-   `data-star-color-hue-end`: Ending hue for star color.
+-   `data-orbit-radius-min`: Minimum radius for star orbit.
+-   `data-orbit-radius-max`: Maximum radius for star orbit.
+-   `data-star-lifespan-min`: Minimum lifespan of a star in milliseconds.
+-   `data-star-lifespan-max`: Maximum lifespan of a star in milliseconds.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)
