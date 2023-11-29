@@ -14,13 +14,9 @@ To include "Beautiful Backgrounds" in your project, add the necessary JavaScript
 
 ## Usage
 
-The library currently includes the following components:
-
-### bb-star-field
-
-An animated star field background component.
-
-#### Example Usage
+´´´js
+import { BbStarField } from 'beautiful-backgrounds';
+´´´
 
 ```html
 <bb-star-field
