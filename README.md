@@ -14,9 +14,9 @@ To include "Beautiful Backgrounds" in your project, add the necessary JavaScript
 
 ## Usage
 
-´´´js
+```js
 import { BbStarField } from 'beautiful-backgrounds';
-´´´
+```
 
 ```html
 <bb-star-field
