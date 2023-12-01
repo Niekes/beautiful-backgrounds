@@ -15,12 +15,12 @@ To include "Beautiful Backgrounds" in your project, add the necessary JavaScript
 ## Usage
 
 ```js
-import { BbStarField } from 'beautiful-backgrounds';
+import { BbStarTrail } from 'beautiful-backgrounds';
 ```
 
 ```html
-<bb-star-field
-    class="bb-star-field"
+<bb-star-trail
+    class="bb-star-trail"
     data-num-stars="567"
     data-star-size-min="0.1"
     data-star-size-max="1.5"
@@ -32,10 +32,12 @@ import { BbStarField } from 'beautiful-backgrounds';
     data-orbit-radius-max="300"
     data-star-lifespan-min="1000"
     data-star-lifespan-max="50000"
-></bb-star-field>
+    data-width="500"
+    data-height="500"
+></bb-star-trail>
 ```
 
-#### Attributes for bb-star-field
+#### Attributes for bb-star-trail
 
 -   `data-num-stars`: Number of stars to be rendered.
 -   `data-star-size-min`: Minimum size of a star.
@@ -44,9 +46,11 @@ import { BbStarField } from 'beautiful-backgrounds';
 -   `data-star-speed-max`: Maximum speed of a star.
 -   `data-star-color-hue-start`: Starting hue for star color.
 -   `data-star-color-hue-end`: Ending hue for star color.
--   `data-orbit-radius-min`: Minimum radius for star orbit.
--   `data-orbit-radius-max`: Maximum radius for star orbit.
+-   `data-radius-min`: Minimum radius for star orbit.
+-   `data-radius-max`: Maximum radius for star orbit.
 -   `data-star-lifespan-min`: Minimum lifespan of a star in milliseconds.
 -   `data-star-lifespan-max`: Maximum lifespan of a star in milliseconds.
+-   `data-width`: Width of the star trail component, remove to fit the size of the container
+-   `data-height`: height of the star trail component, remove to fit the size of the container
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)

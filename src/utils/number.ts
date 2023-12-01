@@ -9,7 +9,7 @@ export function getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export function interpolate(
+export function interpolateLinear(
     value: number,
     domainStart: number,
     domainEnd: number,
@@ -24,5 +24,6 @@ export function interpolate(
     const normalized = (value - domainStart) / (domainEnd - domainStart);
 
     // Scale the normalized value to the range and return it
+    // The output is always between rangeStart and rangeEnd,
     return normalized * (rangeEnd - rangeStart) + rangeStart;
 }

@@ -1,1 +1,1 @@
-export { BbStarField } from './components/StarField';
+export { BbStarTrail } from './components/StarTrail';

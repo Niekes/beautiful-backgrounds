@@ -2,9 +2,8 @@
     "name": "beautiful-backgrounds",
     "version": "0.0.1",
     "keywords": [
-        "d3",
         "canvas",
-        "animatioin",
+        "animation",
         "ambient",
         "background",
         "typescript",
@@ -27,8 +26,8 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "clean": "rm -rf dist/components dist/utils/ && rm -f dist/index.js dist/index.d.ts",
-        "build": "npm run clean && npx tsc",
+        "clean": "rm -rf dist",
+        "build": "npm run clean && npx tsc && rollup -c",
         "watch": "npm run clean && npx tsc --watch",
         "release": "npm run clean && npm run build && git push --follow-tags && npm publish"
     },
@@ -36,6 +35,8 @@
         "dist/"
     ],
     "devDependencies": {
+        "@rollup/plugin-terser": "^0.4.4",
+        "rollup": "^4.6.1",
         "typescript": "5.3.2"
     }
 }
