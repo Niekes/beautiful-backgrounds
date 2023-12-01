@@ -3,7 +3,7 @@ import Particle from './Particle';
 import { getRandomFloat, interpolateLinear } from '../utils/number';
 import { randomColor } from '../utils/color';
 
-export class BbStarTrail extends BB {
+export class bbStarTrail extends BB {
     private starSizeMin: number;
     private starSizeMax: number;
 
@@ -133,5 +133,5 @@ export class BbStarTrail extends BB {
 }
 
 if (!window.customElements.get('bb-star-trail')) {
-    window.customElements.define('bb-star-trail', BbStarTrail);
+    window.customElements.define('bb-star-trail', bbStarTrail);
 }
