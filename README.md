@@ -12,11 +12,11 @@ The "Beautiful Backgrounds" library offers a collection of customizable web comp
 
 ## Installation
 
+Using [`npm`][npm]:
+
 ```sh
 npm i beautiful-backgrounds --save
 ```
-
-In Deno with [`esm.sh`][esmsh]:
 
 ```js
 import { BbStarTrail } from 'beautiful-backgrounds';
@@ -26,19 +26,16 @@ In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-    import { BbStarTrail } from 'https://esm.sh/beautiful-backgrounds'
+    import { BbStarTrail } from 'https://esm.sh/beautiful-backgrounds';
 </script>
 ```
 
 ## Usage
 
-```js
-import { BbStarTrail } from 'beautiful-backgrounds';
-```
+### Star Trail
 
 ```html
 <bb-star-trail
-    class="bb-star-trail"
     data-num-stars="567"
     data-star-size-min="0.1"
     data-star-size-max="1.5"
@@ -71,9 +68,30 @@ import { BbStarTrail } from 'beautiful-backgrounds';
 -   `data-width`: Width of the star trail component, remove to fit the size of the container
 -   `data-height`: height of the star trail component, remove to fit the size of the container
 
+### Digital Rain
+
+```html
+<bb-digital-rain
+    data-characteras="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    data-font-size="16"
+    data-font-color-hue-start="#0F0"
+    data-font-color-hue-end="#0F0"
+    data-speed="1"
+></bb-star-trail>
+```
+
+#### Attributes for bb-digital-rain
+
+-   `data-characters`: Sets the characters for the digital rain effect.
+-   `data-font-size`: Defines the font size of the falling characters.
+-   `data-font-color-hue-start`: Specifies the starting color hue for the rain.
+-   `data-font-color-hue-end`: Sets the ending color hue for the rain.
+-   `data-font-speed`: Controls the falling speed of the digital rain.
+
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)
 
 <!-- Links -->
 
 [esmsh]: https://esm.sh
+[npm]: https://www.npmjs.com/package/beautiful-backgrounds
 [examples]: https://codepen.io/collection/aMPozo
