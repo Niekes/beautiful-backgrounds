@@ -1,5 +1,7 @@
 # Beautiful Backgrounds
 
+[![Build][build-badge]][build]
+
 The "Beautiful Backgrounds" library offers a collection of customizable web components designed to enhance web pages with visually appealing animated backgrounds. Easy to integrate and use, these components are perfect for adding dynamic and interactive elements to your web applications.
 
 [EXAMPLES][examples]
@@ -92,6 +94,12 @@ In browsers with [`esm.sh`][esmsh]:
 
 <!-- Links -->
 
+[build-badge]: https://github.com/niekes/beautiful-backgrounds/workflows/main/badge.svg
+
+[build]: https://github.com/niekes/beautiful-backgrounds/actions
+
 [esmsh]: https://esm.sh
+
 [npm]: https://www.npmjs.com/package/beautiful-backgrounds
+
 [examples]: https://codepen.io/collection/aMPozo
