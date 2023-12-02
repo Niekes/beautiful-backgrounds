@@ -61,14 +61,19 @@ In browsers with [`esm.sh`][esmsh]:
 -   `data-star-size-max`: Maximum size of a star.
 -   `data-star-speed-min`: Minimum speed of a star.
 -   `data-star-speed-max`: Maximum speed of a star.
--   `data-star-color-hue-start`: Starting hue for star color.
--   `data-star-color-hue-end`: Ending hue for star color.
+-   `data-star-color-hue-start`: Starting hue for star color. Should be a value between 0 and 360.
+-   `data-star-color-hue-end`: Ending hue for star color. Should be a value between 0 and 360.
+-   `data-star-color-saturation-start`: Specifies the starting color saturation for star color. Should be a value between 0 and 100.
+-   `data-star-color-saturation-start`: Specifies the ending color saturation for star color. Should be a value between 0 and 100.
+-   `data-star-color-lightness-start`: Specifies the starting color lightness for star color. Should be a value between 0 and 100.
+-   `data-star-color-lightness-start`: Specifies the ending color lightness for star color. Should be a value between 0 and 100.
 -   `data-radius-min`: Minimum radius for star orbit.
 -   `data-radius-max`: Maximum radius for star orbit.
 -   `data-star-lifespan-min`: Minimum lifespan of a star in milliseconds.
 -   `data-star-lifespan-max`: Maximum lifespan of a star in milliseconds.
 -   `data-width`: Width of the star trail component, remove to fit the size of the container
 -   `data-height`: height of the star trail component, remove to fit the size of the container
+-   `data-background-color`: Background color of the canvas element
 
 ### Digital Rain
 
@@ -86,9 +91,14 @@ In browsers with [`esm.sh`][esmsh]:
 
 -   `data-characters`: Sets the characters for the digital rain effect.
 -   `data-font-size`: Defines the font size of the falling characters.
--   `data-font-color-hue-start`: Specifies the starting color hue for the rain.
--   `data-font-color-hue-end`: Sets the ending color hue for the rain.
+-   `data-font-color-hue-start`: Specifies the starting color hue for the rain. Should be a value between 0 and 360.
+-   `data-font-color-hue-end`: Sets the ending color hue for the rain. Should be a value between 0 and 360.
+-   `data-font-color-saturation-start`: Specifies the starting color saturation for the rain. Should be a value between 0 and 100.
+-   `data-font-color-saturation-start`: Specifies the ending color saturation for the rain. Should be a value between 0 and 100.
+-   `data-font-color-lightness-start`: Specifies the starting color lightness for the rain. Should be a value between 0 and 100.
+-   `data-font-color-lightness-start`: Specifies the ending color lightness for the rain. Should be a value between 0 and 100.
 -   `data-speed`: Controls the falling speed of the digital rain.
+-   `data-background-color`: Background color of the canvas element
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)
 

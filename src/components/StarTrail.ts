@@ -14,6 +14,10 @@ export class BbStarTrail extends BB {
 
     public starColorHueStart: number;
     public starColorHueEnd: number;
+    public starColorSaturationStart: number;
+    public starColorSaturationEnd: number;
+    public starColorLightnessStart: number;
+    public starColorLightnessEnd: number;
 
     public starRadiusMin: number;
     public starRadiusMax: number;
@@ -37,6 +41,10 @@ export class BbStarTrail extends BB {
         'data-star-speed-max',
         'data-star-color-hue-start',
         'data-star-color-hue-end',
+        'data-star-color-saturation-start',
+        'data-star-color-saturation-end',
+        'data-star-color-lightness-start',
+        'data-star-color-lightness-end',
         'data-star-radius-min',
         'data-star-radius-max',
         'data-star-lifespan-min',
@@ -59,6 +67,10 @@ export class BbStarTrail extends BB {
 
         this.starColorHueStart = 30;
         this.starColorHueEnd = 75;
+        this.starColorSaturationStart = 100;
+        this.starColorSaturationEnd = 100;
+        this.starColorLightnessStart = 50;
+        this.starColorLightnessEnd = 50;
 
         this.starRadiusMin = 1;
         this.starRadiusMax = 100;
@@ -126,7 +138,11 @@ export class BbStarTrail extends BB {
             interpolateLinear(this.starSpeedMax, -1, 1, -0.04, 0.04)
         );
         const lifespan = getRandomFloat(this.starLifespanMin, this.starLifespanMax);
-        const color = randomColor([this.starColorHueStart, this.starColorHueEnd]);
+        const color = randomColor(
+            [this.starColorHueStart, this.starColorHueEnd],
+            [this.starColorSaturationStart, this.starColorSaturationEnd],
+            [this.starColorLightnessStart, this.starColorLightnessEnd]
+        );
         const angle = getRandomFloat(0, Math.PI * 2);
 
         const radiusRange = this.starRadiusMax - this.starRadiusMin;

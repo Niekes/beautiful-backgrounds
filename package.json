@@ -1,6 +1,6 @@
 {
     "name": "beautiful-backgrounds",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "keywords": [
         "canvas",
         "animation",
@@ -21,7 +21,7 @@
     ],
     "author": "Niekes (https://niekes.com)",
     "license": "BSD-3-Clause",
-    "description": "A collection of customizable web components for creating dynamic, animated backgrounds, featuring a variety of effects including a star field.",
+    "description": "A collection of customizable web components for creating dynamic, animated backgrounds, featuring a variety of effects including a star field and a digital rain. ",
     "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

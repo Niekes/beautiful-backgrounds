@@ -1,10 +1,15 @@
 import BB from './BeautifulBackground';
-
+import { randomColor } from '../utils/color';
 export class BbDigitalRain extends BB {
     public backgroundColor: string;
 
     public fontSize: number;
-    public fontColor: string;
+    public fontColorHueStart: number;
+    public fontColorHueEnd: number;
+    public fontColorSaturationStart: number;
+    public fontColorSaturationEnd: number;
+    public fontColorLightnessStart: number;
+    public fontColorLightnessEnd: number;
     public columns: number;
     public speed: number;
     public randomness: number;
@@ -23,6 +28,10 @@ export class BbDigitalRain extends BB {
         'data-font-size',
         'data-font-color-hue-start',
         'data-font-color-hue-end',
+        'data-font-color-saturation-start',
+        'data-font-color-saturation-end',
+        'data-font-color-lightness-start',
+        'data-font-color-lightness-end',
         'data-background-color'
     ];
 
@@ -33,11 +42,17 @@ export class BbDigitalRain extends BB {
 
         this.backgroundColor = '0, 0, 0';
         this.fontSize = 24;
-        this.fontColor = '#0F0';
+        this.fontColorHueStart = 60;
+        this.fontColorHueEnd = 150;
+        this.fontColorSaturationStart = 90;
+        this.fontColorSaturationEnd = 100;
+        this.fontColorLightnessStart = 50;
+        this.fontColorLightnessEnd = 50;
         this.speed = 2;
         this.randomness = 0.9;
         this.trailOpacity = 0.1;
-        this.characters = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ13579ｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝZ:・."¦=*+-<>|ﾘç';
+        this.characters =
+            'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ13579ｦｲｸｺｿﾁΦﾄﾉﾌﾔﾖﾙﾚﾛﾝZ:・."¦=*+-<>|ﾘçδ╘';
     }
 
     protected connectedCallback(): void {
@@ -72,7 +87,13 @@ export class BbDigitalRain extends BB {
                     const text = this.characters.charAt(
                         Math.floor(Math.random() * this.characters.length)
                     );
-                    this.ctx.fillStyle = this.fontColor;
+
+                    this.ctx.fillStyle = randomColor(
+                        [this.fontColorHueStart, this.fontColorHueEnd],
+                        [this.fontColorSaturationStart, this.fontColorSaturationEnd],
+                        [this.fontColorLightnessStart, this.fontColorLightnessEnd]
+                    );
+
                     this.ctx.fillText(
                         text,
                         i * this.fontSize,
