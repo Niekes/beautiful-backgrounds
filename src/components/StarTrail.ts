@@ -4,22 +4,22 @@ import { getRandomFloat, interpolateLinear } from '../utils/number';
 import { randomColor } from '../utils/color';
 
 export class BbStarTrail extends BB {
-    private starSizeMin: number;
-    private starSizeMax: number;
+    public starSizeMin: number;
+    public starSizeMax: number;
 
-    private starSpeedMin: number;
-    private starSpeedMax: number;
+    public starSpeedMin: number;
+    public starSpeedMax: number;
 
-    private starColorHueStart: number;
-    private starColorHueEnd: number;
+    public starColorHueStart: number;
+    public starColorHueEnd: number;
 
-    private starRadiusMin: number;
-    private starRadiusMax: number;
+    public starRadiusMin: number;
+    public starRadiusMax: number;
 
-    private starLifespanMin: number;
-    private starLifespanMax: number;
+    public starLifespanMin: number;
+    public starLifespanMax: number;
 
-    private numStars: number;
+    public numStars: number;
 
     private trailOpacity: number;
 
@@ -44,7 +44,7 @@ export class BbStarTrail extends BB {
     constructor() {
         super();
 
-        this.starSizeMin = 0.1;
+        this.starSizeMin = 0.5;
         this.starSizeMax = 1.5;
 
         this.starSpeedMin = 0.025;
@@ -60,6 +60,8 @@ export class BbStarTrail extends BB {
         this.starLifespanMax = 10000;
 
         this.numStars = 1000;
+
+        this.trailOpacity = 0.1;
     }
 
     protected connectedCallback(): void {
@@ -81,7 +83,6 @@ export class BbStarTrail extends BB {
     protected initialize(): void {
         this.stars = [];
         this.starRadiusMax = Math.max(this.width, this.height) / 2;
-        this.trailOpacity = 0.1;
         this.animationFrameId = null;
 
         for (let i = 0; i < this.numStars; i++) {

@@ -2,6 +2,8 @@
 
 The "Beautiful Backgrounds" library offers a collection of customizable web components designed to enhance web pages with visually appealing animated backgrounds. Easy to integrate and use, these components are perfect for adding dynamic and interactive elements to your web applications.
 
+[EXAMPLES][examples]
+
 ## Features
 
 -   **Multiple Background Components**: A variety of background components, each offering unique visual effects.
@@ -10,7 +12,23 @@ The "Beautiful Backgrounds" library offers a collection of customizable web comp
 
 ## Installation
 
-To include "Beautiful Backgrounds" in your project, add the necessary JavaScript files to your project's scripts or import them directly into your HTML or JavaScript files or run `npm i beautiful-backgrounds --save`
+```sh
+npm i beautiful-backgrounds --save
+```
+
+In Deno with [`esm.sh`][esmsh]:
+
+```js
+import { BbStarTrail } from 'beautiful-backgrounds';
+```
+
+In browsers with [`esm.sh`][esmsh]:
+
+```html
+<script type="module">
+    import { BbStarTrail } from 'https://esm.sh/beautiful-backgrounds'
+</script>
+```
 
 ## Usage
 
@@ -54,3 +72,8 @@ import { BbStarTrail } from 'beautiful-backgrounds';
 -   `data-height`: height of the star trail component, remove to fit the size of the container
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)
+
+<!-- Links -->
+
+[esmsh]: https://esm.sh
+[examples]: https://codepen.io/collection/aMPozo

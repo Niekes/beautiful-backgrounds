@@ -112,8 +112,9 @@ export default abstract class BeautifulBackground extends HTMLElement {
 
         if (newWidth !== this.width || newHeight !== this.height) {
             this.width = newWidth;
-            this.canvas.width = newWidth;
             this.height = newHeight;
+
+            this.canvas.width = newWidth;
             this.canvas.height = newHeight;
         }
 
