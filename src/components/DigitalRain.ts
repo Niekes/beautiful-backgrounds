@@ -49,7 +49,7 @@ export class BbDigitalRain extends BB {
         const animate = (): void => {
             this.ctx.fillStyle = `rgba(0, 0, 0, ${this.trailOpacity})`;
             this.ctx.fillRect(0, 0, this.width, this.height);
-            this.ctx.font = this.fontSize + 'px monospace';
+            this.ctx.font = `${this.fontSize}px monospace`;
 
             for (let i = 0; i < this.rain.length; i++) {
                 if (this.rain[i] % this.speed === 0) {

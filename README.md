@@ -88,7 +88,7 @@ In browsers with [`esm.sh`][esmsh]:
 -   `data-font-size`: Defines the font size of the falling characters.
 -   `data-font-color-hue-start`: Specifies the starting color hue for the rain.
 -   `data-font-color-hue-end`: Sets the ending color hue for the rain.
--   `data-font-speed`: Controls the falling speed of the digital rain.
+-   `data-speed`: Controls the falling speed of the digital rain.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)
 
