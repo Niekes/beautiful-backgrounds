@@ -1,20 +1,14 @@
 import BB from './BeautifulBackground';
 
 export class BbDigitalRain extends BB {
-    static observedAttributes = [
-        'data-characters',
-        'data-speed',
-        'data-font-size',
-        'data-font-color-hue-start',
-        'data-font-color-hue-end'
-    ];
-
-    private ignoredProps: string[] = ['data-characters'];
+    public backgroundColor: string;
 
     public fontSize: number;
     public fontColor: string;
     public columns: number;
     public speed: number;
+    public randomness: number;
+
     public characters: string;
     public rain: number[];
 
@@ -22,12 +16,26 @@ export class BbDigitalRain extends BB {
 
     private animationFrameId: number | null;
 
+    static observedAttributes = [
+        'data-characters',
+        'data-speed',
+        'data-randomness',
+        'data-font-size',
+        'data-font-color-hue-start',
+        'data-font-color-hue-end',
+        'data-background-color'
+    ];
+
+    protected ignoredProps: string[] = ['data-characters', 'data-background-color'];
+
     constructor() {
         super();
 
-        this.fontSize = 22;
+        this.backgroundColor = '0, 0, 0';
+        this.fontSize = 24;
         this.fontColor = '#0F0';
         this.speed = 2;
+        this.randomness = 0.9;
         this.trailOpacity = 0.1;
         this.characters = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ13579ｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝZ:・."¦=*+-<>|ﾘç';
     }
@@ -49,13 +57,13 @@ export class BbDigitalRain extends BB {
     }
 
     protected initialize(): void {
-        this.columns = this.width / this.fontSize;
-        this.rain = Array(Math.floor(this.columns)).fill(this.height);
+        this.columns = Math.floor(this.width / this.fontSize);
+        this.rain = Array(this.columns).fill(this.height);
     }
 
     protected startAnimation(): void {
         const animate = (): void => {
-            this.ctx.fillStyle = `rgba(0, 0, 0, ${this.trailOpacity})`;
+            this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
             this.ctx.fillRect(0, 0, this.width, this.height);
             this.ctx.font = `${this.fontSize}px monospace`;
 
@@ -73,7 +81,7 @@ export class BbDigitalRain extends BB {
 
                     if (
                         (this.rain[i] / this.speed) * this.fontSize > this.height &&
-                        Math.random() > 0.975
+                        Math.random() > this.randomness
                     ) {
                         this.rain[i] = 0;
                     }
@@ -88,14 +96,7 @@ export class BbDigitalRain extends BB {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        if (this.ignoredProps.includes.name) {
-            const propName = this.getPropNameCamelCased(name);
-            this[propName] = newValue;
-        }
-
-        if (!this.ignoredProps.includes.name) {
-            this.triggerInterpolation(name, oldValue, newValue);
-        }
+        this.setValues(this.ignoredProps, name, oldValue, newValue);
     }
 }
 

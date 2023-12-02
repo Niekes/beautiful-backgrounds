@@ -4,6 +4,8 @@ import { getRandomFloat, interpolateLinear } from '../utils/number';
 import { randomColor } from '../utils/color';
 
 export class BbStarTrail extends BB {
+    public backgroundColor: string;
+
     public starSizeMin: number;
     public starSizeMax: number;
 
@@ -28,6 +30,7 @@ export class BbStarTrail extends BB {
     private animationFrameId: number | null;
 
     static observedAttributes = [
+        'data-background-color',
         'data-star-size-min',
         'data-star-size-max',
         'data-star-speed-min',
@@ -41,8 +44,12 @@ export class BbStarTrail extends BB {
         'data-num-stars'
     ];
 
+    private ignoredProps: string[] = ['data-characters', 'data-background-color'];
+
     constructor() {
         super();
+
+        this.backgroundColor = '0, 0, 0';
 
         this.starSizeMin = 0.5;
         this.starSizeMax = 1.5;
@@ -92,7 +99,7 @@ export class BbStarTrail extends BB {
 
     protected startAnimation(): void {
         const animate = (): void => {
-            this.ctx.fillStyle = `rgba(0, 0, 0, ${this.trailOpacity})`;
+            this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
             this.ctx.fillRect(0, 0, this.width, this.height);
 
             this.stars = this.stars.filter((star) => !star.isDead());
@@ -129,7 +136,7 @@ export class BbStarTrail extends BB {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        this.triggerInterpolation(name, oldValue, newValue);
+        this.setValues(this.ignoredProps, name, oldValue, newValue);
     }
 }
 

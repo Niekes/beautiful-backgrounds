@@ -97,6 +97,17 @@ export default abstract class BeautifulBackground extends HTMLElement {
         }
     }
 
+    protected setValues(ignoredProps: string[], name: string, oldValue: string, newValue: string): void {
+        if (ignoredProps.includes(name)) {
+            const propName = this.getPropNameCamelCased(name);
+            this[propName] = newValue;
+        }
+
+        if (!ignoredProps.includes(name)) {
+            this.triggerInterpolation(name, oldValue, newValue);
+        }
+    }
+
     protected getPropNameCamelCased(dashCased: string): string {
         return dashCased
             .substring(5)
