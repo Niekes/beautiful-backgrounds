@@ -1,7 +1,15 @@
 import BB from './BeautifulBackground';
 
 export class BbDigitalRain extends BB {
-    static observedAttributes = ['data-characters'];
+    static observedAttributes = [
+        'data-characters',
+        'data-speed',
+        'data-font-size',
+        'data-font-color-hue-start',
+        'data-font-color-hue-end'
+    ];
+
+    private ignoredProps: string[] = ['data-characters'];
 
     public fontSize: number;
     public fontColor: string;
@@ -21,7 +29,7 @@ export class BbDigitalRain extends BB {
         this.fontColor = '#0F0';
         this.speed = 2;
         this.trailOpacity = 0.1;
-        this.characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        this.characters = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ13579ｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝZ:・."¦=*+-<>|ﾘç';
     }
 
     protected connectedCallback(): void {
@@ -80,7 +88,14 @@ export class BbDigitalRain extends BB {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        this.triggerInterpolation(name, oldValue, newValue);
+        if (this.ignoredProps.includes.name) {
+            const propName = this.getPropNameCamelCased(name);
+            this[propName] = newValue;
+        }
+
+        if (!this.ignoredProps.includes.name) {
+            this.triggerInterpolation(name, oldValue, newValue);
+        }
     }
 }
 
