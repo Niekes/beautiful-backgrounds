@@ -1,6 +1,10 @@
 {
     "name": "beautiful-backgrounds",
     "version": "0.0.5",
+    "repository": {
+        "url": "https://github.com/Niekes/beautiful-backgrounds"
+    },
+    "homepage": "https://github.com/Niekes/beautiful-backgrounds#readme",
     "keywords": [
         "canvas",
         "animation",
