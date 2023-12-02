@@ -45,6 +45,10 @@ In browsers with [`esm.sh`][esmsh]:
     data-star-speed-max="0.003"
     data-star-color-hue-start="30"
     data-star-color-hue-end="75"
+    data-star-color-saturation-start="90"
+    data-star-color-saturation-end="90"
+    data-star-color-lightness-start="40"
+    data-star-color-lightness-end="60"
     data-orbit-radius-min="10"
     data-orbit-radius-max="300"
     data-star-lifespan-min="1000"
@@ -81,8 +85,12 @@ In browsers with [`esm.sh`][esmsh]:
 <bb-digital-rain
     data-characteras="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     data-font-size="16"
-    data-font-color-hue-start="#0F0"
-    data-font-color-hue-end="#0F0"
+    data-font-color-hue-start="60"
+    data-font-color-hue-end="150"
+    ata-font-color-saturation-start="90"
+    ata-font-color-saturation-end="90"
+    ata-font-color-lightness-start="40"
+    ata-font-color-lightness-end="60"
     data-speed="1"
 ></bb-star-trail>
 ```
@@ -105,11 +113,7 @@ In browsers with [`esm.sh`][esmsh]:
 <!-- Links -->
 
 [build-badge]: https://github.com/niekes/beautiful-backgrounds/workflows/main/badge.svg
-
 [build]: https://github.com/niekes/beautiful-backgrounds/actions
-
 [esmsh]: https://esm.sh
-
 [npm]: https://www.npmjs.com/package/beautiful-backgrounds
-
 [examples]: https://codepen.io/collection/aMPozo
