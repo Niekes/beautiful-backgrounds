@@ -17,6 +17,8 @@ jobs:
               uses: codecov/codecov-action@v3
               env:
                   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+                  fail_ci_if_error: true
+                  files: ./coverage/lcov.info # optional
         strategy:
             matrix:
                 node:
