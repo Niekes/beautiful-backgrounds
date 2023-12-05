@@ -13,12 +13,15 @@ jobs:
                   node-version: ${{matrix.node}}
             - run: npm install
             - run: npm test
-            - name: Upload coverage reports to Codecov
+            - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
-              env:
-                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
+                  directory: ./coverage/tmp/
                   fail_ci_if_error: true
-                  files: ./coverage/lcov.info # optional
+                  flags: unittests
+                  name: codecov-umbrella
+                  verbose: true
         strategy:
             matrix:
                 node:
