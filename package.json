@@ -33,7 +33,7 @@
     "scripts": {
         "clean": "rm -rf dist",
         "pretest": "npx tsc",
-        "test": "c8 --reporter=lcov tape tests/**/*.js",
+        "test": "nyc --reporter=lcov tape tests/**/*.js",
         "build": "npm run clean && npx tsc && rollup -c",
         "watch": "npm run clean && npx tsc --watch",
         "release": "npm run clean && npm run build && git push --follow-tags && npm publish"
@@ -44,6 +44,7 @@
     "devDependencies": {
         "@rollup/plugin-terser": "^0.4.4",
         "c8": "^8.0.1",
+        "nyc": "^15.1.0",
         "rollup": "^4.6.1",
         "tape": "^5.7.2",
         "typescript": "5.3.2"
