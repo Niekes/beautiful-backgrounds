@@ -1,8 +1,9 @@
 import BB from './BeautifulBackground';
 import { randomColor } from '../utils/color';
-export class BbDigitalRain extends BB {
-    public backgroundColor: string;
+import Symbol from './Symbol';
+import { getRandomInt } from '../utils/number';
 
+export class BbDigitalRain extends BB {
     public fontSize: number;
     public fontColorHueStart: number;
     public fontColorHueEnd: number;
@@ -11,19 +12,13 @@ export class BbDigitalRain extends BB {
     public fontColorLightnessStart: number;
     public fontColorLightnessEnd: number;
     public columns: number;
-    public speed: number;
     public randomness: number;
-
     public characters: string;
-    public rain: number[];
-
-    private trailOpacity: number;
-
-    private animationFrameId: number | null;
+    public symbols: Symbol[];
 
     static observedAttributes = [
+        'data-fps',
         'data-characters',
-        'data-speed',
         'data-randomness',
         'data-font-size',
         'data-font-color-hue-start',
@@ -40,26 +35,23 @@ export class BbDigitalRain extends BB {
     constructor() {
         super();
 
-        this.backgroundColor = '0, 0, 0';
         this.fontSize = 24;
         this.fontColorHueStart = 60;
-        this.fontColorHueEnd = 150;
+        this.fontColorHueEnd = this.fontColorHueStart + 90;
         this.fontColorSaturationStart = 90;
         this.fontColorSaturationEnd = 100;
         this.fontColorLightnessStart = 50;
         this.fontColorLightnessEnd = 50;
-        this.speed = 2;
-        this.randomness = 0.9;
+        this.randomness = 0.975;
         this.trailOpacity = 0.1;
-        this.characters =
-            'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ13579ｦｲｸｺｿﾁΦﾄﾉﾌﾔﾖﾙﾚﾛﾝZ:・."¦=*+-<>|ﾘçδ╘';
+        this.characters = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ13579ｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝZ:."¦=*+-<>|ﾘçδ╘';
     }
 
     protected connectedCallback(): void {
         this.shadowR.appendChild(this.canvas);
         this.resizeCanvas();
         this.initialize();
-        this.startAnimation();
+        this.startAnimation(this.animation.bind(this));
 
         window.addEventListener('resize', this.debouncedResizeCanvas.bind(this));
     }
@@ -72,48 +64,40 @@ export class BbDigitalRain extends BB {
     }
 
     protected initialize(): void {
+        this.symbols = [];
         this.columns = Math.floor(this.width / this.fontSize);
-        this.rain = Array(this.columns).fill(this.height);
+
+        for (let i = 0; i < this.columns; i++) {
+            this.symbols[i] = this.createSymbol(i);
+        }
     }
 
-    protected startAnimation(): void {
-        const animate = (): void => {
-            this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
-            this.ctx.fillRect(0, 0, this.width, this.height);
-            this.ctx.font = `${this.fontSize}px monospace`;
+    protected animation(): void {
+        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
+        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.textAlign = 'center';
+        this.ctx.font = `${this.fontSize}px monospace`;
 
-            for (let i = 0; i < this.rain.length; i++) {
-                if (this.rain[i] % this.speed === 0) {
-                    const text = this.characters.charAt(
-                        Math.floor(Math.random() * this.characters.length)
-                    );
+        this.symbols.forEach((symbol) => {
+            symbol.draw(
+                this.ctx,
+                this.characters.charAt(Math.floor(Math.random() * this.characters.length))
+            );
+            symbol.update(this.height, this.randomness);
+        });
+    }
 
-                    this.ctx.fillStyle = randomColor(
-                        [this.fontColorHueStart, this.fontColorHueEnd],
-                        [this.fontColorSaturationStart, this.fontColorSaturationEnd],
-                        [this.fontColorLightnessStart, this.fontColorLightnessEnd]
-                    );
-
-                    this.ctx.fillText(
-                        text,
-                        i * this.fontSize,
-                        (this.rain[i] / this.speed) * this.fontSize
-                    );
-
-                    if (
-                        (this.rain[i] / this.speed) * this.fontSize > this.height &&
-                        Math.random() > this.randomness
-                    ) {
-                        this.rain[i] = 0;
-                    }
-                }
-                this.rain[i]++;
-            }
-
-            this.animationFrameId = requestAnimationFrame(animate);
-        };
-
-        this.animationFrameId = requestAnimationFrame(animate);
+    protected createSymbol(index: number): Symbol {
+        return new Symbol(
+            index,
+            getRandomInt(0, -this.height / this.fontSize),
+            this.fontSize,
+            randomColor(
+                [this.fontColorHueStart, this.fontColorHueEnd],
+                [this.fontColorSaturationStart, this.fontColorSaturationEnd],
+                [this.fontColorLightnessStart, this.fontColorLightnessEnd]
+            )
+        );
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {

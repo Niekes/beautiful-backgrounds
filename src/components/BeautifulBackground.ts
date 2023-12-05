@@ -6,6 +6,13 @@ export default abstract class BeautifulBackground extends HTMLElement {
     protected height: number;
     protected canvas: HTMLCanvasElement;
     protected ctx: CanvasRenderingContext2D;
+    protected backgroundColor: string;
+    protected trailOpacity: number;
+
+    protected lastTime: number;
+    protected fps: number;
+    protected timer: number;
+    protected animationFrameId: number | null;
 
     private resizeDebounceTimer: number | null;
     private interpolationDuration: number = 1000;
@@ -25,9 +32,13 @@ export default abstract class BeautifulBackground extends HTMLElement {
             </style>
         `;
 
+        this.lastTime = 0;
+        this.fps = 30;
+        this.timer = 0;
         this.resizeDebounceTimer = null;
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext('2d')!;
+        this.backgroundColor = '0, 0, 0';
     }
 
     protected abstract connectedCallback(): void;
@@ -38,7 +49,26 @@ export default abstract class BeautifulBackground extends HTMLElement {
         clearTimeout(this.resizeDebounceTimer);
         this.resizeDebounceTimer = setTimeout(() => {
             this.resizeCanvas();
-        }, 1000); // Adjust the debounce time as needed
+        }, 1000);
+    }
+
+    protected startAnimation(fn: Function): void {
+        const animate = (timeStamp: number): void => {
+            const deltaTime: number = timeStamp - this.lastTime;
+            this.lastTime = timeStamp;
+
+            if (this.timer > 1000 / this.fps) {
+                fn();
+
+                this.timer = 0;
+            } else {
+                this.timer += deltaTime;
+            }
+
+            this.animationFrameId = requestAnimationFrame(animate);
+        };
+
+        this.animationFrameId = requestAnimationFrame(animate);
     }
 
     protected interpolateWithThrottle(
@@ -97,7 +127,12 @@ export default abstract class BeautifulBackground extends HTMLElement {
         }
     }
 
-    protected setValues(ignoredProps: string[], name: string, oldValue: string, newValue: string): void {
+    protected setValues(
+        ignoredProps: string[],
+        name: string,
+        oldValue: string,
+        newValue: string
+    ): void {
         if (ignoredProps.includes(name)) {
             const propName = this.getPropNameCamelCased(name);
             this[propName] = newValue;
@@ -127,6 +162,7 @@ export default abstract class BeautifulBackground extends HTMLElement {
 
             this.canvas.width = newWidth;
             this.canvas.height = newHeight;
+            this.canvas.style.backgroundColor = `rgb(${this.backgroundColor})`;
         }
 
         this.fullyInitialized = true;

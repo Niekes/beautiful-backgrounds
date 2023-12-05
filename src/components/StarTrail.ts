@@ -27,13 +27,10 @@ export class BbStarTrail extends BB {
 
     public numStars: number;
 
-    private trailOpacity: number;
-
     private stars: Particle[];
 
-    private animationFrameId: number | null;
-
     static observedAttributes = [
+        'data-fps',
         'data-background-color',
         'data-star-size-min',
         'data-star-size-max',
@@ -87,7 +84,7 @@ export class BbStarTrail extends BB {
         this.shadowR.appendChild(this.canvas);
         this.resizeCanvas();
         this.initialize();
-        this.startAnimation();
+        this.startAnimation(this.animation.bind(this));
 
         window.addEventListener('resize', this.debouncedResizeCanvas.bind(this));
     }
@@ -109,26 +106,20 @@ export class BbStarTrail extends BB {
         }
     }
 
-    protected startAnimation(): void {
-        const animate = (): void => {
-            this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
-            this.ctx.fillRect(0, 0, this.width, this.height);
+    protected animation(): void {
+        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
+        this.ctx.fillRect(0, 0, this.width, this.height);
 
-            this.stars = this.stars.filter((star) => !star.isDead());
+        this.stars = this.stars.filter((star) => !star.isDead());
 
-            while (this.stars.length < this.numStars) {
-                this.stars.push(this.createStar());
-            }
+        while (this.stars.length < this.numStars) {
+            this.stars.push(this.createStar());
+        }
 
-            this.stars.forEach((star) => {
-                star.update(this.width / 2, this.height / 2);
-                star.draw(this.ctx);
-            });
-
-            this.animationFrameId = requestAnimationFrame(animate);
-        };
-
-        this.animationFrameId = requestAnimationFrame(animate);
+        this.stars.forEach((star) => {
+            star.update(this.width / 2, this.height / 2);
+            star.draw(this.ctx);
+        });
     }
 
     protected createStar(): Particle {
