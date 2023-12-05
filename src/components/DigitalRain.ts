@@ -65,6 +65,10 @@ export class BbDigitalRain extends BB {
 
     protected initialize(): void {
         this.symbols = [];
+        this.createSymbols();
+    }
+
+    private createSymbols(): void {
         this.columns = Math.floor(this.width / this.fontSize);
 
         for (let i = 0; i < this.columns; i++) {
@@ -72,7 +76,20 @@ export class BbDigitalRain extends BB {
         }
     }
 
+    private updateSymbols(): void {
+        const currentColumns = Math.floor(this.width / this.fontSize);
+
+        for (let i = this.symbols.length; i < currentColumns; i++) {
+            this.symbols[i] = this.createSymbol(i);
+        }
+
+        if (this.symbols.length > currentColumns) {
+            this.symbols.length = currentColumns;
+        }
+    }
+
     protected animation(): void {
+        this.updateSymbols();
         this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
         this.ctx.textAlign = 'center';
@@ -81,23 +98,20 @@ export class BbDigitalRain extends BB {
         this.symbols.forEach((symbol) => {
             symbol.draw(
                 this.ctx,
-                this.characters.charAt(Math.floor(Math.random() * this.characters.length))
+                this.characters.charAt(Math.floor(Math.random() * this.characters.length)),
+                randomColor(
+                    [this.fontColorHueStart, this.fontColorHueEnd],
+                    [this.fontColorSaturationStart, this.fontColorSaturationEnd],
+                    [this.fontColorLightnessStart, this.fontColorLightnessEnd]
+                ),
+                this.fontSize
             );
-            symbol.update(this.height, this.randomness);
+            symbol.update(this.height, this.randomness, this.fontSize);
         });
     }
 
     protected createSymbol(index: number): Symbol {
-        return new Symbol(
-            index,
-            getRandomInt(0, -this.height / this.fontSize),
-            this.fontSize,
-            randomColor(
-                [this.fontColorHueStart, this.fontColorHueEnd],
-                [this.fontColorSaturationStart, this.fontColorSaturationEnd],
-                [this.fontColorLightnessStart, this.fontColorLightnessEnd]
-            )
-        );
+        return new Symbol(index, getRandomInt(0, -this.height / this.fontSize));
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
