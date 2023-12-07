@@ -77,6 +77,7 @@ In browsers with [`esm.sh`][esmsh]:
 -   `data-star-lifespan-max`: Maximum lifespan of a star in milliseconds.
 -   `data-width`: Width of the star trail component, remove to fit the size of the container
 -   `data-height`: height of the star trail component, remove to fit the size of the container
+-   `data-fps`: Controls the frames per second.
 -   `data-background-color`: Background color of the canvas element
 
 ### Digital Rain
@@ -105,7 +106,7 @@ In browsers with [`esm.sh`][esmsh]:
 -   `data-font-color-saturation-start`: Specifies the ending color saturation for the rain. Should be a value between 0 and 100.
 -   `data-font-color-lightness-start`: Specifies the starting color lightness for the rain. Should be a value between 0 and 100.
 -   `data-font-color-lightness-start`: Specifies the ending color lightness for the rain. Should be a value between 0 and 100.
--   `data-speed`: Controls the falling speed of the digital rain.
+-   `data-fps`: Controls the frames per second.
 -   `data-background-color`: Background color of the canvas element
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)
