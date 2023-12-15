@@ -1,6 +1,7 @@
 # Beautiful Backgrounds
 
 [![Build][build-badge]][build]
+[![Coverage][coverage-badge]][coverage]
 
 The "Beautiful Backgrounds" library offers a collection of customizable web components designed to enhance web pages with visually appealing animated backgrounds. Easy to integrate and use, these components are perfect for adding dynamic and interactive elements to your web applications.
 
@@ -88,10 +89,10 @@ In browsers with [`esm.sh`][esmsh]:
     data-font-size="16"
     data-font-color-hue-start="60"
     data-font-color-hue-end="150"
-    ata-font-color-saturation-start="90"
-    ata-font-color-saturation-end="90"
-    ata-font-color-lightness-start="40"
-    ata-font-color-lightness-end="60"
+    data-font-color-saturation-start="90"
+    data-font-color-saturation-end="90"
+    data-font-color-lightness-start="40"
+    data-font-color-lightness-end="60"
     data-speed="1"
 ></bb-star-trail>
 ```
@@ -115,6 +116,8 @@ In browsers with [`esm.sh`][esmsh]:
 
 [build-badge]: https://github.com/niekes/beautiful-backgrounds/workflows/main/badge.svg
 [build]: https://github.com/niekes/beautiful-backgrounds/actions
+[coverage-badge]: https://img.shields.io/codecov/c/github/niekes/beautiful-backgrounds.svg
+[coverage]: https://codecov.io/github/niekes/beautiful-backgrounds
 [esmsh]: https://esm.sh
-[npm]: https://www.npmjs.com/package/beautiful-backgrounds
 [examples]: https://codepen.io/collection/aMPozo
+[npm]: https://www.npmjs.com/package/beautiful-backgrounds
