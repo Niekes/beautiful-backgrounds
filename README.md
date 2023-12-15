@@ -10,9 +10,9 @@ The "Beautiful Backgrounds" library offers a collection of customizable web comp
 
 ## Features
 
--   **Multiple Background Components**: A variety of background components, each offering unique visual effects.
--   **Customizable and Interactive**: Each component comes with customizable properties to suit different design needs.
--   **Responsive and Efficient**: Components are responsive to screen size changes and optimized for performance.
+- **Multiple Background Components**: A variety of background components, each offering unique visual effects.
+- **Customizable and Interactive**: Each component comes with customizable properties to suit different design needs.
+- **Responsive and Efficient**: Components are responsive to screen size changes and optimized for performance.
 
 ## Installation
 
@@ -30,7 +30,7 @@ In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-    import { BbStarTrail } from 'https://esm.sh/beautiful-backgrounds';
+  import { BbStarTrail } from 'https://esm.sh/beautiful-backgrounds';
 </script>
 ```
 
@@ -40,47 +40,47 @@ In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <bb-star-trail
-    data-num-stars="567"
-    data-star-size-min="0.1"
-    data-star-size-max="1.5"
-    data-star-speed-min="0.001"
-    data-star-speed-max="0.003"
-    data-star-color-hue-start="30"
-    data-star-color-hue-end="75"
-    data-star-color-saturation-start="90"
-    data-star-color-saturation-end="90"
-    data-star-color-lightness-start="40"
-    data-star-color-lightness-end="60"
-    data-orbit-radius-min="10"
-    data-orbit-radius-max="300"
-    data-star-lifespan-min="1000"
-    data-star-lifespan-max="50000"
-    data-width="500"
-    data-height="500"
+  data-num-stars="567"
+  data-star-size-min="0.1"
+  data-star-size-max="1.5"
+  data-star-speed-min="0.001"
+  data-star-speed-max="0.003"
+  data-star-color-hue-start="30"
+  data-star-color-hue-end="75"
+  data-star-color-saturation-start="90"
+  data-star-color-saturation-end="90"
+  data-star-color-lightness-start="40"
+  data-star-color-lightness-end="60"
+  data-orbit-radius-min="10"
+  data-orbit-radius-max="300"
+  data-star-lifespan-min="1000"
+  data-star-lifespan-max="50000"
+  data-width="500"
+  data-height="500"
 ></bb-star-trail>
 ```
 
 #### Attributes for bb-star-trail
 
--   `data-num-stars`: Number of stars to be rendered.
--   `data-star-size-min`: Minimum size of a star.
--   `data-star-size-max`: Maximum size of a star.
--   `data-star-speed-min`: Minimum speed of a star.
--   `data-star-speed-max`: Maximum speed of a star.
--   `data-star-color-hue-start`: Starting hue for star color. Should be a value between 0 and 360.
--   `data-star-color-hue-end`: Ending hue for star color. Should be a value between 0 and 360.
--   `data-star-color-saturation-start`: Specifies the starting color saturation for star color. Should be a value between 0 and 100.
--   `data-star-color-saturation-start`: Specifies the ending color saturation for star color. Should be a value between 0 and 100.
--   `data-star-color-lightness-start`: Specifies the starting color lightness for star color. Should be a value between 0 and 100.
--   `data-star-color-lightness-start`: Specifies the ending color lightness for star color. Should be a value between 0 and 100.
--   `data-radius-min`: Minimum radius for star orbit.
--   `data-radius-max`: Maximum radius for star orbit.
--   `data-star-lifespan-min`: Minimum lifespan of a star in milliseconds.
--   `data-star-lifespan-max`: Maximum lifespan of a star in milliseconds.
--   `data-width`: Width of the star trail component, remove to fit the size of the container
--   `data-height`: height of the star trail component, remove to fit the size of the container
--   `data-fps`: Controls the frames per second.
--   `data-background-color`: Background color of the canvas element
+- `data-num-stars`: Number of stars to be rendered.
+- `data-star-size-min`: Minimum size of a star.
+- `data-star-size-max`: Maximum size of a star.
+- `data-star-speed-min`: Minimum speed of a star.
+- `data-star-speed-max`: Maximum speed of a star.
+- `data-star-color-hue-start`: Starting hue for star color. Should be a value between 0 and 360.
+- `data-star-color-hue-end`: Ending hue for star color. Should be a value between 0 and 360.
+- `data-star-color-saturation-start`: Specifies the starting color saturation for star color. Should be a value between 0 and 100.
+- `data-star-color-saturation-start`: Specifies the ending color saturation for star color. Should be a value between 0 and 100.
+- `data-star-color-lightness-start`: Specifies the starting color lightness for star color. Should be a value between 0 and 100.
+- `data-star-color-lightness-start`: Specifies the ending color lightness for star color. Should be a value between 0 and 100.
+- `data-radius-min`: Minimum radius for star orbit.
+- `data-radius-max`: Maximum radius for star orbit.
+- `data-star-lifespan-min`: Minimum lifespan of a star in milliseconds.
+- `data-star-lifespan-max`: Maximum lifespan of a star in milliseconds.
+- `data-width`: Width of the star trail component, remove to fit the size of the container
+- `data-height`: height of the star trail component, remove to fit the size of the container
+- `data-fps`: Controls the frames per second.
+- `data-background-color`: Background color of the canvas element
 
 ### Digital Rain
 
@@ -100,16 +100,18 @@ In browsers with [`esm.sh`][esmsh]:
 
 #### Attributes for bb-digital-rain
 
--   `data-characters`: Sets the characters for the digital rain effect.
--   `data-font-size`: Defines the font size of the falling characters.
--   `data-font-color-hue-start`: Specifies the starting color hue for the rain. Should be a value between 0 and 360.
--   `data-font-color-hue-end`: Sets the ending color hue for the rain. Should be a value between 0 and 360.
--   `data-font-color-saturation-start`: Specifies the starting color saturation for the rain. Should be a value between 0 and 100.
--   `data-font-color-saturation-start`: Specifies the ending color saturation for the rain. Should be a value between 0 and 100.
--   `data-font-color-lightness-start`: Specifies the starting color lightness for the rain. Should be a value between 0 and 100.
--   `data-font-color-lightness-start`: Specifies the ending color lightness for the rain. Should be a value between 0 and 100.
--   `data-fps`: Controls the frames per second.
--   `data-background-color`: Background color of the canvas element
+- `data-characters`: Sets the characters for the digital rain effect.
+- `data-font-size`: Defines the font size of the falling characters.
+- `data-font-color-hue-start`: Specifies the starting color hue for the rain. Should be a value between 0 and 360.
+- `data-font-color-hue-end`: Sets the ending color hue for the rain. Should be a value between 0 and 360.
+- `data-font-color-saturation-start`: Specifies the starting color saturation for the rain. Should be a value between 0 and 100.
+- `data-font-color-saturation-start`: Specifies the ending color saturation for the rain. Should be a value between 0 and 100.
+- `data-font-color-lightness-start`: Specifies the starting color lightness for the rain. Should be a value between 0 and 100.
+- `data-font-color-lightness-start`: Specifies the ending color lightness for the rain. Should be a value between 0 and 100.
+- `data-fps`: Controls the frames per second.
+- `data-background-color`: Background color of the canvas element
+
+---
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)
 
