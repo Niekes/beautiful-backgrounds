@@ -21,7 +21,7 @@ test('getRandomFloat should return random int within min max range', (t) => {
     t.end();
 });
 
-test.only('interpolateLinear should return random int within min max range', (t) => {
+test('interpolateLinear should return random int within min max range', (t) => {
     const value1 = interpolateLinear(0.5, 0, 1, 0, 10);
     const value2 = interpolateLinear(0.5, 0, 1, 0, 100);
     const value3 = interpolateLinear(1.2, 0, 1, 0, 10);
