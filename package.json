@@ -1,51 +1,30 @@
 {
-    "name": "beautiful-backgrounds",
-    "version": "0.0.7",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Niekes/beautiful-backgrounds"
-    },
-    "homepage": "https://github.com/Niekes/beautiful-backgrounds#readme",
-    "keywords": [
-        "canvas",
-        "animation",
-        "ambient",
-        "background",
-        "typescript",
-        "web-components",
-        "background-effects",
-        "animated-background",
-        "star-field",
-        "custom-elements",
-        "dynamic-background",
-        "visual-effects",
-        "interactive-background",
-        "canvas-animation",
-        "beautiful-backgrounds",
-        "html5-canvas"
-    ],
-    "author": "Niekes (https://niekes.com)",
-    "license": "MIT",
-    "description": "A collection of customizable web components for creating dynamic, animated backgrounds, featuring a variety of effects including a star field and a digital rain. ",
-    "type": "module",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "clean": "rm -rf dist",
-        "pretest": "npx tsc",
-        "test": "c8 --reporter lcov tape tests/**/*.js",
-        "build": "npm run clean && npx tsc --build --clean && npx tsc --build",
-        "watch": "npm run clean && npx tsc --watch",
-        "release": "npm run clean && npm run build && git push --follow-tags && npm publish"
-    },
-    "files": [
-        "dist/"
-    ],
-    "devDependencies": {
-        "@rollup/plugin-terser": "^0.4.4",
-        "c8": "9.1.0",
-        "rollup": "4.13.0",
-        "tape": "5.7.5",
-        "typescript": "5.4.2"
-    }
+  "name": "storybook",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "lit": "^3.3.1"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4",
+    "storybook": "^10.1.11",
+    "@storybook/web-components-vite": "^10.1.11",
+    "@chromatic-com/storybook": "^5.0.0",
+    "@storybook/addon-vitest": "^10.1.11",
+    "@storybook/addon-a11y": "^10.1.11",
+    "@storybook/addon-docs": "^10.1.11",
+    "vitest": "^4.0.17",
+    "playwright": "^1.57.0",
+    "@vitest/browser-playwright": "^4.0.17",
+    "@vitest/coverage-v8": "^4.0.17"
+  }
 }
