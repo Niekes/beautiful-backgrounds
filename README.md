@@ -7,8 +7,6 @@
 <a href="https://github.com/niekes/beautiful-backgrounds"><img src="https://img.shields.io/github/stars/niekes/beautiful-backgrounds" alt="stars" /></a>
 <a href="https://github.com/sponsors/niekes"><img src="https://img.shields.io/badge/sponsor-30363D?logo=GitHub-Sponsors&logoColor=#EA4AAA" alt="sponsor this project" /></a>
 
-> **🚀 Coming Soon**: Interactive Storybook documentation will be available soon, allowing you to explore and customize all components with live examples and real-time property adjustments.
-
 The "Beautiful Backgrounds" library offers a collection of customizable web components designed to enhance web pages with visually appealing animated backgrounds. Easy to integrate and use, these components are perfect for adding dynamic and interactive elements to your web applications.
 
 [EXAMPLES][examples]
@@ -118,7 +116,7 @@ In browsers with [`esm.sh`][esmsh]:
 
 <!-- Links -->
 
-[build-badge]: https://github.com/niekes/beautiful-backgrounds/workflows/main/badge.svg
+[build-badge]: https://img.shields.io/github/actions/workflow/status/niekes/beautiful-backgrounds/main.yml
 [build]: https://github.com/niekes/beautiful-backgrounds/actions
 [coverage-badge]: https://img.shields.io/codecov/c/github/niekes/beautiful-backgrounds.svg
 [coverage]: https://codecov.io/github/niekes/beautiful-backgrounds
