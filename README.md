@@ -3,6 +3,9 @@
 [![Build][build-badge]][build]
 [![Coverage][coverage-badge]][coverage]
 [![Npm][npm-badge]][npm]
+[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@main/badge/badge-storybook.svg)](https://niekes.github.io/beautiful-backgrounds/)
+<a href="https://github.com/niekes/beautiful-backgrounds"><img src="https://img.shields.io/github/stars/niekes/beautiful-backgrounds" alt="stars" /></a>
+<a href="https://github.com/sponsors/niekes"><img src="https://img.shields.io/badge/sponsor-30363D?logo=GitHub-Sponsors&logoColor=#EA4AAA" alt="sponsor this project" /></a>
 
 > **🚀 Coming Soon**: Interactive Storybook documentation will be available soon, allowing you to explore and customize all components with live examples and real-time property adjustments.
 
@@ -112,10 +115,6 @@ In browsers with [`esm.sh`][esmsh]:
 - `data-font-color-lightness-start`: Specifies the ending color lightness for the rain. Should be a value between 0 and 100.
 - `data-fps`: Controls the frames per second.
 - `data-background-color`: Background color of the canvas element
-
----
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A3QJPZ9)
 
 <!-- Links -->
 
