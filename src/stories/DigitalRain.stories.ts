@@ -23,7 +23,7 @@ const meta: Meta = {
                 data-font-color-lightness-start=${args.fontColorLightnessStart}
                 data-font-color-lightness-end=${args.fontColorLightnessEnd}
                 data-background-color=${bgColor}
-                style="width: 100%; height: 600px; display: block;"
+                style="width: 100%; height: 450px; display: flex;"
             ></bb-digital-rain>
         `;
     },
@@ -64,7 +64,7 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const Default: Story = {
+export const Matrix: Story = {
     args: {
         backgroundColor: "#000",
     },
@@ -77,5 +77,17 @@ export const CyberpunkPink: Story = {
         fontColorHueStart: 300,
         fontColorHueEnd: 340,
         backgroundColor: "#570044",
+    },
+};
+
+export const PurpleRain: Story = {
+    args: {
+        backgroundColor: "#000000",
+        characters: "|",
+        randomness: 0.98,
+        fontSize: 12,
+        fontColorHueStart: 267,
+        fontColorHueEnd: 278,
+        fontColorSaturationStart: 100,
     },
 };

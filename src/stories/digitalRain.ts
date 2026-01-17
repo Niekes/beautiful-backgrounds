@@ -91,10 +91,17 @@ export class BbDigitalRain extends LitElement {
 
     private resizeCanvas(): void {
         const rect = this.getBoundingClientRect();
+
+        if (rect.width === this.width && rect.height === this.height) return;
+
         this.width = rect.width;
         this.height = rect.height;
         this.canvas.width = this.width;
         this.canvas.height = this.height;
+
+        // Re-apply background color immediately to prevent white flash
+        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
+        this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
     private debouncedResizeCanvas = this.debounce(
@@ -152,6 +159,11 @@ export class BbDigitalRain extends LitElement {
         };
 
         this.animationFrameId = requestAnimationFrame(animate);
+    }
+
+    repaintCanvas() {
+        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
+        this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
     protected animation(): void {

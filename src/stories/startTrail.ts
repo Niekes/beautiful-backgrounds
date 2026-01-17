@@ -57,7 +57,6 @@ export class BbStarTrail extends LitElement {
     @property({ type: Number, attribute: "data-num-stars" })
     numStars: number = 1000;
 
-    // Properties inherited from BB class
     public canvas: HTMLCanvasElement;
     public ctx: CanvasRenderingContext2D;
     public width: number = 0;
@@ -106,10 +105,16 @@ export class BbStarTrail extends LitElement {
 
     private resizeCanvas(): void {
         const rect = this.getBoundingClientRect();
+
+        if (rect.width === this.width && rect.height === this.height) return;
+
         this.width = rect.width;
         this.height = rect.height;
         this.canvas.width = this.width;
         this.canvas.height = this.height;
+
+        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
+        this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
     private debouncedResizeCanvas = this.debounce(
@@ -127,12 +132,13 @@ export class BbStarTrail extends LitElement {
 
     protected initialize(): void {
         this.stars = [];
-        this.starRadiusMax = Math.max(this.width, this.height) / 2;
         this.animationFrameId = null;
 
         // Initialize background to prevent white flash
         this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
+
+        this.starRadiusMax = this.starRadiusMax || this.width;
 
         for (let i = 0; i < this.numStars; i++) {
             this.stars.push(this.createStar());
@@ -192,22 +198,6 @@ export class BbStarTrail extends LitElement {
             Math.sqrt(Math.random()) * radiusRange + this.starRadiusMin;
 
         return new Particle(size, speed, color, radius, angle, lifespan);
-    }
-
-    // Property change handler for when properties update
-    updated(changedProperties: Map<string | number | symbol, unknown>) {
-        super.updated(changedProperties);
-
-        // Reinitialize if certain properties change
-        if (
-            changedProperties.has("numStars") ||
-            changedProperties.has("starRadiusMin") ||
-            changedProperties.has("starRadiusMax")
-        ) {
-            if (this.width > 0 && this.height > 0) {
-                this.initialize();
-            }
-        }
     }
 
     // Override render to return empty template since we're using canvas

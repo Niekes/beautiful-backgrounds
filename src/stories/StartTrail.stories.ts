@@ -27,7 +27,7 @@ const meta: Meta = {
             data-star-lifespan-min=${args.starLifespanMin}
             data-star-lifespan-max=${args.starLifespanMax}
             data-num-stars=${args.numStars}
-            style="width: 100%; height: 500px; display: flex;"
+            style="width: 100%; height: 450px; display: flex;"
         ></bb-star-trail>`;
     },
     argTypes: {
@@ -57,7 +57,7 @@ const meta: Meta = {
             control: { type: "range", min: 0, max: 100 },
         },
         starColorLightnessEnd: { control: { type: "range", min: 0, max: 100 } },
-        starRadiusMin: { control: { type: "range", min: 0, max: 500 } },
+        starRadiusMin: { control: { type: "range", min: 0, max: 2000 } },
         starRadiusMax: { control: { type: "range", min: 0, max: 2000 } },
         starLifespanMin: {
             control: { type: "range", min: 100, max: 20000, step: 100 },
@@ -80,8 +80,6 @@ const meta: Meta = {
         starColorSaturationEnd: 100,
         starColorLightnessStart: 50,
         starColorLightnessEnd: 50,
-        starRadiusMin: 1,
-        starRadiusMax: 100,
         starLifespanMin: 1000,
         starLifespanMax: 10000,
         fps: 60,
@@ -91,7 +89,7 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const Default: Story = {};
+export const SmoothSky: Story = {};
 
 export const PartyLights: Story = {
     args: {
@@ -99,7 +97,7 @@ export const PartyLights: Story = {
         starSpeedMax: 0.15,
         starColorLightnessStart: 70,
         starColorLightnessEnd: 90,
-        numStars: 145,
+        numStars: 403,
         starSizeMin: 3.6,
         starSizeMax: 6.2,
         starColorHueStart: 0,
@@ -107,7 +105,7 @@ export const PartyLights: Story = {
     },
 };
 
-export const BlueGlowWorms: Story = {
+export const BlueFireFlies: Story = {
     args: {
         starColorHueStart: 200,
         starColorHueEnd: 240,
@@ -117,5 +115,27 @@ export const BlueGlowWorms: Story = {
         starLifespanMin: 100,
         starLifespanMax: 1000,
         backgroundColor: "#050035",
+    },
+};
+
+export const CyanRing: Story = {
+    args: {
+        backgroundColor: "#000000",
+        numStars: 2000,
+        starSizeMin: 0.2,
+        starSizeMax: 0.8,
+        starSpeedMin: 0.025,
+        starSpeedMax: 0.05,
+        starColorHueStart: 174,
+        starColorHueEnd: 200,
+        starColorSaturationStart: 100,
+        starColorSaturationEnd: 100,
+        starColorLightnessStart: 50,
+        starColorLightnessEnd: 50,
+        starRadiusMin: 153,
+        starRadiusMax: 225,
+        starLifespanMin: 10000,
+        starLifespanMax: 20000,
+        fps: 30,
     },
 };
