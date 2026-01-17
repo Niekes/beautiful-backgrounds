@@ -18,7 +18,7 @@ export default class Particle {
         color: string,
         radius: number,
         angle: number,
-        lifespan: number
+        lifespan: number,
     ) {
         this.size = size;
         this.speed = speed;

@@ -121,6 +121,6 @@ In browsers with [`esm.sh`][esmsh]:
 [coverage-badge]: https://img.shields.io/codecov/c/github/niekes/beautiful-backgrounds.svg
 [coverage]: https://codecov.io/github/niekes/beautiful-backgrounds
 [esmsh]: https://esm.sh
-[examples]: https://codepen.io/collection/aMPozo
+[examples]: https://niekes.github.io/beautiful-backgrounds/
 [npm-badge]: https://img.shields.io/npm/v/beautiful-backgrounds
 [npm]: https://www.npmjs.com/package/beautiful-backgrounds
