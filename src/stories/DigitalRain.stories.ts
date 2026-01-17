@@ -12,7 +12,7 @@ const meta: Meta = {
 
         return html`
             <bb-digital-rain
-                data-fps=${args.fps}
+                data-speed=${args.speed}
                 data-characters=${args.characters}
                 data-randomness=${args.randomness}
                 data-font-size=${args.fontSize}
@@ -29,7 +29,7 @@ const meta: Meta = {
     },
     argTypes: {
         backgroundColor: { control: "color" },
-        fps: { control: { type: "range", min: 0, max: 120 } },
+        speed: { control: { type: "range", min: 0, max: 30 } },
         randomness: { control: { type: "range", min: 0, max: 1, step: 0.005 } },
         fontSize: { control: { type: "range", min: 8, max: 72 } },
         fontColorHueStart: { control: { type: "range", min: 0, max: 360 } },
@@ -56,7 +56,7 @@ const meta: Meta = {
         fontColorSaturationEnd: 100,
         fontColorLightnessStart: 50,
         fontColorLightnessEnd: 50,
-        fps: 30,
+        speed: 25,
         backgroundColor: "#000",
     },
 };
@@ -89,5 +89,6 @@ export const PurpleRain: Story = {
         fontColorHueStart: 267,
         fontColorHueEnd: 278,
         fontColorSaturationStart: 100,
+        speed: 30,
     },
 };

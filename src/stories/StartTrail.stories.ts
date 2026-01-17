@@ -10,7 +10,6 @@ const meta: Meta = {
         const c = color(args.backgroundColor)?.rgb();
         const bgColor = c ? `${c.r}, ${c.g}, ${c.b}` : "0, 0, 0";
         return html` <bb-star-trail
-            data-fps=${args.fps}
             data-background-color=${bgColor}
             data-star-size-min=${args.starSizeMin}
             data-star-size-max=${args.starSizeMax}
@@ -32,7 +31,6 @@ const meta: Meta = {
     },
     argTypes: {
         backgroundColor: { control: "color" },
-        fps: { control: { type: "range", min: 0, max: 120 } },
         starSizeMin: {
             control: { type: "range", min: 0.1, max: 10, step: 0.1 },
         },
@@ -40,10 +38,10 @@ const meta: Meta = {
             control: { type: "range", min: 0.1, max: 10, step: 0.1 },
         },
         starSpeedMin: {
-            control: { type: "range", min: 0.001, max: 0.2, step: 0.001 },
+            control: { type: "range", min: -10, max: 10, step: 0.1 },
         },
         starSpeedMax: {
-            control: { type: "range", min: 0.001, max: 0.2, step: 0.001 },
+            control: { type: "range", min: -10, max: 10, step: 0.1 },
         },
         starColorHueStart: { control: { type: "range", min: 0, max: 360 } },
         starColorHueEnd: { control: { type: "range", min: 0, max: 360 } },
@@ -72,8 +70,8 @@ const meta: Meta = {
         numStars: 1000,
         starSizeMin: 0.5,
         starSizeMax: 1.5,
-        starSpeedMin: 0.025,
-        starSpeedMax: 0.05,
+        starSpeedMin: -0.5,
+        starSpeedMax: 0.5,
         starColorHueStart: 30,
         starColorHueEnd: 75,
         starColorSaturationStart: 100,
@@ -82,7 +80,6 @@ const meta: Meta = {
         starColorLightnessEnd: 50,
         starLifespanMin: 1000,
         starLifespanMax: 10000,
-        fps: 60,
     },
 };
 
@@ -93,20 +90,24 @@ export const SmoothSky: Story = {};
 
 export const PartyLights: Story = {
     args: {
-        starSpeedMin: 0.08,
-        starSpeedMax: 0.15,
+        starSpeedMin: -0.1,
+        starSpeedMax: 0.1,
         starColorLightnessStart: 70,
         starColorLightnessEnd: 90,
-        numStars: 403,
+        numStars: 1000,
         starSizeMin: 3.6,
         starSizeMax: 6.2,
         starColorHueStart: 0,
         starColorHueEnd: 360,
+        starLifespanMin: 15000,
+        starLifespanMax: 20000,
     },
 };
 
 export const BlueFireFlies: Story = {
     args: {
+        starSpeedMin: -0.1,
+        starSpeedMax: 0.1,
         starColorHueStart: 200,
         starColorHueEnd: 240,
         starSizeMin: 0.2,
@@ -124,8 +125,8 @@ export const CyanRing: Story = {
         numStars: 2000,
         starSizeMin: 0.2,
         starSizeMax: 0.8,
-        starSpeedMin: 0.025,
-        starSpeedMax: 0.05,
+        starSpeedMin: -1,
+        starSpeedMax: 1,
         starColorHueStart: 174,
         starColorHueEnd: 200,
         starColorSaturationStart: 100,
@@ -136,6 +137,5 @@ export const CyanRing: Story = {
         starRadiusMax: 225,
         starLifespanMin: 10000,
         starLifespanMax: 20000,
-        fps: 30,
     },
 };

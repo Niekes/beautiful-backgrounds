@@ -5,9 +5,12 @@ export default class Particle {
     private radius: number;
     private angle: number;
     private lifespan: number;
+    private force: number;
 
     private x: number;
     private y: number;
+    private frequencyX: number;
+    private frequencyY: number;
     private born: number;
     private fadeInDuration: number;
     private fadeOutDuration: number;
@@ -19,6 +22,9 @@ export default class Particle {
         radius: number,
         angle: number,
         lifespan: number,
+        force: number = 1,
+        frequencyX: number = 1,
+        frequencyY: number = 1,
     ) {
         this.size = size;
         this.speed = speed;
@@ -26,7 +32,10 @@ export default class Particle {
         this.radius = radius;
         this.angle = angle;
         this.lifespan = lifespan;
+        this.force = force;
 
+        this.frequencyX = frequencyX;
+        this.frequencyY = frequencyY;
         this.x = 0;
         this.y = 0;
         this.born = Date.now();
@@ -34,11 +43,21 @@ export default class Particle {
         this.fadeOutDuration = this.lifespan * 0.5;
     }
 
-    update(centerX: number, centerY: number): void {
-        this.angle += this.speed;
+    circularMove(centerX: number, centerY: number, deltaTime: number) {
+        this.angle += this.speed * deltaTime;
+        this.radius += this.force * deltaTime;
 
-        this.x = centerX + Math.cos(this.angle) * this.radius;
-        this.y = centerY + Math.sin(this.angle) * this.radius;
+        // diverse speeds for x and y
+        this.x = centerX + Math.cos(this.angle * this.frequencyX) * this.radius;
+        this.y = centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
+    }
+
+    sinusMove(centerX: number, centerY: number, deltaTime: number) {
+        this.angle += this.speed * deltaTime;
+
+        // Move linearly on X, oscillate on Y
+        this.x = centerX + this.angle * 100; // 50 is just a scale factor for horizontal speed
+        this.y = centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

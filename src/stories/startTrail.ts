@@ -6,9 +6,6 @@ import { randomColor } from "../utils/color";
 
 @customElement("bb-star-trail")
 export class BbStarTrail extends LitElement {
-    @property({ type: Number, attribute: "data-fps" })
-    fps: number = 60;
-
     @property({ type: String, attribute: "data-background-color" })
     backgroundColor: string = "0, 0, 0";
 
@@ -146,21 +143,20 @@ export class BbStarTrail extends LitElement {
     }
 
     private startAnimation(): void {
-        let lastFrameTime = 0;
+        let lastTime = performance.now();
 
-        const animate = (currentTime: number) => {
-            const targetFrameTime = 1000 / this.fps;
-            if (currentTime - lastFrameTime >= targetFrameTime) {
-                this.animation();
-                lastFrameTime = currentTime;
-            }
+        const animate = (now: number) => {
+            const deltaTime = (now - lastTime) / 1000;
+            lastTime = now;
+
+            this.animation(deltaTime);
             this.animationFrameId = requestAnimationFrame(animate);
         };
 
         this.animationFrameId = requestAnimationFrame(animate);
     }
 
-    protected animation(): void {
+    protected animation(deltaTime: number): void {
         this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
 
@@ -171,7 +167,7 @@ export class BbStarTrail extends LitElement {
         }
 
         this.stars.forEach((star) => {
-            star.update(this.width / 2, this.height / 2);
+            star.circularMove(this.width / 2, this.height / 2, deltaTime);
             star.draw(this.ctx);
         });
     }
@@ -179,9 +175,10 @@ export class BbStarTrail extends LitElement {
     protected createStar(): Particle {
         const size = getRandomFloat(this.starSizeMin, this.starSizeMax);
         const speed = getRandomFloat(
-            interpolateLinear(this.starSpeedMin, -1, 1, -0.04, 0.04),
-            interpolateLinear(this.starSpeedMax, -1, 1, -0.04, 0.04),
+            interpolateLinear(this.starSpeedMin, -10, 10, -1, 1),
+            interpolateLinear(this.starSpeedMax, -10, 10, -1, 1),
         );
+
         const lifespan = getRandomFloat(
             this.starLifespanMin,
             this.starLifespanMax,

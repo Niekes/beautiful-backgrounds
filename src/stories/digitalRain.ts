@@ -6,8 +6,8 @@ import { getRandomInt } from "../utils/number";
 
 @customElement("bb-digital-rain")
 export class BbDigitalRain extends LitElement {
-    @property({ type: Number, attribute: "data-fps" })
-    fps: number = 60;
+    @property({ type: Number, attribute: "data-speed" })
+    speed: number = 30; // rows per second
 
     @property({ type: String, attribute: "data-characters" })
     characters: string =
@@ -147,14 +147,13 @@ export class BbDigitalRain extends LitElement {
     }
 
     private startAnimation(): void {
-        let lastFrameTime = 0;
+        let lastTime = performance.now();
 
-        const animate = (currentTime: number) => {
-            const targetFrameTime = 1000 / this.fps;
-            if (currentTime - lastFrameTime >= targetFrameTime) {
-                this.animation();
-                lastFrameTime = currentTime;
-            }
+        const animate = (now: number) => {
+            const deltaTime = (now - lastTime) / 1000;
+            lastTime = now;
+
+            this.animation(deltaTime);
             this.animationFrameId = requestAnimationFrame(animate);
         };
 
@@ -166,7 +165,7 @@ export class BbDigitalRain extends LitElement {
         this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
-    protected animation(): void {
+    protected animation(deltaTime: number): void {
         this.updateSymbols();
         this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
@@ -188,8 +187,16 @@ export class BbDigitalRain extends LitElement {
                     [this.fontColorLightnessStart, this.fontColorLightnessEnd],
                 ),
                 this.fontSize,
+                this.speed,
             );
-            symbol.update(this.height, this.randomness, this.fontSize);
+
+            symbol.update(
+                this.height,
+                this.randomness,
+                this.fontSize,
+                deltaTime,
+                this.speed,
+            );
         });
     }
 
