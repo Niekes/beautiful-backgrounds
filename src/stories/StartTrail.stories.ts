@@ -1,14 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
+import { color } from "d3";
 import { html } from "lit";
 import "./startTrail";
 
 const meta: Meta = {
     title: "Backgrounds/StarTrail",
     component: "bb-star-trail",
-    render: (args) => html`
-        <bb-star-trail
+    render: (args) => {
+        const c = color(args.backgroundColor)?.rgb();
+        const bgColor = c ? `${c.r}, ${c.g}, ${c.b}` : "0, 0, 0";
+        return html` <bb-star-trail
             data-fps=${args.fps}
-            data-background-color=${args.backgroundColor}
+            data-background-color=${bgColor}
             data-star-size-min=${args.starSizeMin}
             data-star-size-max=${args.starSizeMax}
             data-star-speed-min=${args.starSpeedMin}
@@ -24,11 +27,11 @@ const meta: Meta = {
             data-star-lifespan-min=${args.starLifespanMin}
             data-star-lifespan-max=${args.starLifespanMax}
             data-num-stars=${args.numStars}
-            style="width: 100%; height: 600px; display: block;"
-        ></bb-star-trail>
-    `,
+            style="width: 100%; height: 500px; display: flex;"
+        ></bb-star-trail>`;
+    },
     argTypes: {
-        backgroundColor: { control: "text" },
+        backgroundColor: { control: "color" },
         fps: { control: { type: "range", min: 0, max: 120 } },
         starSizeMin: {
             control: { type: "range", min: 0.1, max: 10, step: 0.1 },
@@ -65,8 +68,8 @@ const meta: Meta = {
         numStars: { control: { type: "range", min: 1, max: 5000 } },
     },
     args: {
-        fps: 60,
-        backgroundColor: "0, 0, 0",
+        backgroundColor: "#000",
+        numStars: 1000,
         starSizeMin: 0.5,
         starSizeMax: 1.5,
         starSpeedMin: 0.025,
@@ -81,7 +84,7 @@ const meta: Meta = {
         starRadiusMax: 100,
         starLifespanMin: 1000,
         starLifespanMax: 10000,
-        numStars: 1000,
+        fps: 60,
     },
 };
 
@@ -90,23 +93,29 @@ type Story = StoryObj;
 
 export const Default: Story = {};
 
-export const FastAndBright: Story = {
+export const PartyLights: Story = {
     args: {
         starSpeedMin: 0.08,
         starSpeedMax: 0.15,
         starColorLightnessStart: 70,
         starColorLightnessEnd: 90,
-        numStars: 1500,
+        numStars: 145,
+        starSizeMin: 3.6,
+        starSizeMax: 6.2,
+        starColorHueStart: 0,
+        starColorHueEnd: 360,
     },
 };
 
-export const DeepSpace: Story = {
+export const BlueGlowWorms: Story = {
     args: {
         starColorHueStart: 200,
         starColorHueEnd: 240,
         starSizeMin: 0.2,
         starSizeMax: 0.8,
         numStars: 2000,
-        backgroundColor: "5, 5, 15",
+        starLifespanMin: 100,
+        starLifespanMax: 1000,
+        backgroundColor: "#050035",
     },
 };

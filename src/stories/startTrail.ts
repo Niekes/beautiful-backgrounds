@@ -89,7 +89,7 @@ export class BbStarTrail extends LitElement {
 
         window.addEventListener(
             "resize",
-            this.debouncedResizeCanvas.bind(this)
+            this.debouncedResizeCanvas.bind(this),
         );
     }
 
@@ -97,7 +97,7 @@ export class BbStarTrail extends LitElement {
         super.disconnectedCallback();
         window.removeEventListener(
             "resize",
-            this.debouncedResizeCanvas.bind(this)
+            this.debouncedResizeCanvas.bind(this),
         );
         if (this.animationFrameId !== null) {
             window.cancelAnimationFrame(this.animationFrameId);
@@ -114,7 +114,7 @@ export class BbStarTrail extends LitElement {
 
     private debouncedResizeCanvas = this.debounce(
         this.resizeCanvas.bind(this),
-        100
+        100,
     );
 
     private debounce(func: Function, wait: number): (...args: any[]) => void {
@@ -129,6 +129,10 @@ export class BbStarTrail extends LitElement {
         this.stars = [];
         this.starRadiusMax = Math.max(this.width, this.height) / 2;
         this.animationFrameId = null;
+
+        // Initialize background to prevent white flash
+        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
+        this.ctx.fillRect(0, 0, this.width, this.height);
 
         for (let i = 0; i < this.numStars; i++) {
             this.stars.push(this.createStar());
@@ -170,16 +174,16 @@ export class BbStarTrail extends LitElement {
         const size = getRandomFloat(this.starSizeMin, this.starSizeMax);
         const speed = getRandomFloat(
             interpolateLinear(this.starSpeedMin, -1, 1, -0.04, 0.04),
-            interpolateLinear(this.starSpeedMax, -1, 1, -0.04, 0.04)
+            interpolateLinear(this.starSpeedMax, -1, 1, -0.04, 0.04),
         );
         const lifespan = getRandomFloat(
             this.starLifespanMin,
-            this.starLifespanMax
+            this.starLifespanMax,
         );
         const color = randomColor(
             [this.starColorHueStart, this.starColorHueEnd],
             [this.starColorSaturationStart, this.starColorSaturationEnd],
-            [this.starColorLightnessStart, this.starColorLightnessEnd]
+            [this.starColorLightnessStart, this.starColorLightnessEnd],
         );
         const angle = getRandomFloat(0, Math.PI * 2);
 

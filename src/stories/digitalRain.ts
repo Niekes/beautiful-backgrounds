@@ -74,7 +74,7 @@ export class BbDigitalRain extends LitElement {
 
         window.addEventListener(
             "resize",
-            this.debouncedResizeCanvas.bind(this)
+            this.debouncedResizeCanvas.bind(this),
         );
     }
 
@@ -82,7 +82,7 @@ export class BbDigitalRain extends LitElement {
         super.disconnectedCallback();
         window.removeEventListener(
             "resize",
-            this.debouncedResizeCanvas.bind(this)
+            this.debouncedResizeCanvas.bind(this),
         );
         if (this.animationFrameId !== null) {
             window.cancelAnimationFrame(this.animationFrameId);
@@ -99,7 +99,7 @@ export class BbDigitalRain extends LitElement {
 
     private debouncedResizeCanvas = this.debounce(
         this.resizeCanvas.bind(this),
-        100
+        100,
     );
 
     private debounce(func: Function, wait: number): (...args: any[]) => void {
@@ -113,6 +113,10 @@ export class BbDigitalRain extends LitElement {
     protected initialize(): void {
         this.symbols = [];
         this.createSymbols();
+
+        // Initialize background to prevent white flash
+        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
+        this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
     private createSymbols(): void {
@@ -161,7 +165,7 @@ export class BbDigitalRain extends LitElement {
             symbol.draw(
                 this.ctx,
                 this.characters.charAt(
-                    Math.floor(Math.random() * this.characters.length)
+                    Math.floor(Math.random() * this.characters.length),
                 ),
                 randomColor(
                     [this.fontColorHueStart, this.fontColorHueEnd],
@@ -169,9 +173,9 @@ export class BbDigitalRain extends LitElement {
                         this.fontColorSaturationStart,
                         this.fontColorSaturationEnd,
                     ],
-                    [this.fontColorLightnessStart, this.fontColorLightnessEnd]
+                    [this.fontColorLightnessStart, this.fontColorLightnessEnd],
                 ),
-                this.fontSize
+                this.fontSize,
             );
             symbol.update(this.height, this.randomness, this.fontSize);
         });
