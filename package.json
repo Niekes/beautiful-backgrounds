@@ -1,53 +1,55 @@
 {
-  "name": "beautiful-backgrounds",
-  "version": "0.0.7",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Niekes/beautiful-backgrounds"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
-  },
-  "dependencies": {
-    "lit": "^3.3.1"
-  },
-  "devDependencies": {
-    "typescript": "~5.9.3",
-    "vite": "^7.2.4",
-    "storybook": "^10.1.11",
-    "@storybook/web-components-vite": "^10.1.11",
-    "@storybook/addon-vitest": "^10.1.11",
-    "@storybook/addon-a11y": "^10.1.11",
-    "@storybook/addon-docs": "^10.1.11",
-    "vitest": "^4.0.17",
-    "playwright": "^1.57.0",
-    "@vitest/browser-playwright": "^4.0.17",
-    "@vitest/coverage-v8": "^4.0.17"
-  },
-  "keywords": [
-    "canvas",
-    "animation",
-    "ambient",
-    "background",
-    "typescript",
-    "web-components",
-    "background-effects",
-    "animated-background",
-    "star-field",
-    "custom-elements",
-    "dynamic-background",
-    "visual-effects",
-    "interactive-background",
-    "canvas-animation",
-    "beautiful-backgrounds",
-    "html5-canvas"
-  ],
-  "author": "Niekes",
-  "license": "MIT",
-  "description": "A collection of customizable web components for creating dynamic, animated backgrounds, featuring a variety of effects including a star field and a digital rain. "
+    "name": "beautiful-backgrounds",
+    "version": "0.0.7",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Niekes/beautiful-backgrounds"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "storybook": "storybook dev -p 6006",
+        "build-storybook": "storybook build"
+    },
+    "dependencies": {
+        "lit": "^3.3.1"
+    },
+    "devDependencies": {
+        "@storybook/addon-a11y": "^10.1.11",
+        "@storybook/addon-docs": "^10.1.11",
+        "@storybook/addon-vitest": "^10.1.11",
+        "@storybook/web-components-vite": "^10.1.11",
+        "@types/d3": "^7.4.3",
+        "@vitest/browser-playwright": "^4.0.17",
+        "@vitest/coverage-v8": "^4.0.17",
+        "d3": "^7.9.0",
+        "playwright": "^1.57.0",
+        "storybook": "^10.1.11",
+        "typescript": "~5.9.3",
+        "vite": "^7.2.4",
+        "vitest": "^4.0.17"
+    },
+    "keywords": [
+        "canvas",
+        "animation",
+        "ambient",
+        "background",
+        "typescript",
+        "web-components",
+        "background-effects",
+        "animated-background",
+        "star-field",
+        "custom-elements",
+        "dynamic-background",
+        "visual-effects",
+        "interactive-background",
+        "canvas-animation",
+        "beautiful-backgrounds",
+        "html5-canvas"
+    ],
+    "author": "Niekes",
+    "license": "MIT",
+    "description": "A collection of customizable web components for creating dynamic, animated backgrounds, featuring a variety of effects including a star field and a digital rain. "
 }
