@@ -10,22 +10,22 @@ const meta: Meta = {
         const c = color(args.backgroundColor)?.rgb();
         const bgColor = c ? `${c.r}, ${c.g}, ${c.b}` : "0, 0, 0";
         return html` <bb-star-trail
-            data-background-color=${bgColor}
-            data-star-size-min=${args.starSizeMin}
-            data-star-size-max=${args.starSizeMax}
-            data-star-speed-min=${args.starSpeedMin}
-            data-star-speed-max=${args.starSpeedMax}
-            data-star-color-hue-start=${args.starColorHueStart}
-            data-star-color-hue-end=${args.starColorHueEnd}
-            data-star-color-saturation-start=${args.starColorSaturationStart}
-            data-star-color-saturation-end=${args.starColorSaturationEnd}
-            data-star-color-lightness-start=${args.starColorLightnessStart}
-            data-star-color-lightness-end=${args.starColorLightnessEnd}
-            data-star-radius-min=${args.starRadiusMin}
-            data-star-radius-max=${args.starRadiusMax}
-            data-star-lifespan-min=${args.starLifespanMin}
-            data-star-lifespan-max=${args.starLifespanMax}
-            data-num-stars=${args.numStars}
+            background-color=${bgColor}
+            star-size-min=${args.starSizeMin}
+            star-size-max=${args.starSizeMax}
+            star-speed-min=${args.starSpeedMin}
+            star-speed-max=${args.starSpeedMax}
+            star-color-hue-start=${args.starColorHueStart}
+            star-color-hue-end=${args.starColorHueEnd}
+            star-color-saturation-start=${args.starColorSaturationStart}
+            star-color-saturation-end=${args.starColorSaturationEnd}
+            star-color-lightness-start=${args.starColorLightnessStart}
+            star-color-lightness-end=${args.starColorLightnessEnd}
+            star-radius-min=${args.starRadiusMin}
+            star-radius-max=${args.starRadiusMax}
+            star-lifespan-min=${args.starLifespanMin}
+            star-lifespan-max=${args.starLifespanMax}
+            num-stars=${args.numStars}
             style="width: 100%; height: 450px; display: flex;"
         ></bb-star-trail>`;
     },
@@ -99,8 +99,8 @@ export const PartyLights: Story = {
         starSizeMax: 6.2,
         starColorHueStart: 0,
         starColorHueEnd: 360,
-        starLifespanMin: 15000,
-        starLifespanMax: 20000,
+        starLifespanMin: 3100,
+        starLifespanMax: 13900,
     },
 };
 
@@ -108,8 +108,8 @@ export const BlueFireFlies: Story = {
     args: {
         starSpeedMin: -0.1,
         starSpeedMax: 0.1,
-        starColorHueStart: 200,
-        starColorHueEnd: 240,
+        starColorHueStart: 169,
+        starColorHueEnd: 275,
         starSizeMin: 0.2,
         starSizeMax: 0.8,
         numStars: 2000,

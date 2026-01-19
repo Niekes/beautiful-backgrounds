@@ -9,6 +9,9 @@ export default class Particle {
 
     private x: number;
     private y: number;
+    private px: number;
+    private py: number;
+    private initialized: boolean = false;
     private frequencyX: number;
     private frequencyY: number;
     private born: number;
@@ -38,6 +41,8 @@ export default class Particle {
         this.frequencyY = frequencyY;
         this.x = 0;
         this.y = 0;
+        this.px = 0;
+        this.py = 0;
         this.born = Date.now();
         this.fadeInDuration = this.lifespan * 0.25;
         this.fadeOutDuration = this.lifespan * 0.5;
@@ -47,25 +52,57 @@ export default class Particle {
         this.angle += this.speed * deltaTime;
         this.radius += this.force * deltaTime;
 
-        // diverse speeds for x and y
-        this.x = centerX + Math.cos(this.angle * this.frequencyX) * this.radius;
-        this.y = centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
-    }
+        const newX =
+            centerX + Math.cos(this.angle * this.frequencyX) * this.radius;
+        const newY =
+            centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
 
+        if (!this.initialized) {
+            this.x = newX;
+            this.y = newY;
+            this.px = newX;
+            this.py = newY;
+            this.initialized = true;
+        } else {
+            this.px = this.x;
+            this.py = this.y;
+            this.x = newX;
+            this.y = newY;
+        }
+    }
     sinusMove(centerX: number, centerY: number, deltaTime: number) {
         this.angle += this.speed * deltaTime;
 
-        // Move linearly on X, oscillate on Y
-        this.x = centerX + this.angle * 100; // 50 is just a scale factor for horizontal speed
-        this.y = centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
+        const newX = centerX + this.angle * 100;
+        const newY =
+            centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
+
+        if (!this.initialized) {
+            this.x = newX;
+            this.y = newY;
+            this.px = newX;
+            this.py = newY;
+            this.initialized = true;
+        } else {
+            this.px = this.x;
+            this.py = this.y;
+            this.x = newX;
+            this.y = newY;
+        }
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
         ctx.globalAlpha = this.calculateOpacity();
-        ctx.fill();
+        ctx.beginPath();
+
+        ctx.lineCap = "round";
+        ctx.lineWidth = this.size * 2;
+        ctx.strokeStyle = this.color;
+
+        ctx.moveTo(this.px, this.py);
+        ctx.lineTo(this.x, this.y);
+        ctx.stroke();
+
         ctx.globalAlpha = 1;
     }
 

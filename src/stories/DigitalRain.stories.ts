@@ -12,17 +12,17 @@ const meta: Meta = {
 
         return html`
             <bb-digital-rain
-                data-speed=${args.speed}
-                data-characters=${args.characters}
-                data-randomness=${args.randomness}
-                data-font-size=${args.fontSize}
-                data-font-color-hue-start=${args.fontColorHueStart}
-                data-font-color-hue-end=${args.fontColorHueEnd}
-                data-font-color-saturation-start=${args.fontColorSaturationStart}
-                data-font-color-saturation-end=${args.fontColorSaturationEnd}
-                data-font-color-lightness-start=${args.fontColorLightnessStart}
-                data-font-color-lightness-end=${args.fontColorLightnessEnd}
-                data-background-color=${bgColor}
+                speed=${args.speed}
+                characters=${args.characters}
+                randomness=${args.randomness}
+                font-size=${args.fontSize}
+                font-color-hue-start=${args.fontColorHueStart}
+                font-color-hue-end=${args.fontColorHueEnd}
+                font-color-saturation-start=${args.fontColorSaturationStart}
+                font-color-saturation-end=${args.fontColorSaturationEnd}
+                font-color-lightness-start=${args.fontColorLightnessStart}
+                font-color-lightness-end=${args.fontColorLightnessEnd}
+                background-color=${bgColor}
                 style="width: 100%; height: 450px; display: flex;"
             ></bb-digital-rain>
         `;
@@ -67,13 +67,14 @@ type Story = StoryObj;
 export const Matrix: Story = {
     args: {
         backgroundColor: "#000",
+        speed: 22,
     },
 };
 
 export const CyberpunkPink: Story = {
     args: {
         characters:
-            "ΨΦΧΩΣΠΛΔΓΒΑ01100110ЯΞΨΦΧΩΞΠΛΔΓβγδεζηθικλμνξοπρστυφχψωАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ∀∃∄∈∉∋∌∐∑",
+            "ΨΦΧΩΣΠΛΔΓΒΑ01100110ЯΞ",
         fontColorHueStart: 300,
         fontColorHueEnd: 340,
         backgroundColor: "#570044",

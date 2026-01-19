@@ -1,120 +1,48 @@
-import { LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { randomColor } from "../utils/color";
 import Symbol from "../Symbol";
 import { getRandomInt } from "../utils/number";
+import { BeautifulBackground } from "../BeautifulBackground";
 
 @customElement("bb-digital-rain")
-export class BbDigitalRain extends LitElement {
-    @property({ type: Number, attribute: "data-speed" })
+export class BbDigitalRain extends BeautifulBackground {
+    @property({ type: Number, attribute: "speed" })
     speed: number = 30; // rows per second
 
-    @property({ type: String, attribute: "data-characters" })
-    characters: string =
-        'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ13579ｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝZ:."¦=*+-<>|ﾘçδ╘';
+    @property({ type: String, attribute: "characters" })
+    characters: string = "ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ";
 
-    @property({ type: Number, attribute: "data-randomness" })
+    @property({ type: Number, attribute: "randomness" })
     randomness: number = 0.975;
 
-    @property({ type: Number, attribute: "data-font-size" })
+    @property({ type: Number, attribute: "font-size" })
     fontSize: number = 24;
 
-    @property({ type: Number, attribute: "data-font-color-hue-start" })
+    @property({ type: Number, attribute: "font-color-hue-start" })
     fontColorHueStart: number = 60;
 
-    @property({ type: Number, attribute: "data-font-color-hue-end" })
+    @property({ type: Number, attribute: "font-color-hue-end" })
     fontColorHueEnd: number = 150;
 
-    @property({ type: Number, attribute: "data-font-color-saturation-start" })
+    @property({ type: Number, attribute: "font-color-saturation-start" })
     fontColorSaturationStart: number = 90;
 
-    @property({ type: Number, attribute: "data-font-color-saturation-end" })
+    @property({ type: Number, attribute: "font-color-saturation-end" })
     fontColorSaturationEnd: number = 100;
 
-    @property({ type: Number, attribute: "data-font-color-lightness-start" })
+    @property({ type: Number, attribute: "font-color-lightness-start" })
     fontColorLightnessStart: number = 50;
 
-    @property({ type: Number, attribute: "data-font-color-lightness-end" })
+    @property({ type: Number, attribute: "font-color-lightness-end" })
     fontColorLightnessEnd: number = 50;
-
-    @property({ type: String, attribute: "data-background-color" })
-    backgroundColor: string = "0, 0, 0";
 
     // Properties inherited from BB class
     public columns: number = 0;
     public symbols: Symbol[] = [];
-    public canvas: HTMLCanvasElement;
-    public ctx: CanvasRenderingContext2D;
-    public width: number = 0;
-    public height: number = 0;
-    public animationFrameId: number | null = null;
-    public trailOpacity: number = 0.1;
 
     constructor() {
         super();
-
-        // Initialize canvas
-        this.canvas = document.createElement("canvas");
-        this.ctx = this.canvas.getContext("2d")!;
-
-        // Set initial font color hue end
         this.fontColorHueEnd = this.fontColorHueStart + 90;
-    }
-
-    protected firstUpdated(): void {
-        // Create shadow DOM and append canvas
-        if (!this.shadowRoot) {
-            this.attachShadow({ mode: "open" });
-        }
-        this.shadowRoot!.appendChild(this.canvas);
-
-        this.resizeCanvas();
-        this.initialize();
-        this.startAnimation();
-
-        window.addEventListener(
-            "resize",
-            this.debouncedResizeCanvas.bind(this),
-        );
-    }
-
-    disconnectedCallback(): void {
-        super.disconnectedCallback();
-        window.removeEventListener(
-            "resize",
-            this.debouncedResizeCanvas.bind(this),
-        );
-        if (this.animationFrameId !== null) {
-            window.cancelAnimationFrame(this.animationFrameId);
-        }
-    }
-
-    private resizeCanvas(): void {
-        const rect = this.getBoundingClientRect();
-
-        if (rect.width === this.width && rect.height === this.height) return;
-
-        this.width = rect.width;
-        this.height = rect.height;
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-
-        // Re-apply background color immediately to prevent white flash
-        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
-        this.ctx.fillRect(0, 0, this.width, this.height);
-    }
-
-    private debouncedResizeCanvas = this.debounce(
-        this.resizeCanvas.bind(this),
-        100,
-    );
-
-    private debounce(func: Function, wait: number): (...args: any[]) => void {
-        let timeout: any;
-        return (...args: any[]) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
     }
 
     protected initialize(): void {
@@ -146,26 +74,7 @@ export class BbDigitalRain extends LitElement {
         }
     }
 
-    private startAnimation(): void {
-        let lastTime = performance.now();
-
-        const animate = (now: number) => {
-            const deltaTime = (now - lastTime) / 1000;
-            lastTime = now;
-
-            this.animation(deltaTime);
-            this.animationFrameId = requestAnimationFrame(animate);
-        };
-
-        this.animationFrameId = requestAnimationFrame(animate);
-    }
-
-    repaintCanvas() {
-        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
-        this.ctx.fillRect(0, 0, this.width, this.height);
-    }
-
-    protected animation(deltaTime: number): void {
+    protected loop(deltaTime: number): void {
         this.updateSymbols();
         this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
@@ -202,11 +111,6 @@ export class BbDigitalRain extends LitElement {
 
     protected createSymbol(index: number): Symbol {
         return new Symbol(index, getRandomInt(0, -this.height / this.fontSize));
-    }
-
-    // Override render to return empty template since we're using canvas
-    render() {
-        return;
     }
 }
 

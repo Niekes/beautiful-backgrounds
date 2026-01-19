@@ -1,135 +1,61 @@
-import { LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import Particle from "../Particle";
 import { getRandomFloat, interpolateLinear } from "../utils/number";
 import { randomColor } from "../utils/color";
+import { BeautifulBackground } from "../BeautifulBackground";
 
 @customElement("bb-star-trail")
-export class BbStarTrail extends LitElement {
-    @property({ type: String, attribute: "data-background-color" })
-    backgroundColor: string = "0, 0, 0";
-
-    @property({ type: Number, attribute: "data-star-size-min" })
+export class BbStarTrail extends BeautifulBackground {
+    @property({ type: Number, attribute: "star-size-min" })
     starSizeMin: number = 0.5;
 
-    @property({ type: Number, attribute: "data-star-size-max" })
+    @property({ type: Number, attribute: "star-size-max" })
     starSizeMax: number = 1.5;
 
-    @property({ type: Number, attribute: "data-star-speed-min" })
+    @property({ type: Number, attribute: "star-speed-min" })
     starSpeedMin: number = 0.025;
 
-    @property({ type: Number, attribute: "data-star-speed-max" })
+    @property({ type: Number, attribute: "star-speed-max" })
     starSpeedMax: number = 0.05;
 
-    @property({ type: Number, attribute: "data-star-color-hue-start" })
+    @property({ type: Number, attribute: "star-color-hue-start" })
     starColorHueStart: number = 30;
 
-    @property({ type: Number, attribute: "data-star-color-hue-end" })
+    @property({ type: Number, attribute: "star-color-hue-end" })
     starColorHueEnd: number = 75;
 
-    @property({ type: Number, attribute: "data-star-color-saturation-start" })
+    @property({ type: Number, attribute: "star-color-saturation-start" })
     starColorSaturationStart: number = 100;
 
-    @property({ type: Number, attribute: "data-star-color-saturation-end" })
+    @property({ type: Number, attribute: "star-color-saturation-end" })
     starColorSaturationEnd: number = 100;
 
-    @property({ type: Number, attribute: "data-star-color-lightness-start" })
+    @property({ type: Number, attribute: "star-color-lightness-start" })
     starColorLightnessStart: number = 50;
 
-    @property({ type: Number, attribute: "data-star-color-lightness-end" })
+    @property({ type: Number, attribute: "star-color-lightness-end" })
     starColorLightnessEnd: number = 50;
 
-    @property({ type: Number, attribute: "data-star-radius-min" })
+    @property({ type: Number, attribute: "star-radius-min" })
     starRadiusMin: number = 1;
 
-    @property({ type: Number, attribute: "data-star-radius-max" })
+    @property({ type: Number, attribute: "star-radius-max" })
     starRadiusMax: number = 100;
 
-    @property({ type: Number, attribute: "data-star-lifespan-min" })
+    @property({ type: Number, attribute: "star-lifespan-min" })
     starLifespanMin: number = 1000;
 
-    @property({ type: Number, attribute: "data-star-lifespan-max" })
+    @property({ type: Number, attribute: "star-lifespan-max" })
     starLifespanMax: number = 10000;
 
-    @property({ type: Number, attribute: "data-num-stars" })
+    @property({ type: Number, attribute: "num-stars" })
     numStars: number = 1000;
-
-    public canvas: HTMLCanvasElement;
-    public ctx: CanvasRenderingContext2D;
-    public width: number = 0;
-    public height: number = 0;
-    public animationFrameId: number | null = null;
-    public trailOpacity: number = 0.1;
 
     // Component-specific properties
     private stars: Particle[] = [];
 
-    constructor() {
-        super();
-
-        // Initialize canvas
-        this.canvas = document.createElement("canvas");
-        this.ctx = this.canvas.getContext("2d")!;
-    }
-
-    protected firstUpdated(): void {
-        // Create shadow DOM and append canvas
-        if (!this.shadowRoot) {
-            this.attachShadow({ mode: "open" });
-        }
-        this.shadowRoot!.appendChild(this.canvas);
-
-        this.resizeCanvas();
-        this.initialize();
-        this.startAnimation();
-
-        window.addEventListener(
-            "resize",
-            this.debouncedResizeCanvas.bind(this),
-        );
-    }
-
-    disconnectedCallback(): void {
-        super.disconnectedCallback();
-        window.removeEventListener(
-            "resize",
-            this.debouncedResizeCanvas.bind(this),
-        );
-        if (this.animationFrameId !== null) {
-            window.cancelAnimationFrame(this.animationFrameId);
-        }
-    }
-
-    private resizeCanvas(): void {
-        const rect = this.getBoundingClientRect();
-
-        if (rect.width === this.width && rect.height === this.height) return;
-
-        this.width = rect.width;
-        this.height = rect.height;
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-
-        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
-        this.ctx.fillRect(0, 0, this.width, this.height);
-    }
-
-    private debouncedResizeCanvas = this.debounce(
-        this.resizeCanvas.bind(this),
-        100,
-    );
-
-    private debounce(func: Function, wait: number): (...args: any[]) => void {
-        let timeout: any;
-        return (...args: any[]) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
-
     protected initialize(): void {
         this.stars = [];
-        this.animationFrameId = null;
 
         // Initialize background to prevent white flash
         this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
@@ -142,21 +68,7 @@ export class BbStarTrail extends LitElement {
         }
     }
 
-    private startAnimation(): void {
-        let lastTime = performance.now();
-
-        const animate = (now: number) => {
-            const deltaTime = (now - lastTime) / 1000;
-            lastTime = now;
-
-            this.animation(deltaTime);
-            this.animationFrameId = requestAnimationFrame(animate);
-        };
-
-        this.animationFrameId = requestAnimationFrame(animate);
-    }
-
-    protected animation(deltaTime: number): void {
+    protected loop(deltaTime: number): void {
         this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
 
@@ -195,11 +107,6 @@ export class BbStarTrail extends LitElement {
             Math.sqrt(Math.random()) * radiusRange + this.starRadiusMin;
 
         return new Particle(size, speed, color, radius, angle, lifespan);
-    }
-
-    // Override render to return empty template since we're using canvas
-    render() {
-        return;
     }
 }
 

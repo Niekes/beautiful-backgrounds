@@ -34,7 +34,6 @@ export default class Symbol {
         speed: number,
         baseSpeed: number = 30,
     ): void {
-        // Abstand proportional zur Geschwindigkeit
         const spacingFactor = speed / baseSpeed;
         ctx.fillStyle = color;
         ctx.fillText(
