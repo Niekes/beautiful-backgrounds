@@ -11,6 +11,7 @@ export abstract class BeautifulBackground extends LitElement {
     public width: number = 0;
     public height: number = 0;
     public animationFrameId: number | null = null;
+    @property({ type: Number, attribute: "trail-opacity" })
     public trailOpacity: number = 0.1;
 
     protected debouncedResize: () => void;

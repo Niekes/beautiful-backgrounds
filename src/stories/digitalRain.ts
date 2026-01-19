@@ -7,7 +7,7 @@ import { BeautifulBackground } from "../BeautifulBackground";
 @customElement("bb-digital-rain")
 export class BbDigitalRain extends BeautifulBackground {
     @property({ type: Number, attribute: "speed" })
-    speed: number = 30; // rows per second
+    speed: number = 10; // rows per second
 
     @property({ type: String, attribute: "characters" })
     characters: string = "ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ";
@@ -96,7 +96,7 @@ export class BbDigitalRain extends BeautifulBackground {
                     [this.fontColorLightnessStart, this.fontColorLightnessEnd],
                 ),
                 this.fontSize,
-                this.speed,
+                this.speed * 3,
             );
 
             symbol.update(
@@ -104,7 +104,7 @@ export class BbDigitalRain extends BeautifulBackground {
                 this.randomness,
                 this.fontSize,
                 deltaTime,
-                this.speed,
+                this.speed * 3,
             );
         });
     }

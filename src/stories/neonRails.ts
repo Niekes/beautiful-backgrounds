@@ -4,25 +4,25 @@ import { getRandomFloat, interpolateLinear } from "../utils/number";
 import { randomColor } from "../utils/color";
 import { BeautifulBackground } from "../BeautifulBackground";
 
-@customElement("bb-star-trail")
-export class BbStarTrail extends BeautifulBackground {
+@customElement("bb-neon-rails")
+export class BbNeonRails extends BeautifulBackground {
     @property({ type: Number, attribute: "particle-size-min" })
-    particleSizeMin: number = 0.5;
+    particleSizeMin: number = 1;
 
     @property({ type: Number, attribute: "particle-size-max" })
-    particleSizeMax: number = 1.5;
+    particleSizeMax: number = 1;
 
     @property({ type: Number, attribute: "particle-speed-min" })
-    particleSpeedMin: number = 0.025;
+    particleSpeedMin: number = -30;
 
     @property({ type: Number, attribute: "particle-speed-max" })
-    particleSpeedMax: number = 0.05;
+    particleSpeedMax: number = 30;
 
     @property({ type: Number, attribute: "particle-color-hue-start" })
-    particleColorHueStart: number = 30;
+    particleColorHueStart: number = 130;
 
     @property({ type: Number, attribute: "particle-color-hue-end" })
-    particleColorHueEnd: number = 75;
+    particleColorHueEnd: number = 300;
 
     @property({ type: Number, attribute: "particle-color-saturation-start" })
     particleColorSaturationStart: number = 100;
@@ -34,31 +34,25 @@ export class BbStarTrail extends BeautifulBackground {
     particleColorLightnessStart: number = 50;
 
     @property({ type: Number, attribute: "particle-color-lightness-end" })
-    particleColorLightnessEnd: number = 50;
-
-    @property({ type: Number, attribute: "particle-radius-min" })
-    particleRadiusMin: number = 1;
-
-    @property({ type: Number, attribute: "particle-radius-max" })
-    particleRadiusMax: number = 100;
+    particleColorLightnessEnd: number = 0;
 
     @property({ type: Number, attribute: "particle-lifespan-min" })
-    particleLifespanMin: number = 1000;
+    particleLifespanMin: number = 100;
 
     @property({ type: Number, attribute: "particle-lifespan-max" })
-    particleLifespanMax: number = 10000;
+    particleLifespanMax: number = 50000;
 
     @property({ type: Number, attribute: "particle-amount" })
-    particleAmount: number = 1000;
+    particleAmount: number = 2000;
 
     @property({ type: Number, attribute: "grid-sides" })
-    gridSides: number = 6;
+    gridSides: number = 3;
 
     @property({ type: Number, attribute: "grid-size" })
-    gridSize: number = 40;
+    gridSize: number = 60;
 
     @property({ type: Number, attribute: "grid-angle" })
-    gridAngle: number = 0;
+    gridAngle: number = Math.PI / 2;
 
     @property({ type: Array, attribute: "particle-colors" })
     particleColors: string[] = [];
@@ -66,14 +60,15 @@ export class BbStarTrail extends BeautifulBackground {
     // Component-specific properties
     private particles: Particle[] = [];
 
+    @property({ type: Number, attribute: "trail-opacity" })
+    public trailOpacity: number = 0.0125;
+
     protected initialize(): void {
         this.particles = [];
 
         // Initialize background to prevent white flash
         this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
-
-        this.particleRadiusMax = this.particleRadiusMax || this.width;
 
         for (let i = 0; i < this.particleAmount; i++) {
             this.particles.push(this.createParticle());
@@ -93,7 +88,7 @@ export class BbStarTrail extends BeautifulBackground {
         }
 
         this.particles.forEach((particle) => {
-            particle.circularMove(this.width / 2, this.height / 2, deltaTime);
+            particle.railMove(this.width / 2, this.height / 2, deltaTime);
             particle.draw(this.ctx);
         });
     }
@@ -101,8 +96,8 @@ export class BbStarTrail extends BeautifulBackground {
     protected createParticle(): Particle {
         const size = getRandomFloat(this.particleSizeMin, this.particleSizeMax);
         const speed = getRandomFloat(
-            interpolateLinear(this.particleSpeedMin, -10, 10, -1, 1),
-            interpolateLinear(this.particleSpeedMax, -10, 10, -1, 1),
+            interpolateLinear(this.particleSpeedMin, -10, 10, -10, 10),
+            interpolateLinear(this.particleSpeedMax, -10, 10, -10, 10),
         );
 
         const lifespan = getRandomFloat(
@@ -111,7 +106,6 @@ export class BbStarTrail extends BeautifulBackground {
         );
 
         let color: string;
-
         if (this.particleColors && this.particleColors.length > 0) {
             color =
                 this.particleColors[
@@ -131,28 +125,31 @@ export class BbStarTrail extends BeautifulBackground {
             );
         }
 
-        const angle = getRandomFloat(0, Math.PI * 2);
+        // Create randomly on canvas (rectangular distribution)
+        const randX = getRandomFloat(0, this.width);
+        const randY = getRandomFloat(0, this.height);
+        const dx = randX - this.width / 2;
+        const dy = randY - this.height / 2;
 
-        const radiusRange = this.particleRadiusMax - this.particleRadiusMin;
-        const radius =
-            Math.sqrt(Math.random()) * radiusRange + this.particleRadiusMin;
+        const angle = Math.atan2(dy, dx);
 
         return new Particle({
             size: size,
             speed: speed,
             color: color,
-            radius: radius,
             angle: angle,
             lifespan: lifespan,
             gridSides: this.gridSides,
             gridSize: this.gridSize,
             gridAngle: this.gridAngle,
+            x: randX,
+            y: randY,
         });
     }
 }
 
 declare global {
     interface HTMLElementTagNameMap {
-        "bb-star-trail": BbStarTrail;
+        "bb-neon-rails": BbNeonRails;
     }
 }

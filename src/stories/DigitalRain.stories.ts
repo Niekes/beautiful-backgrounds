@@ -4,7 +4,7 @@ import { html } from "lit";
 import "./digitalRain";
 
 const meta: Meta = {
-    title: "Backgrounds/DigitalRain",
+    title: "Backgrounds/Digital Rain",
     component: "bb-digital-rain",
     render: (args) => {
         const c = color(args.backgroundColor)?.rgb();
@@ -23,13 +23,14 @@ const meta: Meta = {
                 font-color-lightness-start=${args.fontColorLightnessStart}
                 font-color-lightness-end=${args.fontColorLightnessEnd}
                 background-color=${bgColor}
+                trail-opacity=${args.trailOpacity}
                 style="width: 100%; height: 450px; display: flex;"
             ></bb-digital-rain>
         `;
     },
     argTypes: {
         backgroundColor: { control: "color" },
-        speed: { control: { type: "range", min: 0, max: 30 } },
+        speed: { control: { type: "range", min: 0, max: 10, step: 0.1 } },
         randomness: { control: { type: "range", min: 0, max: 1, step: 0.005 } },
         fontSize: { control: { type: "range", min: 8, max: 72 } },
         fontColorHueStart: { control: { type: "range", min: 0, max: 360 } },
@@ -44,6 +45,9 @@ const meta: Meta = {
             control: { type: "range", min: 0, max: 100 },
         },
         fontColorLightnessEnd: { control: { type: "range", min: 0, max: 100 } },
+        trailOpacity: {
+            control: { type: "range", min: 0.001, max: 1, step: 0.001 },
+        },
     },
     args: {
         characters:
@@ -56,25 +60,24 @@ const meta: Meta = {
         fontColorSaturationEnd: 100,
         fontColorLightnessStart: 50,
         fontColorLightnessEnd: 50,
-        speed: 25,
+        speed: 10,
         backgroundColor: "#000",
+        trailOpacity: 0.1,
     },
 };
 
 export default meta;
 type Story = StoryObj;
 
-export const Matrix: Story = {
+export const Default: Story = {
     args: {
         backgroundColor: "#000",
-        speed: 22,
     },
 };
 
 export const CyberpunkPink: Story = {
     args: {
-        characters:
-            "ΨΦΧΩΣΠΛΔΓΒΑ01100110ЯΞ",
+        characters: "ΨΦΧΩΣΠΛΔΓΒΑ01100110ЯΞ",
         fontColorHueStart: 300,
         fontColorHueEnd: 340,
         backgroundColor: "#570044",
