@@ -240,6 +240,170 @@ export const PinkVeins: Story = {
         gridSize: 10,
         gridAngle: 168,
         trailOpacity: 0.001,
-        particleColors: []
-    }
+        particleColors: [],
+    },
+};
+
+export const ElectricHighway: Story = {
+    args: {
+        backgroundColor: "#000a1a",
+        particleColors: ["#00ffff", "#0080ff"],
+        particleSizeMin: 1.5,
+        particleSizeMax: 3.0,
+        particleSpeedMin: 15,
+        particleSpeedMax: 25,
+        particleLifespanMin: 2000,
+        particleLifespanMax: 8000,
+        particleAmount: 800,
+        gridSides: 4,
+        gridSize: 80,
+        gridAngle: 0,
+        trailOpacity: 0.08,
+    },
+};
+
+export const VioletLattice: Story = {
+    args: {
+        backgroundColor: "#0f0014",
+        particleColors: ["#ff00ff", "#ff0080", "#8000ff"],
+        particleSizeMin: 0.5,
+        particleSizeMax: 2.0,
+        particleSpeedMin: -3,
+        particleSpeedMax: 3,
+        particleLifespanMin: 5000,
+        particleLifespanMax: 15000,
+        particleAmount: 1500,
+        gridSides: 6,
+        gridSize: 45,
+        gridAngle: 30,
+        trailOpacity: 0.02,
+    },
+};
+
+export const TronLegacy: Story = {
+    args: {
+        backgroundColor: "#000000",
+        particleColorHueStart: 180,
+        particleColorHueEnd: 200,
+        particleColorSaturationStart: 100,
+        particleColorSaturationEnd: 100,
+        particleColorLightnessStart: 50,
+        particleColorLightnessEnd: 80,
+        particleSizeMin: 0.8,
+        particleSizeMax: 1.7,
+        particleSpeedMin: 8,
+        particleSpeedMax: 20,
+        particleLifespanMin: 3000,
+        particleLifespanMax: 10000,
+        particleAmount: 2500,
+        gridSides: 4,
+        gridSize: 50,
+        gridAngle: 115,
+        trailOpacity: 0.05,
+    },
+};
+
+export const NeuralNetwork: Story = {
+    args: {
+        backgroundColor: "#0a0a0f",
+        particleColors: ["#00ff88", "#00ffcc", "#00ffff"],
+        particleSizeMin: 0.3,
+        particleSizeMax: 1.2,
+        particleSpeedMin: -2,
+        particleSpeedMax: 2,
+        particleLifespanMin: 8000,
+        particleLifespanMax: 25000,
+        particleAmount: 3000,
+        gridSides: 5,
+        gridSize: 35,
+        gridAngle: 0,
+        trailOpacity: 0.044,
+    },
+};
+
+export const RainbowCircuit: Story = {
+    args: {
+        backgroundColor: "#000000",
+        particleColorHueStart: 0,
+        particleColorHueEnd: 360,
+        particleColorSaturationStart: 100,
+        particleColorSaturationEnd: 100,
+        particleColorLightnessStart: 50,
+        particleColorLightnessEnd: 70,
+        particleSizeMin: 1.0,
+        particleSizeMax: 2.5,
+        particleSpeedMin: 5,
+        particleSpeedMax: 15,
+        particleLifespanMin: 4000,
+        particleLifespanMax: 12000,
+        particleAmount: 1800,
+        gridSides: 8,
+        gridSize: 60,
+        gridAngle: 22.5,
+        trailOpacity: 0.03,
+    },
+};
+
+export const QuantumTunnels: Story = {
+    args: {
+        backgroundColor: "#000000",
+        particleColorHueStart: 260,
+        particleColorHueEnd: 280,
+        particleColorSaturationStart: 80,
+        particleColorSaturationEnd: 100,
+        particleColorLightnessStart: 40,
+        particleColorLightnessEnd: 90,
+        particleSizeMin: 0.2,
+        particleSizeMax: 1.8,
+        particleSpeedMin: -12,
+        particleSpeedMax: 12,
+        particleLifespanMin: 1500,
+        particleLifespanMax: 8000,
+        particleAmount: 4000,
+        gridSides: 3,
+        gridSize: 40,
+        gridAngle: 60,
+        trailOpacity: 0.01,
+    },
+};
+
+export const EmeraldMatrix: Story = {
+    args: {
+        backgroundColor: "#001a00",
+        particleColorHueStart: 120,
+        particleColorHueEnd: 150,
+        particleColorSaturationStart: 100,
+        particleColorSaturationEnd: 100,
+        particleColorLightnessStart: 30,
+        particleColorLightnessEnd: 70,
+        particleSizeMin: 0.5,
+        particleSizeMax: 1.5,
+        particleSpeedMin: 3,
+        particleSpeedMax: 10,
+        particleLifespanMin: 5000,
+        particleLifespanMax: 18000,
+        particleAmount: 2200,
+        gridSides: 4,
+        gridSize: 25,
+        gridAngle: 0,
+        trailOpacity: 0.025,
+    },
+};
+
+export const SunsetGrid: Story = {
+    args: {
+        backgroundColor: "#1a0a00",
+        particleColors: ["#ff6600", "#ff9900", "#ffcc00", "#ff3300"],
+        particleSizeMin: 0.8,
+        particleSizeMax: 2.5,
+        particleSpeedMin: -5,
+        particleSpeedMax: 5,
+        particleLifespanMin: 6000,
+        particleLifespanMax: 20000,
+        particleAmount: 1200,
+        gridSides: 6,
+        gridSize: 55,
+        gridAngle: 90,
+        trailOpacity: 0.04,
+    },
 };

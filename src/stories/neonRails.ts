@@ -67,7 +67,7 @@ export class BbNeonRails extends BeautifulBackground {
         this.particles = [];
 
         // Initialize background to prevent white flash
-        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
+        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         for (let i = 0; i < this.particleAmount; i++) {

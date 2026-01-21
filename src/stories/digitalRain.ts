@@ -50,7 +50,7 @@ export class BbDigitalRain extends BeautifulBackground {
         this.createSymbols();
 
         // Initialize background to prevent white flash
-        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
+        this.ctx.fillStyle = `rgba(${this.backgroundColor})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
     }
 

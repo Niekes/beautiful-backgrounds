@@ -6,6 +6,9 @@ import { BeautifulBackground } from "../BeautifulBackground";
 
 @customElement("bb-star-trail")
 export class BbStarTrail extends BeautifulBackground {
+    @property({ type: Number, attribute: "particle-force" })
+    particleForce: number = 0;
+
     @property({ type: Number, attribute: "particle-size-min" })
     particleSizeMin: number = 0.5;
 
@@ -70,7 +73,7 @@ export class BbStarTrail extends BeautifulBackground {
         this.particles = [];
 
         // Initialize background to prevent white flash
-        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
+        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         this.particleRadiusMax = this.particleRadiusMax || this.width;
@@ -147,6 +150,7 @@ export class BbStarTrail extends BeautifulBackground {
             gridSides: this.gridSides,
             gridSize: this.gridSize,
             gridAngle: this.gridAngle,
+            force: this.particleForce,
         });
     }
 }

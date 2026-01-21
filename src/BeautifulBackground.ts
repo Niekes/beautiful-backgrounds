@@ -11,6 +11,7 @@ export abstract class BeautifulBackground extends LitElement {
     public width: number = 0;
     public height: number = 0;
     public animationFrameId: number | null = null;
+
     @property({ type: Number, attribute: "trail-opacity" })
     public trailOpacity: number = 0.1;
 
@@ -23,6 +24,14 @@ export abstract class BeautifulBackground extends LitElement {
         this.debouncedResize = debounce(this.resizeCanvas.bind(this), 100);
     }
 
+    protected handleVisibilityChange = () => {
+        if (document.visibilityState === "hidden") {
+            this.stopAnimation();
+        } else {
+            this.startAnimation();
+        }
+    };
+
     protected firstUpdated() {
         if (!this.shadowRoot) {
             this.attachShadow({ mode: "open" });
@@ -34,14 +43,20 @@ export abstract class BeautifulBackground extends LitElement {
         this.startAnimation();
 
         window.addEventListener("resize", this.debouncedResize);
+        document.addEventListener(
+            "visibilitychange",
+            this.handleVisibilityChange,
+        );
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
         window.removeEventListener("resize", this.debouncedResize);
-        if (this.animationFrameId !== null) {
-            cancelAnimationFrame(this.animationFrameId);
-        }
+        document.removeEventListener(
+            "visibilitychange",
+            this.handleVisibilityChange,
+        );
+        this.stopAnimation();
     }
 
     protected resizeCanvas(): void {
@@ -68,6 +83,8 @@ export abstract class BeautifulBackground extends LitElement {
     }
 
     protected startAnimation() {
+        if (this.animationFrameId !== null) return;
+
         let lastTime = performance.now();
         const animate = (now: number) => {
             const deltaTime = (now - lastTime) / 1000;
@@ -76,6 +93,13 @@ export abstract class BeautifulBackground extends LitElement {
             this.animationFrameId = requestAnimationFrame(animate);
         };
         this.animationFrameId = requestAnimationFrame(animate);
+    }
+
+    protected stopAnimation() {
+        if (this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
     }
 
     protected abstract loop(deltaTime: number): void;

@@ -71,7 +71,18 @@ type Story = StoryObj;
 
 export const Default: Story = {
     args: {
-        backgroundColor: "#000",
+        characters: "ｱｲｳｴｵｶｷｸｹｺ",
+        fontColorHueStart: 120,
+        fontColorHueEnd: 140,
+        fontColorSaturationStart: 80,
+        fontColorSaturationEnd: 100,
+        fontColorLightnessStart: 40,
+        fontColorLightnessEnd: 60,
+        backgroundColor: "#000000",
+        speed: 8,
+        fontSize: 20,
+        randomness: 0.95,
+        trailOpacity: 0.08,
     },
 };
 
@@ -90,9 +101,79 @@ export const PurpleRain: Story = {
         characters: "|",
         randomness: 0.98,
         fontSize: 12,
-        fontColorHueStart: 267,
-        fontColorHueEnd: 278,
-        fontColorSaturationStart: 100,
-        speed: 30,
+        fontColorHueStart: 261,
+        fontColorHueEnd: 289,
+        fontColorSaturationStart: 87,
+        speed: 5.4,
+        fontColorLightnessStart: 43,
+        fontColorLightnessEnd: 55,
+    },
+};
+
+export const NeonBlue: Story = {
+    args: {
+        characters: "ABCDEF0123456789",
+        fontColorHueStart: 180,
+        fontColorHueEnd: 210,
+        fontColorSaturationStart: 90,
+        fontColorSaturationEnd: 100,
+        fontColorLightnessStart: 60,
+        fontColorLightnessEnd: 70,
+        backgroundColor: "#001122",
+        speed: 6,
+        fontSize: 18,
+        randomness: 0.9,
+        trailOpacity: 0.12,
+    },
+};
+
+export const OrangeFire: Story = {
+    args: {
+        characters: "▲◆●★",
+        fontColorHueStart: 30,
+        fontColorHueEnd: 45,
+        fontColorSaturationStart: 80,
+        fontColorSaturationEnd: 100,
+        fontColorLightnessStart: 50,
+        fontColorLightnessEnd: 60,
+        backgroundColor: "#220000",
+        speed: 7,
+        fontSize: 22,
+        randomness: 0.92,
+        trailOpacity: 0.15,
+    },
+};
+
+export const GhostWhite: Story = {
+    args: {
+        characters: "░▒▓■□▲▼",
+        fontColorHueStart: 0,
+        fontColorHueEnd: 0,
+        fontColorSaturationStart: 0,
+        fontColorSaturationEnd: 0,
+        fontColorLightnessStart: 80,
+        fontColorLightnessEnd: 100,
+        backgroundColor: "#111111",
+        speed: 4,
+        fontSize: 16,
+        randomness: 0.98,
+        trailOpacity: 0.05,
+    },
+};
+
+export const RainbowChaos: Story = {
+    args: {
+        characters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        fontColorHueStart: 0,
+        fontColorHueEnd: 360,
+        fontColorSaturationStart: 70,
+        fontColorSaturationEnd: 100,
+        fontColorLightnessStart: 40,
+        fontColorLightnessEnd: 80,
+        backgroundColor: "#000000",
+        speed: 9,
+        fontSize: 14,
+        randomness: 0.99,
+        trailOpacity: 0.09,
     },
 };
