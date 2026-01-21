@@ -23,6 +23,8 @@ const meta: Meta = {
                 hue-end=${args.hueEnd}
                 saturation=${args.saturation}
                 offset-step=${args.offsetStep}
+                wiggle-amplitude=${args.wiggleAmplitude}
+                wiggle-speed=${args.wiggleSpeed}
                 trail-opacity=${args.trailOpacity}
                 style="width: 100%; height: 500px; display: flex;"
             ></bb-liquid-lines>
@@ -42,6 +44,10 @@ const meta: Meta = {
         hueEnd: { control: { type: "range", min: 0, max: 360, step: 1 } },
         saturation: { control: { type: "range", min: 0, max: 100, step: 1 } },
         offsetStep: { control: { type: "range", min: -2, max: 2, step: 0.01 } },
+        wiggleAmplitude: {
+            control: { type: "range", min: 0, max: 100, step: 1 },
+        },
+        wiggleSpeed: { control: { type: "range", min: 0, max: 5, step: 0.1 } },
         trailOpacity: {
             control: { type: "range", min: 0, max: 1, step: 0.05 },
         },
@@ -58,6 +64,8 @@ const meta: Meta = {
         hueEnd: 280,
         saturation: 80,
         offsetStep: 0.2,
+        wiggleAmplitude: 20,
+        wiggleSpeed: 0.3,
         trailOpacity: 0.1,
     },
 };
@@ -65,7 +73,13 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const Default: Story = {};
+export const Default: Story = {
+    args: {
+        lineCount: 16,
+        amplitude: 48,
+        speed: 2.05,
+    },
+};
 
 export const DeepSea: Story = {
     args: {
@@ -77,6 +91,8 @@ export const DeepSea: Story = {
         hueStart: 180,
         hueEnd: 220,
         backgroundColor: "#000814",
+        wiggleAmplitude: 1,
+        wiggleSpeed: 5
     },
 };
 
@@ -90,6 +106,7 @@ export const SunsetGlow: Story = {
         hueStart: 10,
         hueEnd: 50,
         backgroundColor: "#1a0f00",
+        wiggleSpeed: 0.7
     },
 };
 
@@ -105,6 +122,8 @@ export const NeonPulse: Story = {
         lineWidth: 1,
         backgroundColor: "#050010",
         trailOpacity: 0.05,
+        wiggleAmplitude: 2,
+        wiggleSpeed: 3
     },
 };
 
@@ -136,6 +155,8 @@ export const AuroraBorealis: Story = {
         lineWidth: 3,
         backgroundColor: "#000510",
         trailOpacity: 0.08,
+        wiggleAmplitude: 40,
+        wiggleSpeed: 3.1,
     },
 };
 
@@ -151,6 +172,8 @@ export const MoltenMagma: Story = {
         saturation: 100,
         lineWidth: 12,
         backgroundColor: "#100000",
+        wiggleAmplitude: 10,
+        wiggleSpeed: 0.1,
     },
 };
 
@@ -171,16 +194,19 @@ export const DigitalMist: Story = {
 
 export const Bioluminescence: Story = {
     args: {
-        lineCount: 35,
+        lineCount: 54,
         amplitude: 80,
-        frequency: 0.01,
-        speed: 1.5,
-        lineSpacing: 20,
-        hueStart: 160,
-        hueEnd: 200,
-        lineWidth: 1,
+        frequency: 0.004,
+        speed: 0.88,
+        lineSpacing: 16,
+        hueStart: 164,
+        hueEnd: 245,
+        lineWidth: 3.2,
         backgroundColor: "#000a0a",
         trailOpacity: 0.03,
+        offsetStep: 0.04,
+        wiggleAmplitude: 3,
+        wiggleSpeed: 1.6
     },
 };
 

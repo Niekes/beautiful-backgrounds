@@ -34,6 +34,12 @@ export class BbLiquidLines extends BeautifulBackground {
     @property({ type: Number, attribute: "offset-step" })
     offsetStep: number = 0.2;
 
+    @property({ type: Number, attribute: "wiggle-amplitude" })
+    wiggleAmplitude: number = 20;
+
+    @property({ type: Number, attribute: "wiggle-speed" })
+    wiggleSpeed: number = 0.3;
+
     private time: number = 0;
 
     protected loop(deltaTime: number): void {
@@ -78,18 +84,24 @@ export class BbLiquidLines extends BeautifulBackground {
 
         for (let j = 0; j < points - 1; j++) {
             const x1 = j * step;
-            const wave1 =
+            const horizontalWave1 =
                 Math.sin(
                     x1 * this.frequency + this.time * this.speed + phaseOffset,
                 ) * this.amplitude;
-            const y1 = baseY + wave1;
+            const verticalWiggle1 =
+                Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
+                this.wiggleAmplitude;
+            const y1 = baseY + horizontalWave1 + verticalWiggle1;
 
             const x2 = (j + 1) * step;
-            const wave2 =
+            const horizontalWave2 =
                 Math.sin(
                     x2 * this.frequency + this.time * this.speed + phaseOffset,
                 ) * this.amplitude;
-            const y2 = baseY + wave2;
+            const verticalWiggle2 =
+                Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
+                this.wiggleAmplitude;
+            const y2 = baseY + horizontalWave2 + verticalWiggle2;
 
             const midX = (x1 + x2) / 2;
             const midY = (y1 + y2) / 2;
