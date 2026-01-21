@@ -39,80 +39,37 @@ In browsers with [`esm.sh`][esmsh]:
 
 ## Usage
 
-### Star Trail
+The best way to explore all the possibilities, interactive controls, and properties for each background is through our [Storybook](https://niekes.github.io/beautiful-backgrounds/). It provides a real-time environment to tweak parameters and see the results instantly.
 
-```html
-<bb-star-trail
-  data-num-stars="567"
-  data-star-size-min="0.1"
-  data-star-size-max="1.5"
-  data-star-speed-min="0.001"
-  data-star-speed-max="0.003"
-  data-star-color-hue-start="30"
-  data-star-color-hue-end="75"
-  data-star-color-saturation-start="90"
-  data-star-color-saturation-end="90"
-  data-star-color-lightness-start="40"
-  data-star-color-lightness-end="60"
-  data-orbit-radius-min="10"
-  data-orbit-radius-max="300"
-  data-star-lifespan-min="1000"
-  data-star-lifespan-max="50000"
-  data-width="500"
-  data-height="500"
-></bb-star-trail>
-```
+---
 
-#### Attributes for bb-star-trail
+### [Digital Rain](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/digitalRain.ts)
 
-- `data-num-stars`: Number of stars to be rendered.
-- `data-star-size-min`: Minimum size of a star.
-- `data-star-size-max`: Maximum size of a star.
-- `data-star-speed-min`: Minimum speed of a star.
-- `data-star-speed-max`: Maximum speed of a star.
-- `data-star-color-hue-start`: Starting hue for star color. Should be a value between 0 and 360.
-- `data-star-color-hue-end`: Ending hue for star color. Should be a value between 0 and 360.
-- `data-star-color-saturation-start`: Specifies the starting color saturation for star color. Should be a value between 0 and 100.
-- `data-star-color-saturation-start`: Specifies the ending color saturation for star color. Should be a value between 0 and 100.
-- `data-star-color-lightness-start`: Specifies the starting color lightness for star color. Should be a value between 0 and 100.
-- `data-star-color-lightness-start`: Specifies the ending color lightness for star color. Should be a value between 0 and 100.
-- `data-radius-min`: Minimum radius for star orbit.
-- `data-radius-max`: Maximum radius for star orbit.
-- `data-star-lifespan-min`: Minimum lifespan of a star in milliseconds.
-- `data-star-lifespan-max`: Maximum lifespan of a star in milliseconds.
-- `data-width`: Width of the star trail component, remove to fit the size of the container
-- `data-height`: height of the star trail component, remove to fit the size of the container
-- `data-fps`: Controls the frames per second.
-- `data-background-color`: Background color of the canvas element
+A classic matrix-style falling character effect. Highly customizable with character sets, font sizes, speeds, and complex color gradients. Perfect for a retro-hacker or high-tech aesthetic.
 
-### Digital Rain
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--default)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/digitalRain.ts)
 
-```html
-<bb-digital-rain
-    data-characteras="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    data-font-size="16"
-    data-font-color-hue-start="60"
-    data-font-color-hue-end="150"
-    data-font-color-saturation-start="90"
-    data-font-color-saturation-end="90"
-    data-font-color-lightness-start="40"
-    data-font-color-lightness-end="60"
-    data-speed="1"
-></bb-star-trail>
-```
+### [Hexagon Wave](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/hexagonWave.ts)
 
-#### Attributes for bb-digital-rain
+A sleek, organic waving grid of hexagons (or other polygons). It features dynamic shading, lightness boosts, and wave physics that create a premium, rhythmic motion across the screen.
 
-- `data-characters`: Sets the characters for the digital rain effect.
-- `data-font-size`: Defines the font size of the falling characters.
-- `data-font-color-hue-start`: Specifies the starting color hue for the rain. Should be a value between 0 and 360.
-- `data-font-color-hue-end`: Sets the ending color hue for the rain. Should be a value between 0 and 360.
-- `data-font-color-saturation-start`: Specifies the starting color saturation for the rain. Should be a value between 0 and 100.
-- `data-font-color-saturation-start`: Specifies the ending color saturation for the rain. Should be a value between 0 and 100.
-- `data-font-color-lightness-start`: Specifies the starting color lightness for the rain. Should be a value between 0 and 100.
-- `data-font-color-lightness-start`: Specifies the ending color lightness for the rain. Should be a value between 0 and 100.
-- `data-fps`: Controls the frames per second.
-- `data-background-color`: Background color of the canvas element
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagonwave--default)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/hexagonWave.ts)
+
+### [Neon Rails](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/neonRails.ts)
+
+Fast-moving particles that follow a geometric grid, creating long neon trails. It's ideal for "electric" or "cyberpunk" themes, offering deep control over particle lifespan, grid geometry, and trail opacity.
+
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--default)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/neonRails.ts)
+
+### [Star Trail](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/startTrail.ts)
+
+A beautiful celestial animation featuring orbiting stars with fading trails. You can adjust orbit radii, star sizes, and colors to create anything from a subtle night sky to a vibrant cosmic nebula.
+
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--default)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/startTrail.ts)
 
 <!-- Links -->
 
