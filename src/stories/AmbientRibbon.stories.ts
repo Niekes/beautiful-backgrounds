@@ -239,5 +239,6 @@ export const ColdWave: Story = {
         ribbonSpeedMin: 0.003,
         ribbonSpeedMax: 0.006,
         bgColors: "#020617, #0f172a",
+        ribbonCount: 2
     },
 };
