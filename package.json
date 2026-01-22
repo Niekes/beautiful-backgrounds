@@ -16,6 +16,15 @@
             "require": "./build/bb.js"
         }
     },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    },
+    "files": [
+        "build",
+        "README.md",
+        "LICENSE"
+    ],
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
@@ -24,8 +33,9 @@
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build"
     },
-    "dependencies": {
-        "lit": "^3.3.1"
+    "dependencies": {},
+    "peerDependencies": {
+        "lit": "^3.0.0"
     },
     "devDependencies": {
         "@storybook/addon-a11y": "^10.2.0",
@@ -41,7 +51,8 @@
         "storybook": "^10.2.0",
         "typescript": "~5.9.3",
         "vite": "^7.2.4",
-        "vitest": "^4.0.17"
+        "vitest": "^4.0.17",
+        "lit": "^3.3.1"
     },
     "keywords": [
         "canvas",
