@@ -1,6 +1,6 @@
 import { customElement, property } from "lit/decorators.js";
 import Particle from "../Particle";
-import { getRandomFloat, interpolateLinear } from "../utils/number";
+import { getRandomFloat } from "../utils/number";
 import { randomColor } from "../utils/color";
 import { BeautifulBackground } from "../BeautifulBackground";
 import { stringToArrayConverter } from "../utils/lit";
@@ -101,8 +101,8 @@ export class BbNeonRails extends BeautifulBackground {
     protected createParticle(): Particle {
         const size = getRandomFloat(this.particleSizeMin, this.particleSizeMax);
         const speed = getRandomFloat(
-            interpolateLinear(this.particleSpeedMin, -10, 10, -10, 10),
-            interpolateLinear(this.particleSpeedMax, -10, 10, -10, 10),
+            this.particleSpeedMin,
+            this.particleSpeedMax,
         );
 
         const lifespan = getRandomFloat(
