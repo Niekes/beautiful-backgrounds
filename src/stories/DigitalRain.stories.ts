@@ -71,7 +71,7 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const Default: Story = {
+export const ClassicMatrixRain: Story = {
     args: {
         characters: "ｱｲｳｴｵｶｷｸｹｺ",
         fontColorHueStart: 120,

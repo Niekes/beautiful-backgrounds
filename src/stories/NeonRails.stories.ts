@@ -107,7 +107,7 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const Default: Story = {
+export const CyberGridNetwork: Story = {
     args: {
         bgColors: "#000, #000",
         particleSpeedMin: -1,

@@ -81,7 +81,7 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const Default: Story = {
+export const SerpentineFlow: Story = {
     args: {
         lineCount: 16,
         lineAmplitude: 48,

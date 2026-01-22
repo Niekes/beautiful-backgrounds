@@ -82,7 +82,7 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const Default: Story = {
+export const HoneycombPulsar: Story = {
     args: {
         baseLightness: 30,
         hexHueStart: 207,

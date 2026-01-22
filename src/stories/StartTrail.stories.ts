@@ -100,7 +100,13 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const Default: Story = {};
+export const GalacticVortex: Story = {
+    args: {
+        bgColors: "#000, #030",
+        bgAngle: 275,
+        trailOpacity: 0.328,
+    },
+};
 
 export const Messiere: Story = {
     args: {
