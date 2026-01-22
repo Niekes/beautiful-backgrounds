@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
 import Github from "./assets/github.svg";
+import Codepen from "./assets/codepen.svg";
 import Compatibility from "./assets/compatibility.png";
 import Context from "./assets/context.png";
 import Assets from "./assets/assets.png";
@@ -72,6 +73,16 @@ export const RightArrow = () => (
       >GitHub<RightArrow /></a>
     </div>
 
+        <div className="sb-section-item">
+      <img src={Codepen} alt="Codepen logo" className="sb-explore-image"/>
+      Find more advaned exmaples on codepen
+
+      <a
+        href="https://codepen.io/collection/aMPozo"
+        target="_blank"
+      >Codepen<RightArrow /></a>
+    </div>
+
 </div>
 
 <style>
@@ -127,8 +138,7 @@ export const RightArrow = () => (
   }
 
   .sb-socials {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
   }
 
   .sb-socials p {

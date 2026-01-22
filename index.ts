@@ -1,7 +1,6 @@
-export * from "./src/BeautifulBackground";
-export * from "./src/components/ambientRibbon";
-export * from "./src/components/digitalRain";
-export * from "./src/components/hexagonWave";
-export * from "./src/components/liquidLines";
-export * from "./src/components/neonRails";
-export * from "./src/components/startTrail";
+export { BbAmbientRibbon } from "./src/components/ambientRibbon";
+export { BbDigitalRain } from "./src/components/digitalRain";
+export { BbHexagonWave } from "./src/components/hexagonWave";
+export { BbLiquidLines } from "./src/components/liquidLines";
+export { BbNeonRails } from "./src/components/neonRails";
+export { BbStarTrail } from "./src/components/startTrail";
