@@ -43,40 +43,47 @@ The best way to explore all the possibilities, interactive controls, and propert
 
 ---
 
-### [Digital Rain](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/digitalRain.ts)
+### [Ambient Ribbon](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/ambientRibbon.ts)
+
+A beautiful, flowing animation of multiple ribbons with deep control over wave physics, rotation, and color transitions. Perfect for high-end, elegant design themes.
+
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/ambientRibbon.ts)
+
+### [Digital Rain](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/digitalRain.ts)
 
 A classic matrix-style falling character effect. Highly customizable with character sets, font sizes, speeds, and complex color gradients. Perfect for a retro-hacker or high-tech aesthetic.
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--default)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/digitalRain.ts)
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/digitalRain.ts)
 
-### [Hexagon Wave](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/hexagonWave.ts)
+### [Hexagon Wave](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/hexagonWave.ts)
 
 A sleek, organic waving grid of hexagons (or other polygons). It features dynamic shading, lightness boosts, and wave physics that create a premium, rhythmic motion across the screen.
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagonwave--default)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/hexagonWave.ts)
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/hexagonWave.ts)
 
-### [Liquid Lines](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/liquidLines.ts)
+### [Liquid Lines](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/liquidLines.ts)
 
 A fluid, undulating animation of multiple lines with gradients and 3D depth effects. It offers extensive control over wave physics, line thickness, and color transitions, making it perfect for organic or "liquid" design themes.
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquidlines--default)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/liquidLines.ts)
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/liquidLines.ts)
 
-### [Neon Rails](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/neonRails.ts)
+### [Neon Rails](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/neonRails.ts)
 
 Fast-moving particles that follow a geometric grid, creating long neon trails. It's ideal for "electric" or "cyberpunk" themes, offering deep control over particle lifespan, grid geometry, and trail opacity.
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--default)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/neonRails.ts)
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/neonRails.ts)
 
-### [Star Trail](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/startTrail.ts)
+### [Star Trail](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/startTrail.ts)
 
 A beautiful celestial animation featuring orbiting stars with fading trails. You can adjust orbit radii, star sizes, and colors to create anything from a subtle night sky to a vibrant cosmic nebula.
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--default)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/startTrail.ts)
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/startTrail.ts)
 
 <!-- Links -->
 
