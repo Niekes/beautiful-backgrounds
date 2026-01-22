@@ -72,8 +72,10 @@ export abstract class BeautifulBackground extends LitElement {
 
     protected drawBackground(ctx: CanvasRenderingContext2D): void {
         const angleRad = (this.bgAngle * Math.PI) / 180;
-        const diagonal = Math.sqrt(this.width ** 2 + this.height ** 2);
-        const r = diagonal / 2;
+        const r =
+            (Math.abs(this.width * Math.cos(angleRad)) +
+                Math.abs(this.height * Math.sin(angleRad))) /
+            2;
         const centerX = this.width / 2;
         const centerY = this.height / 2;
 
