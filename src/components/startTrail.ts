@@ -78,8 +78,7 @@ export class BbStarTrail extends BeautifulBackground {
         this.particles = [];
 
         // Initialize background to prevent white flash
-        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
-        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.drawBackground(this.ctx);
 
         this.particleRadiusMax = this.particleRadiusMax || this.width;
 
@@ -89,8 +88,9 @@ export class BbStarTrail extends BeautifulBackground {
     }
 
     protected loop(deltaTime: number): void {
-        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
-        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.globalAlpha = this.trailOpacity;
+        this.drawBackground(this.ctx);
+        this.ctx.globalAlpha = 1.0;
 
         this.particles = this.particles.filter(
             (particle) => !particle.isDead(),

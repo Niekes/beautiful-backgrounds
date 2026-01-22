@@ -1,15 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite";
-import { color } from "d3";
 import { html } from "lit";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import "../components/digitalRain";
 
 const meta: Meta = {
     title: "Backgrounds/Digital Rain",
     component: "bb-digital-rain",
     render: (args) => {
-        const c = color(args.backgroundColor)?.rgb();
-        const bgColor = c ? `${c.r}, ${c.g}, ${c.b}` : "0, 0, 0";
-
         return html`
             <bb-digital-rain
                 speed=${args.speed}
@@ -22,7 +18,8 @@ const meta: Meta = {
                 font-color-saturation-end=${args.fontColorSaturationEnd}
                 font-color-lightness-start=${args.fontColorLightnessStart}
                 font-color-lightness-end=${args.fontColorLightnessEnd}
-                background-color=${bgColor}
+                bg-colors=${args.bgColors}
+                bg-angle=${args.bgAngle}
                 trail-opacity=${args.trailOpacity}
                 font-colors=${args.fontColors}
                 style="width: 100%; height: 450px; display: flex;"
@@ -30,7 +27,6 @@ const meta: Meta = {
         `;
     },
     argTypes: {
-        backgroundColor: { control: "color" },
         speed: { control: { type: "range", min: 0, max: 10, step: 0.1 } },
         randomness: { control: { type: "range", min: 0, max: 1, step: 0.005 } },
         fontSize: { control: { type: "range", min: 8, max: 72 } },
@@ -50,8 +46,12 @@ const meta: Meta = {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
         fontColors: { control: "text" },
+        bgColors: { control: "text" },
+        bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
     },
     args: {
+        bgColors: "#000, #000",
+        bgAngle: 0,
         characters:
             'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ13579ｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝZ:."¦=*+-<>|ﾘçδ╘',
         randomness: 0.975,
@@ -63,7 +63,6 @@ const meta: Meta = {
         fontColorLightnessStart: 50,
         fontColorLightnessEnd: 50,
         speed: 10,
-        backgroundColor: "#000",
         trailOpacity: 0.1,
         fontColors: "",
     },
@@ -81,7 +80,7 @@ export const Default: Story = {
         fontColorSaturationEnd: 100,
         fontColorLightnessStart: 40,
         fontColorLightnessEnd: 60,
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         speed: 8,
         fontSize: 20,
         randomness: 0.95,
@@ -94,13 +93,13 @@ export const CyberpunkPink: Story = {
         characters: "ΨΦΧΩΣΠΛΔΓΒΑ01100110ЯΞ",
         fontColorHueStart: 300,
         fontColorHueEnd: 340,
-        backgroundColor: "#570044",
+        bgColors: "#570044, #570099",
     },
 };
 
 export const PurpleRain: Story = {
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         characters: "|",
         randomness: 0.98,
         fontSize: 12,
@@ -122,7 +121,7 @@ export const NeonBlue: Story = {
         fontColorSaturationEnd: 100,
         fontColorLightnessStart: 60,
         fontColorLightnessEnd: 70,
-        backgroundColor: "#001122",
+        bgColors: "#001122, #001122",
         speed: 6,
         fontSize: 18,
         randomness: 0.9,
@@ -139,7 +138,7 @@ export const OrangeFire: Story = {
         fontColorSaturationEnd: 100,
         fontColorLightnessStart: 50,
         fontColorLightnessEnd: 60,
-        backgroundColor: "#220000",
+        bgColors: "#220000, #220000",
         speed: 7,
         fontSize: 22,
         randomness: 0.92,
@@ -156,7 +155,7 @@ export const GhostWhite: Story = {
         fontColorSaturationEnd: 0,
         fontColorLightnessStart: 80,
         fontColorLightnessEnd: 100,
-        backgroundColor: "#111111",
+        bgColors: "#111111, #111111",
         speed: 4,
         fontSize: 16,
         randomness: 0.98,
@@ -173,7 +172,7 @@ export const RainbowChaos: Story = {
         fontColorSaturationEnd: 100,
         fontColorLightnessStart: 50,
         fontColorLightnessEnd: 50,
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         speed: 9,
         fontSize: 14,
         randomness: 0.99,
@@ -184,7 +183,7 @@ export const RainbowChaos: Story = {
 export const MatrixRed: Story = {
     args: {
         fontColors: "#ff0000, #aa0000, #550000",
-        backgroundColor: "#110000",
+        bgColors: "#110000, #110000",
         fontSize: 18,
         speed: 12,
     },

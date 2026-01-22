@@ -58,8 +58,7 @@ export class BbDigitalRain extends BeautifulBackground {
         this.createSymbols();
 
         // Initialize background to prevent white flash
-        this.ctx.fillStyle = `rgba(${this.backgroundColor})`;
-        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.drawBackground(this.ctx);
     }
 
     private createSymbols(): void {
@@ -84,8 +83,10 @@ export class BbDigitalRain extends BeautifulBackground {
 
     protected loop(deltaTime: number): void {
         this.updateSymbols();
-        this.ctx.fillStyle = `rgba(${this.backgroundColor}, ${this.trailOpacity})`;
-        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.globalAlpha = this.trailOpacity;
+        this.drawBackground(this.ctx);
+        this.ctx.globalAlpha = 1.0;
+
         this.ctx.textAlign = "center";
         this.ctx.font = `${this.fontSize}px monospace`;
 

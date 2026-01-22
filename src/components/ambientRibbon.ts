@@ -3,7 +3,6 @@ import type { PropertyValues } from "lit";
 import { BeautifulBackground } from "../BeautifulBackground";
 import { getRandomFloat } from "../utils/number";
 import { hsla } from "../utils/color";
-import { stringToArrayConverter } from "../utils/lit";
 
 class Line {
     public angle: number[];
@@ -114,16 +113,6 @@ export class BbAmbientRibbon extends BeautifulBackground {
     @property({ type: Number, attribute: "ribbon-line-opacity" })
     ribbonLineOpacity: number = 0.2;
 
-    @property({
-        type: Array,
-        attribute: "bg-colors",
-        converter: stringToArrayConverter,
-    })
-    bgColors: string[] = ["#000", "#000"];
-
-    @property({ type: Number, attribute: "bg-angle" })
-    bgAngle: number = 0;
-
     private ribbons: Ribbon[] = [];
     private hue: number = 11;
     private hueForward: boolean = true;
@@ -186,35 +175,11 @@ export class BbAmbientRibbon extends BeautifulBackground {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         // Background
-        const angleRad = (this.bgAngle * Math.PI) / 180;
+        this.drawBackground(this.ctx);
+
         const diagonal = Math.sqrt(this.width ** 2 + this.height ** 2);
-        const r = diagonal / 2;
         const centerX = this.width / 2;
         const centerY = this.height / 2;
-
-        const x0 = centerX - Math.cos(angleRad) * r;
-        const y0 = centerY - Math.sin(angleRad) * r;
-        const x1 = centerX + Math.cos(angleRad) * r;
-        const y1 = centerY + Math.sin(angleRad) * r;
-
-        const gradient = this.ctx.createLinearGradient(x0, y0, x1, y1);
-
-        const colors =
-            this.bgColors.length > 0 ? this.bgColors : ["#000", "#000"];
-
-        try {
-            colors.forEach((color, index) => {
-                const stop = index / (colors.length - 1 || 1);
-                gradient.addColorStop(stop, color);
-            });
-        } catch (e) {
-            // Fallback while typing invalid colors
-            gradient.addColorStop(0, "#000");
-            gradient.addColorStop(1, "#000");
-        }
-
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, 0, this.width, this.height);
 
         const radius = diagonal / 2;
         const radius3 = radius / 3;

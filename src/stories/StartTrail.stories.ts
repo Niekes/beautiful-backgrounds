@@ -1,16 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite";
-import { color } from "d3";
 import { html } from "lit";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import "../components/startTrail";
 
 const meta: Meta = {
     title: "Backgrounds/Star Trail",
     component: "bb-star-trail",
     render: (args) => {
-        const c = color(args.backgroundColor)?.rgb();
-        const bgColor = c ? `${c.r}, ${c.g}, ${c.b}` : "0, 0, 0";
         return html` <bb-star-trail
-            background-color=${bgColor}
+            bg-colors=${args.bgColors}
+            bg-angle=${args.bgAngle}
             particle-size-min=${args.particleSizeMin}
             particle-size-max=${args.particleSizeMax}
             particle-speed-min=${args.particleSpeedMin}
@@ -33,7 +31,7 @@ const meta: Meta = {
         ></bb-star-trail>`;
     },
     argTypes: {
-        backgroundColor: { control: "color" },
+        particleColors: { control: "text" },
         particleSizeMin: {
             control: { type: "range", min: 0.1, max: 10, step: 0.1 },
         },
@@ -72,13 +70,15 @@ const meta: Meta = {
         particleForce: {
             control: { type: "range", min: -50, max: 50, step: 0.1 },
         },
-        particleColors: { control: "text" },
+        bgColors: { control: "text" },
+        bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
         trailOpacity: {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
     },
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
+        bgAngle: 0,
         particleAmount: 1000,
         particleColorHueStart: 30,
         particleColorHueEnd: 75,
@@ -133,7 +133,7 @@ export const PartyLights: Story = {
 
 export const BlueFireFlies: Story = {
     args: {
-        backgroundColor: "#050035",
+        bgColors: "#050035, #050035",
         particleAmount: 2000,
         particleColorHueEnd: 275,
         particleColorHueStart: 169,
@@ -148,7 +148,7 @@ export const BlueFireFlies: Story = {
 
 export const CyanRing: Story = {
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         particleAmount: 2000,
         particleColorHueEnd: 200,
         particleColorHueStart: 174,
@@ -169,7 +169,7 @@ export const CyanRing: Story = {
 
 export const GravitationalCollapse: Story = {
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
         particleAmount: 2326,
         particleColorHueStart: 0,
         particleColorHueEnd: 360,
@@ -200,7 +200,7 @@ export const RGBStars: Story = {
 
 export const GoldenNebula: Story = {
     args: {
-        backgroundColor: "#1a0f00",
+        bgColors: "#1a0f00, #1a0f00",
         particleColorHueStart: 35,
         particleColorHueEnd: 55,
         particleColorLightnessStart: 60,
@@ -221,7 +221,7 @@ export const GoldenNebula: Story = {
 
 export const AuroraBorealis: Story = {
     args: {
-        backgroundColor: "#000a1a",
+        bgColors: "#000a1a, #000a1a",
         particleColors: "#00ff88, #00ffcc, #88ff00, #ccff00, #00ccff",
         particleAmount: 4000,
         particleSizeMin: 0.5,
@@ -239,7 +239,7 @@ export const AuroraBorealis: Story = {
 
 export const CosmicDust: Story = {
     args: {
-        backgroundColor: "#0a0a14",
+        bgColors: "#0a0a14, #0a0a14",
         particleColorHueStart: 200,
         particleColorHueEnd: 280,
         particleColorLightnessStart: 40,
@@ -260,7 +260,7 @@ export const CosmicDust: Story = {
 
 export const FireflyForest: Story = {
     args: {
-        backgroundColor: "#0f1a0a",
+        bgColors: "#0f1a0a, #0f1a0a",
         particleColors: "#ffff00, #ffee00, #ffdd00",
         particleAmount: 800,
         particleSizeMin: 1.5,
@@ -278,7 +278,7 @@ export const FireflyForest: Story = {
 
 export const NeonVortex: Story = {
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         particleColors: "#ff00ff, #00ffff, #ff0080, #0080ff",
         particleAmount: 3500,
         particleSizeMin: 0.8,
@@ -296,7 +296,7 @@ export const NeonVortex: Story = {
 
 export const StarfieldWarp: Story = {
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         particleColorHueStart: 180,
         particleColorHueEnd: 240,
         particleColorLightnessStart: 80,
@@ -317,7 +317,7 @@ export const StarfieldWarp: Story = {
 
 export const TwilightSparkle: Story = {
     args: {
-        backgroundColor: "#1a0f2e",
+        bgColors: "#1a0f2e, #1a0f2e",
         particleColors: "#ff69b4, #ba55d3, #9370db, #dda0dd",
         particleAmount: 1500,
         particleSizeMin: 1.0,
@@ -335,7 +335,7 @@ export const TwilightSparkle: Story = {
 
 export const RainbowBurst: Story = {
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         particleColorHueStart: 0,
         particleColorHueEnd: 360,
         particleColorLightnessStart: 50,

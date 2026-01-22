@@ -1,19 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite";
-import { color } from "d3";
 import { html } from "lit";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import "../components/neonRails";
 
 const meta: Meta = {
     title: "Backgrounds/Neon Rails",
     component: "bb-neon-rails",
     render: (args) => {
-        const c = color(args.backgroundColor)?.rgb();
-        const bgColor = c ? `${c.r}, ${c.g}, ${c.b}` : "0, 0, 0";
         const angle = args.gridAngle * (Math.PI / 180);
 
         return html`
             <bb-neon-rails
-                background-color=${bgColor}
+                bg-colors=${args.bgColors}
+                bg-angle=${args.bgAngle}
                 particle-size-min=${args.particleSizeMin}
                 particle-size-max=${args.particleSizeMax}
                 particle-speed-min=${args.particleSpeedMin}
@@ -37,7 +35,7 @@ const meta: Meta = {
         `;
     },
     argTypes: {
-        backgroundColor: { control: "color" },
+        particleColors: { control: "text" },
         particleSizeMin: {
             control: { type: "range", min: 0.1, max: 10, step: 0.1 },
         },
@@ -76,13 +74,15 @@ const meta: Meta = {
         gridAngle: {
             control: { type: "range", min: 0, max: 360, step: 1 },
         },
+        bgColors: { control: "text" },
+        bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
         trailOpacity: {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
-        particleColors: { control: "text" },
     },
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
+        bgAngle: 0,
         particleSizeMin: 1,
         particleSizeMax: 1,
         particleSpeedMin: -10,
@@ -109,7 +109,7 @@ type Story = StoryObj;
 
 export const Default: Story = {
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
         particleSpeedMin: -1,
         particleSpeedMax: 1,
     },
@@ -117,7 +117,7 @@ export const Default: Story = {
 
 export const LaserSecurityGrid: Story = {
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
         particleSizeMin: 0.1,
         particleSizeMax: 0.1,
         particleSpeedMin: 1.7,
@@ -139,7 +139,7 @@ export const LaserSecurityGrid: Story = {
 
 export const GoldenMesh: Story = {
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
         particleSizeMin: 0.1,
         particleSizeMax: 1.3,
         particleSpeedMin: -0.8,
@@ -161,7 +161,7 @@ export const GoldenMesh: Story = {
 
 export const StarRole: Story = {
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
         particleSizeMin: 1,
         particleSizeMax: 1.7,
         particleSpeedMin: 0.1,
@@ -198,7 +198,7 @@ export const Maze: Story = {
 
 export const TriangleChain: Story = {
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
         particleSizeMin: 0.1,
         particleSizeMax: 0.2,
         particleSpeedMin: 0.1,
@@ -222,7 +222,7 @@ export const TriangleChain: Story = {
 
 export const PinkVeins: Story = {
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
         particleSizeMin: 0.1,
         particleSizeMax: 1,
         particleSpeedMin: -4.6,
@@ -246,7 +246,7 @@ export const PinkVeins: Story = {
 
 export const ElectricHighway: Story = {
     args: {
-        backgroundColor: "#000a1a",
+        bgColors: "#000a1a, #000a1a",
         particleColors: "#00ffff, #0080ff",
         particleSizeMin: 1.5,
         particleSizeMax: 3.0,
@@ -264,7 +264,7 @@ export const ElectricHighway: Story = {
 
 export const VioletLattice: Story = {
     args: {
-        backgroundColor: "#0f0014",
+        bgColors: "#0f0014, #0f0014",
         particleColors: "#ff00ff, #ff0080, #8000ff",
         particleSizeMin: 0.5,
         particleSizeMax: 2.0,
@@ -282,7 +282,7 @@ export const VioletLattice: Story = {
 
 export const TronLegacy: Story = {
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         particleColorHueStart: 180,
         particleColorHueEnd: 200,
         particleColorSaturationStart: 100,
@@ -305,7 +305,7 @@ export const TronLegacy: Story = {
 
 export const NeuralNetwork: Story = {
     args: {
-        backgroundColor: "#0a0a0f",
+        bgColors: "#0a0a0f, #0a0a0f",
         particleColors: "#00ff88, #00ffcc, #00ffff",
         particleSizeMin: 0.3,
         particleSizeMax: 1.2,
@@ -323,7 +323,7 @@ export const NeuralNetwork: Story = {
 
 export const RainbowCircuit: Story = {
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         particleColorHueStart: 0,
         particleColorHueEnd: 360,
         particleColorSaturationStart: 100,
@@ -346,7 +346,7 @@ export const RainbowCircuit: Story = {
 
 export const QuantumTunnels: Story = {
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
         particleColorHueStart: 260,
         particleColorHueEnd: 280,
         particleColorSaturationStart: 80,
@@ -369,7 +369,7 @@ export const QuantumTunnels: Story = {
 
 export const EmeraldMatrix: Story = {
     args: {
-        backgroundColor: "#001a00",
+        bgColors: "#001a00, #001a00",
         particleColorHueStart: 120,
         particleColorHueEnd: 150,
         particleColorSaturationStart: 100,
@@ -392,7 +392,7 @@ export const EmeraldMatrix: Story = {
 
 export const SunsetGrid: Story = {
     args: {
-        backgroundColor: "#1a0a00",
+        bgColors: "#1a0a00, #1a0a00",
         particleColors: "#ff6600, #ff9900, #ffcc00, #ff3300",
         particleSizeMin: 0.8,
         particleSizeMax: 2.5,

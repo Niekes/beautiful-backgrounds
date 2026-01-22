@@ -1,18 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite";
-import { color } from "d3";
 import { html } from "lit";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import "../components/liquidLines";
 
 const meta: Meta = {
     title: "Backgrounds/Liquid Lines",
     component: "bb-liquid-lines",
     render: (args) => {
-        const c = color(args.backgroundColor as string)?.rgb();
-        const bgColor = c ? `${c.r}, ${c.g}, ${c.b}` : "0, 0, 0";
-
         return html`
             <bb-liquid-lines
-                background-color=${bgColor}
+                bg-colors=${args.bgColors}
+                bg-angle=${args.bgAngle}
                 line-count=${args.lineCount}
                 line-amplitude=${args.lineAmplitude}
                 line-frequency=${args.lineFrequency}
@@ -32,7 +29,6 @@ const meta: Meta = {
         `;
     },
     argTypes: {
-        backgroundColor: { control: "color" },
         lineCount: { control: { type: "range", min: 1, max: 100, step: 1 } },
         lineAmplitude: {
             control: { type: "range", min: 0, max: 200, step: 1 },
@@ -56,12 +52,15 @@ const meta: Meta = {
             control: { type: "range", min: 0, max: 100, step: 1 },
         },
         wiggleSpeed: { control: { type: "range", min: 0, max: 5, step: 0.1 } },
+        bgColors: { control: "text" },
+        bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
         trailOpacity: {
             control: { type: "range", min: 0, max: 1, step: 0.05 },
         },
     },
     args: {
-        backgroundColor: "#000000",
+        bgColors: "#000000, #000000",
+        bgAngle: 0,
         lineCount: 20,
         lineAmplitude: 30,
         lineFrequency: 0.005,
@@ -99,7 +98,7 @@ export const DeepSea: Story = {
         lineSpacing: 25,
         lineHueStart: 180,
         lineHueEnd: 220,
-        backgroundColor: "#000814",
+        bgColors: "#000814, #000814",
         wiggleAmplitude: 1,
         wiggleSpeed: 5,
     },
@@ -114,7 +113,7 @@ export const SunsetGlow: Story = {
         lineSpacing: 50,
         lineHueStart: 10,
         lineHueEnd: 50,
-        backgroundColor: "#1a0f00",
+        bgColors: "#1a0f00, #1a0f00",
         wiggleSpeed: 0.7,
     },
 };
@@ -129,7 +128,7 @@ export const NeonPulse: Story = {
         lineHueStart: 280,
         lineHueEnd: 320,
         lineWidth: 1,
-        backgroundColor: "#050010",
+        bgColors: "#050010, #050010",
         trailOpacity: 0.05,
         wiggleAmplitude: 2,
         wiggleSpeed: 3,
@@ -147,7 +146,7 @@ export const Minimalist: Story = {
         lineHueEnd: 0,
         lineSaturation: 0,
         lineWidth: 0.5,
-        backgroundColor: "#ffffff",
+        bgColors: "#ffffff, #ffffff",
     },
 };
 
@@ -162,7 +161,7 @@ export const AuroraBorealis: Story = {
         lineHueEnd: 180,
         lineSaturation: 90,
         lineWidth: 3,
-        backgroundColor: "#000510",
+        bgColors: "#000510, #000510",
         trailOpacity: 0.08,
         wiggleAmplitude: 40,
         wiggleSpeed: 3.1,
@@ -180,7 +179,7 @@ export const MoltenMagma: Story = {
         lineHueEnd: 30,
         lineSaturation: 100,
         lineWidth: 12,
-        backgroundColor: "#100000",
+        bgColors: "#100000, #100000",
         wiggleAmplitude: 10,
         wiggleSpeed: 0.1,
     },
@@ -196,7 +195,7 @@ export const DigitalMist: Story = {
         lineHueStart: 200,
         lineHueEnd: 240,
         lineWidth: 0.5,
-        backgroundColor: "#0a0a0a",
+        bgColors: "#0a0a0a, #0a0a0a",
         trailOpacity: 0.2,
     },
 };
@@ -211,7 +210,7 @@ export const Bioluminescence: Story = {
         lineHueStart: 164,
         lineHueEnd: 245,
         lineWidth: 3.2,
-        backgroundColor: "#000a0a",
+        bgColors: "#000a0a, #000a0a",
         trailOpacity: 0.03,
         lineOffsetStep: 0.04,
         wiggleAmplitude: 3,
@@ -230,7 +229,7 @@ export const GoldenHour: Story = {
         lineHueEnd: 60,
         lineSaturation: 70,
         lineWidth: 5,
-        backgroundColor: "#1a1500",
+        bgColors: "#1a1500, #1a1500",
     },
 };
 
@@ -250,7 +249,7 @@ export const Rainbow: Story = {
 
 export const PinkShutters: Story = {
     args: {
-        backgroundColor: "#ffffff",
+        bgColors: "#ffffff, #ffffff",
         lineCount: 61,
         lineAmplitude: 48,
         lineFrequency: 0.0007,

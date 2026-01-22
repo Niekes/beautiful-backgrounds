@@ -1,18 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/web-components-vite";
-import { color } from "d3";
 import { html } from "lit";
+import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import "../components/hexagonWave";
 
 const meta: Meta = {
     title: "Backgrounds/Hexagon Wave",
     component: "bb-hexagon-wave",
     render: (args) => {
-        const c = color(args.backgroundColor as string)?.rgb();
-        const bgColor = c ? `${c.r}, ${c.g}, ${c.b}` : "0, 0, 0";
-
         return html`
             <bb-hexagon-wave
-                background-color=${bgColor}
+                bg-colors=${args.bgColors}
+                bg-angle=${args.bgAngle}
                 hex-size=${args.hexSize}
                 wave-amplitude=${args.waveAmplitude}
                 wave-speed=${args.waveSpeed}
@@ -31,7 +28,6 @@ const meta: Meta = {
         `;
     },
     argTypes: {
-        backgroundColor: { control: "color" },
         hexSize: { control: { type: "range", min: 1, max: 200, step: 1 } },
         waveAmplitude: {
             control: { type: "range", min: 0, max: 25, step: 0.1 },
@@ -60,10 +56,13 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0, max: 1, step: 0.05 },
         },
+        bgColors: { control: "text" },
+        bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
         hexColors: { control: "text" },
     },
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
+        bgAngle: 0,
         hexSize: 50,
         waveAmplitude: 5.5,
         waveSpeed: 1.1,
@@ -94,6 +93,7 @@ export const Default: Story = {
         hexScale: 1,
         hexSize: 50,
         waveSpeed: 1.3,
+        bgColors: "#0071bc, #0071bc",
     },
 };
 
@@ -108,7 +108,7 @@ export const SunsetGradient: Story = {
 
 export const NeonVibe: Story = {
     args: {
-        backgroundColor: "#050510",
+        bgColors: "#050510, #050510",
         hexHueStart: 280,
         hexHueEnd: 320,
         baseLightness: 50,
@@ -123,7 +123,7 @@ export const HoneyCombs: Story = {
         hexSize: 50,
         hexHueStart: 40,
         hexHueEnd: 80,
-        backgroundColor: "#eeff00",
+        bgColors: "#eeff00, #eeff00",
         baseLightness: 50,
     },
 };
@@ -134,7 +134,7 @@ export const TinyCells: Story = {
         waveAmplitude: 4,
         hexHueStart: 200,
         hexHueEnd: 260,
-        backgroundColor: "#090414",
+        bgColors: "#321145, #213f52",
         baseLightness: 50,
         hexScale: 0.6,
     },
@@ -142,7 +142,7 @@ export const TinyCells: Story = {
 
 export const OceanDepths: Story = {
     args: {
-        backgroundColor: "#001a33",
+        bgColors: "#001a33, #001a33",
         hexHueStart: 180,
         hexHueEnd: 220,
         baseLightness: 45,
@@ -156,7 +156,7 @@ export const OceanDepths: Story = {
 
 export const LavaFlow: Story = {
     args: {
-        backgroundColor: "#ff8e00",
+        bgColors: "#ff8e00, #ff8e00",
         hexHueStart: 0,
         hexHueEnd: 38,
         baseLightness: 50,
@@ -171,7 +171,7 @@ export const LavaFlow: Story = {
 
 export const ArcticIce: Story = {
     args: {
-        backgroundColor: "#e6f7ff",
+        bgColors: "#e6f7ff, #e6f7ff",
         hexHueStart: 180,
         hexHueEnd: 200,
         baseLightness: 60,
@@ -185,7 +185,7 @@ export const ArcticIce: Story = {
 
 export const CyberpunkGrid: Story = {
     args: {
-        backgroundColor: "#0a0014",
+        bgColors: "#0a0014, #0a0014",
         hexColors: "#ff00ff, #00ffff, #ff0080",
         baseLightness: 50,
         lightnessRange: 30,
@@ -196,7 +196,7 @@ export const CyberpunkGrid: Story = {
 
 export const ForestCanopy: Story = {
     args: {
-        backgroundColor: "#0d1f0d",
+        bgColors: "#0d1f0d, #0d1f0d",
         hexHueStart: 90,
         hexHueEnd: 150,
         baseLightness: 15,
@@ -208,7 +208,7 @@ export const ForestCanopy: Story = {
 
 export const DesertMirage: Story = {
     args: {
-        backgroundColor: "#2b1f0f",
+        bgColors: "#2b1f0f, #2b1f0f",
         hexHueStart: 30,
         hexHueEnd: 50,
         baseLightness: 35,
@@ -221,7 +221,7 @@ export const DesertMirage: Story = {
 
 export const ElectricStorm: Story = {
     args: {
-        backgroundColor: "#0f0f1a",
+        bgColors: "#0f0f1a, #0f0f1a",
         hexHueStart: 240,
         hexHueEnd: 280,
         baseLightness: 46,
@@ -235,7 +235,7 @@ export const ElectricStorm: Story = {
 
 export const PastelDream: Story = {
     args: {
-        backgroundColor: "#fff5f8",
+        bgColors: "#fff5f8, #fff5f8",
         hexColors: "#ffb3d9, #b3d9ff, #d9b3ff, #ffffb3",
         baseLightness: 63,
         lightnessRange: 15,
@@ -249,7 +249,7 @@ export const PastelDream: Story = {
 
 export const SurfersParadise: Story = {
     args: {
-        backgroundColor: "#000",
+        bgColors: "#000, #000",
         hexSize: 7,
         waveAmplitude: 5.5,
         waveSpeed: -1,

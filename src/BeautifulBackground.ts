@@ -1,8 +1,19 @@
 import { css, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 import { debounce } from "./utils/function";
+import { stringToArrayConverter } from "./utils/lit";
 
 export abstract class BeautifulBackground extends LitElement {
+    @property({
+        type: Array,
+        attribute: "bg-colors",
+        converter: stringToArrayConverter,
+    })
+    bgColors: string[] = ["#000", "#000"];
+
+    @property({ type: Number, attribute: "bg-angle" })
+    bgAngle: number = 0;
+
     @property({ type: String, attribute: "background-color" })
     backgroundColor: string = "0, 0, 0";
 
@@ -59,6 +70,38 @@ export abstract class BeautifulBackground extends LitElement {
         this.stopAnimation();
     }
 
+    protected drawBackground(ctx: CanvasRenderingContext2D): void {
+        const angleRad = (this.bgAngle * Math.PI) / 180;
+        const diagonal = Math.sqrt(this.width ** 2 + this.height ** 2);
+        const r = diagonal / 2;
+        const centerX = this.width / 2;
+        const centerY = this.height / 2;
+
+        const x0 = centerX - Math.cos(angleRad) * r;
+        const y0 = centerY - Math.sin(angleRad) * r;
+        const x1 = centerX + Math.cos(angleRad) * r;
+        const y1 = centerY + Math.sin(angleRad) * r;
+
+        const gradient = ctx.createLinearGradient(x0, y0, x1, y1);
+
+        const colors =
+            this.bgColors.length > 0 ? this.bgColors : ["#000", "#000"];
+
+        try {
+            colors.forEach((color, index) => {
+                const stop = index / (colors.length - 1 || 1);
+                gradient.addColorStop(stop, color);
+            });
+        } catch (e) {
+            // Fallback while typing invalid colors
+            gradient.addColorStop(0, "#000");
+            gradient.addColorStop(1, "#000");
+        }
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, this.width, this.height);
+    }
+
     protected resizeCanvas(): void {
         const rect = this.getBoundingClientRect();
         const dpr = window.devicePixelRatio || 1;
@@ -75,8 +118,7 @@ export abstract class BeautifulBackground extends LitElement {
 
         this.ctx.scale(dpr, dpr);
 
-        this.ctx.fillStyle = `rgb(${this.backgroundColor})`;
-        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.drawBackground(this.ctx);
     }
 
     protected initialize(): void {
