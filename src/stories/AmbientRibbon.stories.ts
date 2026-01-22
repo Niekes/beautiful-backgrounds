@@ -162,7 +162,7 @@ export const GoldenHour: Story = {
 export const MidnightAura: Story = {
     args: {
         ribbonHueStart: 240,
-        ribbonHueEnd: 280,
+        ribbonHueEnd: 320,
         ribbonSaturationStart: 50,
         ribbonSaturationEnd: 70,
         ribbonLightnessStart: 40,
