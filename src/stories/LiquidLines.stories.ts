@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { color } from "d3";
 import { html } from "lit";
-import "./liquidLines";
+import "../components/liquidLines";
 
 const meta: Meta = {
-    title: "Backgrounds/LiquidLines",
+    title: "Backgrounds/Liquid Lines",
     component: "bb-liquid-lines",
     render: (args) => {
         const c = color(args.backgroundColor as string)?.rgb();

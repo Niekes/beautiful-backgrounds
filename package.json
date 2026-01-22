@@ -6,9 +6,20 @@
         "type": "git",
         "url": "https://github.com/Niekes/beautiful-backgrounds"
     },
+    "main": "./build/bb.js",
+    "module": "./build/bb.es.js",
+    "types": "./build/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./build/index.d.ts",
+            "import": "./build/bb.es.js",
+            "require": "./build/bb.js"
+        }
+    },
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
+        "build:types": "tsc --emitDeclarationOnly --declaration --outDir build",
         "preview": "vite preview",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build"
@@ -22,6 +33,7 @@
         "@storybook/addon-vitest": "^10.2.0",
         "@storybook/web-components-vite": "^10.2.0",
         "@types/d3": "^7.4.3",
+        "@types/node": "^25.0.10",
         "@vitest/browser-playwright": "^4.0.17",
         "@vitest/coverage-v8": "^4.0.17",
         "d3": "^7.9.0",

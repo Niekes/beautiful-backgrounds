@@ -101,18 +101,22 @@ export class BbLiquidLines extends BeautifulBackground {
 
         for (let j = 0; j < points - 1; j++) {
             const x1 = j * step;
+
             const horizontalWave1 =
                 Math.sin(
                     x1 * this.lineFrequency +
                         this.time * this.speed +
                         phaseOffset,
                 ) * this.lineAmplitude;
+
             const verticalWiggle1 =
                 Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
                 this.wiggleAmplitude;
+
             const y1 = baseY + horizontalWave1 + verticalWiggle1;
 
             const x2 = (j + 1) * step;
+
             const horizontalWave2 =
                 Math.sin(
                     x2 * this.lineFrequency +
@@ -122,6 +126,7 @@ export class BbLiquidLines extends BeautifulBackground {
             const verticalWiggle2 =
                 Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
                 this.wiggleAmplitude;
+
             const y2 = baseY + horizontalWave2 + verticalWiggle2;
 
             const midX = (x1 + x2) / 2;

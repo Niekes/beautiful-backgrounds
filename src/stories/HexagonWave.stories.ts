@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { color } from "d3";
 import { html } from "lit";
-import "./hexagonWave";
+import "../components/hexagonWave";
 
 const meta: Meta = {
-    title: "Backgrounds/HexagonWave",
+    title: "Backgrounds/Hexagon Wave",
     component: "bb-hexagon-wave",
     render: (args) => {
         const c = color(args.backgroundColor as string)?.rgb();
@@ -262,6 +262,6 @@ export const SurfersParadise: Story = {
         hexSaturation: 100,
         hexScale: 1.2,
         trailOpacity: 0.1,
-        hexColors: null,
+        hexColors: "",
     },
 };

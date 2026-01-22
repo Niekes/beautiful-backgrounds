@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { color } from "d3";
 import { html } from "lit";
-import "./startTrail";
+import "../components/startTrail";
 
 const meta: Meta = {
     title: "Backgrounds/Star Trail",

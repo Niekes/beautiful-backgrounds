@@ -1,4 +1,4 @@
-import { LitElement } from "lit";
+import { css, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 import { debounce } from "./utils/function";
 
@@ -71,6 +71,7 @@ export abstract class BeautifulBackground extends LitElement {
         this.canvas.height = Math.floor(this.height * dpr);
         this.canvas.style.width = `${this.width}px`;
         this.canvas.style.height = `${this.height}px`;
+        this.canvas.style.borderRadius = "inherit";
 
         this.ctx.scale(dpr, dpr);
 
@@ -101,6 +102,12 @@ export abstract class BeautifulBackground extends LitElement {
             this.animationFrameId = null;
         }
     }
+
+    static styles = css`
+        :host {
+            border-radius: inherit;
+        }
+    `;
 
     protected abstract loop(deltaTime: number): void;
 

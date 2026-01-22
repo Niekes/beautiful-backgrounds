@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { color } from "d3";
 import { html } from "lit";
-import "./neonRails";
+import "../components/neonRails";
 
 const meta: Meta = {
     title: "Backgrounds/Neon Rails",
