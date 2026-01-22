@@ -27,7 +27,7 @@ const meta: Meta = {
             particle-force=${args.particleForce}
             trail-opacity=${args.trailOpacity}
             particle-colors=${args.particleColors}
-            style="width: 100%; height: 450px; display: flex;"
+            style="width: 100%; height: 500px; border-radius: 15px"
         ></bb-star-trail>`;
     },
     argTypes: {

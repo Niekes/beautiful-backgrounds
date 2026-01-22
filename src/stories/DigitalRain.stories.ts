@@ -22,7 +22,7 @@ const meta: Meta = {
                 bg-angle=${args.bgAngle}
                 trail-opacity=${args.trailOpacity}
                 font-colors=${args.fontColors}
-                style="width: 100%; height: 450px; display: flex;"
+                style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-digital-rain>
         `;
     },

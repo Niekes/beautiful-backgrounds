@@ -24,7 +24,7 @@ const meta: Meta = {
             bg-colors=${args.bgColors}
             bg-angle=${args.bgAngle}
             trail-opacity=${args.trailOpacity}
-            style="width: 100%; height: 500px; display: flex;"
+            style="width: 100%; height: 500px; border-radius: 15px"
         ></bb-ambient-ribbon>
     `,
     argTypes: {
@@ -239,6 +239,6 @@ export const ColdWave: Story = {
         ribbonSpeedMin: 0.003,
         ribbonSpeedMax: 0.006,
         bgColors: "#020617, #0f172a",
-        ribbonCount: 2
+        ribbonCount: 2,
     },
 };

@@ -148,6 +148,7 @@ export abstract class BeautifulBackground extends LitElement {
     static styles = css`
         :host {
             border-radius: inherit;
+            display: flex;
         }
     `;
 

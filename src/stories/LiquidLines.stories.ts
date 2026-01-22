@@ -24,7 +24,7 @@ const meta: Meta = {
                 wiggle-amplitude=${args.wiggleAmplitude}
                 wiggle-speed=${args.wiggleSpeed}
                 trail-opacity=${args.trailOpacity}
-                style="width: 100%; height: 500px; display: flex;"
+                style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-liquid-lines>
         `;
     },

@@ -23,7 +23,7 @@ const meta: Meta = {
                 hex-scale=${args.hexScale}
                 trail-opacity=${args.trailOpacity}
                 hex-colors=${args.hexColors}
-                style="width: 100%; height: 500px; display: flex;"
+                style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-hexagon-wave>
         `;
     },
