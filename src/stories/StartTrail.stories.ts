@@ -108,7 +108,7 @@ export const GalacticVortex: Story = {
     },
 };
 
-export const Messiere: Story = {
+export const WhirlpoolGalaxy: Story = {
     args: {
         particleColors: "#0b2c55, #1c5d92, #6faee8, #f7da85, #d56297",
         particleAmount: 5000,
