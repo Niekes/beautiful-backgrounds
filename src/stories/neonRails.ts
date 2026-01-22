@@ -3,6 +3,7 @@ import Particle from "../Particle";
 import { getRandomFloat, interpolateLinear } from "../utils/number";
 import { randomColor } from "../utils/color";
 import { BeautifulBackground } from "../BeautifulBackground";
+import { stringToArrayConverter } from "../utils/lit";
 
 @customElement("bb-neon-rails")
 export class BbNeonRails extends BeautifulBackground {
@@ -54,7 +55,11 @@ export class BbNeonRails extends BeautifulBackground {
     @property({ type: Number, attribute: "grid-angle" })
     gridAngle: number = Math.PI / 2;
 
-    @property({ type: Array, attribute: "particle-colors" })
+    @property({
+        type: Array,
+        attribute: "particle-colors",
+        converter: stringToArrayConverter,
+    })
     particleColors: string[] = [];
 
     // Component-specific properties

@@ -24,6 +24,7 @@ const meta: Meta = {
                 font-color-lightness-end=${args.fontColorLightnessEnd}
                 background-color=${bgColor}
                 trail-opacity=${args.trailOpacity}
+                font-colors=${args.fontColors}
                 style="width: 100%; height: 450px; display: flex;"
             ></bb-digital-rain>
         `;
@@ -48,6 +49,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
+        fontColors: { control: "text" },
     },
     args: {
         characters:
@@ -63,6 +65,7 @@ const meta: Meta = {
         speed: 10,
         backgroundColor: "#000",
         trailOpacity: 0.1,
+        fontColors: "",
     },
 };
 
@@ -168,12 +171,21 @@ export const RainbowChaos: Story = {
         fontColorHueEnd: 360,
         fontColorSaturationStart: 70,
         fontColorSaturationEnd: 100,
-        fontColorLightnessStart: 40,
-        fontColorLightnessEnd: 80,
+        fontColorLightnessStart: 50,
+        fontColorLightnessEnd: 50,
         backgroundColor: "#000000",
         speed: 9,
         fontSize: 14,
         randomness: 0.99,
         trailOpacity: 0.09,
+    },
+};
+
+export const MatrixRed: Story = {
+    args: {
+        fontColors: "#ff0000, #aa0000, #550000",
+        backgroundColor: "#110000",
+        fontSize: 18,
+        speed: 12,
     },
 };

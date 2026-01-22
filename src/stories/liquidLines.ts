@@ -1,6 +1,7 @@
 import { hsl } from "d3";
 import { customElement, property } from "lit/decorators.js";
 import { BeautifulBackground } from "../BeautifulBackground";
+import { stringToArrayConverter } from "../utils/lit";
 
 @customElement("bb-liquid-lines")
 export class BbLiquidLines extends BeautifulBackground {
@@ -40,6 +41,13 @@ export class BbLiquidLines extends BeautifulBackground {
     @property({ type: Number, attribute: "wiggle-speed" })
     wiggleSpeed: number = 0.3;
 
+    @property({
+        type: Array,
+        attribute: "line-colors",
+        converter: stringToArrayConverter,
+    })
+    lineColors: string[] = [];
+
     private time: number = 0;
 
     protected loop(deltaTime: number): void {
@@ -76,11 +84,19 @@ export class BbLiquidLines extends BeautifulBackground {
         const depthLightness =
             baseLightness + Math.sin(this.time * 0.001 + index * 0.5) * 10;
 
-        const color = hsl(
-            currentHue,
-            this.lineSaturation / 100,
-            depthLightness / 100,
-        );
+        const color =
+            this.lineColors && this.lineColors.length > 0
+                ? hsl(this.lineColors[index % this.lineColors.length])
+                : hsl(
+                      currentHue,
+                      this.lineSaturation / 100,
+                      depthLightness / 100,
+                  );
+
+        if (this.lineColors && this.lineColors.length > 0) {
+            color.l = depthLightness / 100;
+        }
+
         ctx.strokeStyle = color.toString();
 
         for (let j = 0; j < points - 1; j++) {

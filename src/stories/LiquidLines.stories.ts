@@ -23,6 +23,7 @@ const meta: Meta = {
                 line-hue-end=${args.lineHueEnd}
                 line-saturation=${args.lineSaturation}
                 line-offset-step=${args.lineOffsetStep}
+                line-colors=${args.lineColors}
                 wiggle-amplitude=${args.wiggleAmplitude}
                 wiggle-speed=${args.wiggleSpeed}
                 trail-opacity=${args.trailOpacity}
@@ -50,6 +51,7 @@ const meta: Meta = {
         lineOffsetStep: {
             control: { type: "range", min: -2, max: 2, step: 0.01 },
         },
+        lineColors: { control: "text" },
         wiggleAmplitude: {
             control: { type: "range", min: 0, max: 100, step: 1 },
         },
@@ -70,6 +72,7 @@ const meta: Meta = {
         lineHueEnd: 280,
         lineSaturation: 80,
         lineOffsetStep: 0.2,
+        lineColors: "",
         wiggleAmplitude: 20,
         wiggleSpeed: 0.3,
         trailOpacity: 0.1,
@@ -228,5 +231,38 @@ export const GoldenHour: Story = {
         lineSaturation: 70,
         lineWidth: 5,
         backgroundColor: "#1a1500",
+    },
+};
+
+export const Rainbow: Story = {
+    args: {
+        lineCount: 30,
+        lineAmplitude: 40,
+        lineFrequency: 0.005,
+        speed: 0.5,
+        lineSpacing: 30,
+        lineColors:
+            "#ff0000, #ffa500, #ffff00, #008000, #0000ff, #4b0082, #ee82ee",
+        wiggleAmplitude: 10,
+        wiggleSpeed: 0.5,
+    },
+};
+
+export const PinkShutters: Story = {
+    args: {
+        backgroundColor: "#ffffff",
+        lineCount: 61,
+        lineAmplitude: 48,
+        lineFrequency: 0.0007,
+        speed: -1,
+        lineSpacing: 23,
+        lineWidth: 0.9,
+        lineHueStart: 276,
+        lineHueEnd: 360,
+        lineSaturation: 80,
+        lineOffsetStep: 0.2,
+        wiggleAmplitude: 5,
+        wiggleSpeed: 0.7,
+        trailOpacity: 0.15,
     },
 };

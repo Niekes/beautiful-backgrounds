@@ -2,6 +2,7 @@ import { hsl } from "d3";
 import { type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { BeautifulBackground } from "../BeautifulBackground";
+import { stringToArrayConverter } from "../utils/lit";
 
 type HexCell = {
     x: number;
@@ -51,7 +52,11 @@ export class BbHexagonWave extends BeautifulBackground {
     @property({ type: Number, attribute: "hex-scale" })
     hexScale: number = 1.0;
 
-    @property({ type: Array, attribute: "particle-colors" })
+    @property({
+        type: Array,
+        attribute: "hex-colors",
+        converter: stringToArrayConverter,
+    })
     hexColors: string[] = [];
 
     private grid: HexCell[] = [];

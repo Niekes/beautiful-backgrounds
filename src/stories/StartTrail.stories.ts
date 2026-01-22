@@ -28,7 +28,7 @@ const meta: Meta = {
             particle-amount=${args.particleAmount}
             particle-force=${args.particleForce}
             trail-opacity=${args.trailOpacity}
-            .particleColors=${args.particleColors}
+            particle-colors=${args.particleColors}
             style="width: 100%; height: 450px; display: flex;"
         ></bb-star-trail>`;
     },
@@ -72,7 +72,7 @@ const meta: Meta = {
         particleForce: {
             control: { type: "range", min: -50, max: 50, step: 0.1 },
         },
-        particleColors: { control: "object" },
+        particleColors: { control: "text" },
         trailOpacity: {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
@@ -93,7 +93,7 @@ const meta: Meta = {
         particleSpeedMin: 0.5,
         particleSpeedMax: 2.0,
         trailOpacity: 0.1,
-        particleColors: [],
+        particleColors: "",
     },
 };
 
@@ -104,7 +104,7 @@ export const Default: Story = {};
 
 export const Messiere: Story = {
     args: {
-        particleColors: ["#0b2c55", "#1c5d92", "#6faee8", "#f7da85", "#d56297"],
+        particleColors: "#0b2c55, #1c5d92, #6faee8, #f7da85, #d56297",
         particleAmount: 5000,
         particleSizeMin: 1.1,
         particleSizeMax: 2.5,
@@ -191,7 +191,7 @@ export const GravitationalCollapse: Story = {
 
 export const RGBStars: Story = {
     args: {
-        particleColors: ["#ff0000", "#00ff00", "#0000ff"],
+        particleColors: "#ff0000, #00ff00, #0000ff",
         particleAmount: 500,
         particleSizeMin: 2,
         particleSizeMax: 4,
@@ -222,7 +222,7 @@ export const GoldenNebula: Story = {
 export const AuroraBorealis: Story = {
     args: {
         backgroundColor: "#000a1a",
-        particleColors: ["#00ff88", "#00ffcc", "#88ff00", "#ccff00", "#00ccff"],
+        particleColors: "#00ff88, #00ffcc, #88ff00, #ccff00, #00ccff",
         particleAmount: 4000,
         particleSizeMin: 0.5,
         particleSizeMax: 1.5,
@@ -261,7 +261,7 @@ export const CosmicDust: Story = {
 export const FireflyForest: Story = {
     args: {
         backgroundColor: "#0f1a0a",
-        particleColors: ["#ffff00", "#ffee00", "#ffdd00"],
+        particleColors: "#ffff00, #ffee00, #ffdd00",
         particleAmount: 800,
         particleSizeMin: 1.5,
         particleSizeMax: 3.5,
@@ -279,7 +279,7 @@ export const FireflyForest: Story = {
 export const NeonVortex: Story = {
     args: {
         backgroundColor: "#000000",
-        particleColors: ["#ff00ff", "#00ffff", "#ff0080", "#0080ff"],
+        particleColors: "#ff00ff, #00ffff, #ff0080, #0080ff",
         particleAmount: 3500,
         particleSizeMin: 0.8,
         particleSizeMax: 2.5,
@@ -318,7 +318,7 @@ export const StarfieldWarp: Story = {
 export const TwilightSparkle: Story = {
     args: {
         backgroundColor: "#1a0f2e",
-        particleColors: ["#ff69b4", "#ba55d3", "#9370db", "#dda0dd"],
+        particleColors: "#ff69b4, #ba55d3, #9370db, #dda0dd",
         particleAmount: 1500,
         particleSizeMin: 1.0,
         particleSizeMax: 3.0,

@@ -31,7 +31,7 @@ const meta: Meta = {
                 grid-size=${args.gridSize}
                 grid-angle=${angle}
                 trail-opacity=${args.trailOpacity}
-                .particleColors=${args.particleColors}
+                particle-colors=${args.particleColors}
                 style="width: 100%; height: 450px; display: flex;"
             ></bb-neon-rails>
         `;
@@ -79,7 +79,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
-        particleColors: { control: "object" },
+        particleColors: { control: "text" },
     },
     args: {
         backgroundColor: "#000",
@@ -100,7 +100,7 @@ const meta: Meta = {
         gridSize: 60,
         gridAngle: 180,
         trailOpacity: 0.0125,
-        particleColors: [],
+        particleColors: "",
     },
 };
 
@@ -184,7 +184,7 @@ export const StarRole: Story = {
 
 export const Maze: Story = {
     args: {
-        particleColors: ["#ffffff", "#008BFF", "#E4FF30"],
+        particleColors: "#ffffff, #008BFF, #E4FF30",
         particleAmount: 506,
         gridSides: 4,
         gridSize: 29,
@@ -247,7 +247,7 @@ export const PinkVeins: Story = {
 export const ElectricHighway: Story = {
     args: {
         backgroundColor: "#000a1a",
-        particleColors: ["#00ffff", "#0080ff"],
+        particleColors: "#00ffff, #0080ff",
         particleSizeMin: 1.5,
         particleSizeMax: 3.0,
         particleSpeedMin: 15,
@@ -265,7 +265,7 @@ export const ElectricHighway: Story = {
 export const VioletLattice: Story = {
     args: {
         backgroundColor: "#0f0014",
-        particleColors: ["#ff00ff", "#ff0080", "#8000ff"],
+        particleColors: "#ff00ff, #ff0080, #8000ff",
         particleSizeMin: 0.5,
         particleSizeMax: 2.0,
         particleSpeedMin: -3,
@@ -306,7 +306,7 @@ export const TronLegacy: Story = {
 export const NeuralNetwork: Story = {
     args: {
         backgroundColor: "#0a0a0f",
-        particleColors: ["#00ff88", "#00ffcc", "#00ffff"],
+        particleColors: "#00ff88, #00ffcc, #00ffff",
         particleSizeMin: 0.3,
         particleSizeMax: 1.2,
         particleSpeedMin: -2,
@@ -393,7 +393,7 @@ export const EmeraldMatrix: Story = {
 export const SunsetGrid: Story = {
     args: {
         backgroundColor: "#1a0a00",
-        particleColors: ["#ff6600", "#ff9900", "#ffcc00", "#ff3300"],
+        particleColors: "#ff6600, #ff9900, #ffcc00, #ff3300",
         particleSizeMin: 0.8,
         particleSizeMax: 2.5,
         particleSpeedMin: -5,

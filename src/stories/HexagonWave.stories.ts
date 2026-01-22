@@ -25,18 +25,18 @@ const meta: Meta = {
                 hex-saturation=${args.hexSaturation}
                 hex-scale=${args.hexScale}
                 trail-opacity=${args.trailOpacity}
-                .hexColors=${args.hexColors || []}
+                hex-colors=${args.hexColors}
                 style="width: 100%; height: 500px; display: flex;"
             ></bb-hexagon-wave>
         `;
     },
     argTypes: {
         backgroundColor: { control: "color" },
-        hexSize: { control: { type: "range", min: 10, max: 200, step: 1 } },
+        hexSize: { control: { type: "range", min: 1, max: 200, step: 1 } },
         waveAmplitude: {
             control: { type: "range", min: 0, max: 25, step: 0.1 },
         },
-        waveSpeed: { control: { type: "range", min: 0.1, max: 5, step: 0.1 } },
+        waveSpeed: { control: { type: "range", min: -5, max: 5, step: 0.1 } },
         waveXFactor: {
             control: { type: "range", min: -0.05, max: 0.05, step: 0.001 },
         },
@@ -60,7 +60,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0, max: 1, step: 0.05 },
         },
-        hexColors: { control: "object" },
+        hexColors: { control: "text" },
     },
     args: {
         backgroundColor: "#000",
@@ -76,7 +76,7 @@ const meta: Meta = {
         hexSaturation: 60,
         hexScale: 1.0,
         trailOpacity: 0.1,
-        hexColors: [],
+        hexColors: "",
     },
 };
 
@@ -186,7 +186,7 @@ export const ArcticIce: Story = {
 export const CyberpunkGrid: Story = {
     args: {
         backgroundColor: "#0a0014",
-        hexColors: ["#ff00ff", "#00ffff", "#ff0080"],
+        hexColors: "#ff00ff, #00ffff, #ff0080",
         baseLightness: 50,
         lightnessRange: 30,
         waveSpeed: 2.0,
@@ -236,7 +236,7 @@ export const ElectricStorm: Story = {
 export const PastelDream: Story = {
     args: {
         backgroundColor: "#fff5f8",
-        hexColors: ["#ffb3d9", "#b3d9ff", "#d9b3ff", "#ffffb3"],
+        hexColors: "#ffb3d9, #b3d9ff, #d9b3ff, #ffffb3",
         baseLightness: 63,
         lightnessRange: 15,
         waveSpeed: 2.4,
@@ -250,11 +250,11 @@ export const PastelDream: Story = {
 export const SurfersParadise: Story = {
     args: {
         backgroundColor: "#000",
-        hexSize: 17,
+        hexSize: 7,
         waveAmplitude: 5.5,
-        waveSpeed: 1.3,
-        waveXFactor: -0.013,
-        waveYFactor: 0.029,
+        waveSpeed: -1,
+        waveXFactor: -0.007,
+        waveYFactor: 0.03,
         baseLightness: 37,
         lightnessRange: 25,
         hexHueStart: 182,

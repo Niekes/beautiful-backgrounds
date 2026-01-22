@@ -3,6 +3,7 @@ import { randomColor } from "../utils/color";
 import Symbol from "../Symbol";
 import { getRandomInt } from "../utils/number";
 import { BeautifulBackground } from "../BeautifulBackground";
+import { stringToArrayConverter } from "../utils/lit";
 
 @customElement("bb-digital-rain")
 export class BbDigitalRain extends BeautifulBackground {
@@ -35,6 +36,13 @@ export class BbDigitalRain extends BeautifulBackground {
 
     @property({ type: Number, attribute: "font-color-lightness-end" })
     fontColorLightnessEnd: number = 50;
+
+    @property({
+        type: Array,
+        attribute: "font-colors",
+        converter: stringToArrayConverter,
+    })
+    fontColors: string[] = [];
 
     // Properties inherited from BB class
     public columns: number = 0;
@@ -87,14 +95,21 @@ export class BbDigitalRain extends BeautifulBackground {
                 this.characters.charAt(
                     Math.floor(Math.random() * this.characters.length),
                 ),
-                randomColor(
-                    [this.fontColorHueStart, this.fontColorHueEnd],
-                    [
-                        this.fontColorSaturationStart,
-                        this.fontColorSaturationEnd,
-                    ],
-                    [this.fontColorLightnessStart, this.fontColorLightnessEnd],
-                ),
+                this.fontColors && this.fontColors.length > 0
+                    ? this.fontColors[
+                          Math.floor(Math.random() * this.fontColors.length)
+                      ]
+                    : randomColor(
+                          [this.fontColorHueStart, this.fontColorHueEnd],
+                          [
+                              this.fontColorSaturationStart,
+                              this.fontColorSaturationEnd,
+                          ],
+                          [
+                              this.fontColorLightnessStart,
+                              this.fontColorLightnessEnd,
+                          ],
+                      ),
                 this.fontSize,
                 this.speed * 3,
             );

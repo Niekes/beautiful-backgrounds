@@ -3,6 +3,7 @@ import Particle from "../Particle";
 import { getRandomFloat, interpolateLinear } from "../utils/number";
 import { randomColor } from "../utils/color";
 import { BeautifulBackground } from "../BeautifulBackground";
+import { stringToArrayConverter } from "../utils/lit";
 
 @customElement("bb-star-trail")
 export class BbStarTrail extends BeautifulBackground {
@@ -63,7 +64,11 @@ export class BbStarTrail extends BeautifulBackground {
     @property({ type: Number, attribute: "grid-angle" })
     gridAngle: number = 0;
 
-    @property({ type: Array, attribute: "particle-colors" })
+    @property({
+        type: Array,
+        attribute: "particle-colors",
+        converter: stringToArrayConverter,
+    })
     particleColors: string[] = [];
 
     // Component-specific properties
