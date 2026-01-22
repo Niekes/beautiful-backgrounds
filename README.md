@@ -61,7 +61,7 @@ A sleek, organic waving grid of hexagons (or other polygons). It features dynami
 
 A fluid, undulating animation of multiple lines with gradients and 3D depth effects. It offers extensive control over wave physics, line thickness, and color transitions, making it perfect for organic or "liquid" design themes.
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--default)
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquidlines--default)
 - 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/liquidLines.ts)
 
 ### [Neon Rails](https://github.com/niekes/beautiful-backgrounds/blob/main/src/stories/neonRails.ts)

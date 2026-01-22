@@ -17,16 +17,16 @@
         "lit": "^3.3.1"
     },
     "devDependencies": {
-        "@storybook/addon-a11y": "^10.1.11",
-        "@storybook/addon-docs": "^10.1.11",
-        "@storybook/addon-vitest": "^10.1.11",
-        "@storybook/web-components-vite": "^10.1.11",
+        "@storybook/addon-a11y": "^10.2.0",
+        "@storybook/addon-docs": "^10.2.0",
+        "@storybook/addon-vitest": "^10.2.0",
+        "@storybook/web-components-vite": "^10.2.0",
         "@types/d3": "^7.4.3",
         "@vitest/browser-playwright": "^4.0.17",
         "@vitest/coverage-v8": "^4.0.17",
         "d3": "^7.9.0",
         "playwright": "^1.57.0",
-        "storybook": "^10.1.11",
+        "storybook": "^10.2.0",
         "typescript": "~5.9.3",
         "vite": "^7.2.4",
         "vitest": "^4.0.17"

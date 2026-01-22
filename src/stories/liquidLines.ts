@@ -7,11 +7,11 @@ export class BbLiquidLines extends BeautifulBackground {
     @property({ type: Number, attribute: "line-count" })
     lineCount: number = 20;
 
-    @property({ type: Number, attribute: "amplitude" })
-    amplitude: number = 30;
+    @property({ type: Number, attribute: "line-amplitude" })
+    lineAmplitude: number = 30;
 
-    @property({ type: Number, attribute: "frequency" })
-    frequency: number = 0.005;
+    @property({ type: Number, attribute: "line-frequency" })
+    lineFrequency: number = 0.005;
 
     @property({ type: Number, attribute: "speed" })
     speed: number = 0.5;
@@ -22,17 +22,17 @@ export class BbLiquidLines extends BeautifulBackground {
     @property({ type: Number, attribute: "line-width" })
     lineWidth: number = 2;
 
-    @property({ type: Number, attribute: "hue-start" })
-    hueStart: number = 200;
+    @property({ type: Number, attribute: "line-hue-start" })
+    lineHueStart: number = 200;
 
-    @property({ type: Number, attribute: "hue-end" })
-    hueEnd: number = 280;
+    @property({ type: Number, attribute: "line-hue-end" })
+    lineHueEnd: number = 280;
 
-    @property({ type: Number, attribute: "saturation" })
-    saturation: number = 80;
+    @property({ type: Number, attribute: "line-saturation" })
+    lineSaturation: number = 80;
 
-    @property({ type: Number, attribute: "offset-step" })
-    offsetStep: number = 0.2;
+    @property({ type: Number, attribute: "line-offset-step" })
+    lineOffsetStep: number = 0.2;
 
     @property({ type: Number, attribute: "wiggle-amplitude" })
     wiggleAmplitude: number = 20;
@@ -61,7 +61,7 @@ export class BbLiquidLines extends BeautifulBackground {
         const points = 100; // Resolution of the line
         const step = this.width / (points - 1);
 
-        const phaseOffset = index * this.offsetStep;
+        const phaseOffset = index * this.lineOffsetStep;
 
         ctx.beginPath();
         ctx.lineWidth = this.lineWidth;
@@ -69,7 +69,8 @@ export class BbLiquidLines extends BeautifulBackground {
         // Gradient for 3D look
         const progress = index / this.lineCount;
         const currentHue =
-            this.hueStart + (this.hueEnd - this.hueStart) * progress;
+            this.lineHueStart +
+            (this.lineHueEnd - this.lineHueStart) * progress;
         // Lightness varies for a "depth" effect
         const baseLightness = 40;
         const depthLightness =
@@ -77,7 +78,7 @@ export class BbLiquidLines extends BeautifulBackground {
 
         const color = hsl(
             currentHue,
-            this.saturation / 100,
+            this.lineSaturation / 100,
             depthLightness / 100,
         );
         ctx.strokeStyle = color.toString();
@@ -86,8 +87,10 @@ export class BbLiquidLines extends BeautifulBackground {
             const x1 = j * step;
             const horizontalWave1 =
                 Math.sin(
-                    x1 * this.frequency + this.time * this.speed + phaseOffset,
-                ) * this.amplitude;
+                    x1 * this.lineFrequency +
+                        this.time * this.speed +
+                        phaseOffset,
+                ) * this.lineAmplitude;
             const verticalWiggle1 =
                 Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
                 this.wiggleAmplitude;
@@ -96,8 +99,10 @@ export class BbLiquidLines extends BeautifulBackground {
             const x2 = (j + 1) * step;
             const horizontalWave2 =
                 Math.sin(
-                    x2 * this.frequency + this.time * this.speed + phaseOffset,
-                ) * this.amplitude;
+                    x2 * this.lineFrequency +
+                        this.time * this.speed +
+                        phaseOffset,
+                ) * this.lineAmplitude;
             const verticalWiggle2 =
                 Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
                 this.wiggleAmplitude;
