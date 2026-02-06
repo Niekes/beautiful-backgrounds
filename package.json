@@ -37,21 +37,19 @@
         "lit": "^3.0.0"
     },
     "devDependencies": {
-        "@storybook/addon-a11y": "^10.2.0",
-        "@storybook/addon-docs": "^10.2.0",
-        "@storybook/addon-vitest": "^10.2.0",
-        "@storybook/web-components-vite": "^10.2.0",
+        "@storybook/addon-a11y": "^10.2.6",
+        "@storybook/addon-docs": "^10.2.6",
+        "@storybook/addon-vitest": "^10.2.6",
+        "@storybook/web-components-vite": "^10.2.6",
         "@types/d3": "^7.4.3",
-        "@types/node": "^25.0.10",
-        "@vitest/browser-playwright": "^4.0.17",
-        "@vitest/coverage-v8": "^4.0.17",
+        "@types/node": "^25.2.0",
+        "@vitest/coverage-v8": "^4.0.18",
         "d3": "^7.9.0",
-        "playwright": "^1.57.0",
-        "storybook": "^10.2.0",
+        "storybook": "^10.2.6",
         "typescript": "~5.9.3",
-        "vite": "^7.2.4",
-        "vitest": "^4.0.17",
-        "lit": "^3.3.1"
+        "vite": "^7.3.1",
+        "vitest": "^4.0.18",
+        "lit": "^3.3.2"
     },
     "keywords": [
         "canvas",
