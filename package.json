@@ -4,7 +4,7 @@
     "type": "module",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/niekes/beautiful-backgrounds.git"
+        "url": "git+https://github.com/Niekes/beautiful-backgrounds.git"
     },
     "main": "./build/bb.js",
     "module": "./build/bb.es.js",
