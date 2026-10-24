@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The bundle no longer includes d3-color: the browser parses the colors in
+  `hex-colors` and `line-colors`, so newer formats such as `oklch()` work
+  too. Both builds are minified, and `bb.es.js` shrinks from 105 kB to
+  41 kB.
+- The package no longer ships the declaration files of the stories or the
+  Vite logo.
+
+### Fixed
+
+- `<bb-concentric-pulse>` no longer stops with a single ring color or an
+  empty `ring-colors` attribute, and accepts every CSS color.
+- Gray colors in `hex-colors` and `line-colors` no longer produce an
+  invalid color.
+- `HTMLElementTagNameMap` knows `bb-ambient-ribbon`.
+
 ## [1.1.0] - 2026-10-24
 
 ### Added

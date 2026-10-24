@@ -83,46 +83,47 @@ export class BbDigitalRain extends BeautifulBackground {
 
     protected loop(deltaTime: number): void {
         this.updateSymbols();
-        this.ctx.globalAlpha = this.trailOpacity;
-        this.drawBackground(this.ctx);
-        this.ctx.globalAlpha = 1.0;
+        this.fadeTrail();
 
         this.ctx.textAlign = "center";
         this.ctx.font = `${this.fontSize}px monospace`;
 
+        const speed = this.speed * 3;
         this.symbols.forEach((symbol) => {
             symbol.draw(
                 this.ctx,
-                this.characters.charAt(
-                    Math.floor(Math.random() * this.characters.length),
-                ),
-                this.fontColors && this.fontColors.length > 0
-                    ? this.fontColors[
-                          Math.floor(Math.random() * this.fontColors.length)
-                      ]
-                    : randomColor(
-                          [this.fontColorHueStart, this.fontColorHueEnd],
-                          [
-                              this.fontColorSaturationStart,
-                              this.fontColorSaturationEnd,
-                          ],
-                          [
-                              this.fontColorLightnessStart,
-                              this.fontColorLightnessEnd,
-                          ],
-                      ),
+                this.randomCharacter(),
+                this.symbolColor(),
                 this.fontSize,
-                this.speed * 3,
+                speed,
             );
-
             symbol.update(
                 this.height,
                 this.randomness,
                 this.fontSize,
                 deltaTime,
-                this.speed * 3,
+                speed,
             );
         });
+    }
+
+    private randomCharacter(): string {
+        return this.characters.charAt(
+            Math.floor(Math.random() * this.characters.length),
+        );
+    }
+
+    private symbolColor(): string {
+        if (this.fontColors.length > 0) {
+            return this.fontColors[
+                Math.floor(Math.random() * this.fontColors.length)
+            ];
+        }
+        return randomColor(
+            [this.fontColorHueStart, this.fontColorHueEnd],
+            [this.fontColorSaturationStart, this.fontColorSaturationEnd],
+            [this.fontColorLightnessStart, this.fontColorLightnessEnd],
+        );
     }
 
     protected createSymbol(index: number): Symbol {

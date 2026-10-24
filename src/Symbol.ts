@@ -1,3 +1,6 @@
+// The speed at which the rows are spaced exactly one font size apart.
+const BASE_SPEED = 30;
+
 export default class Symbol {
     protected x: number;
     protected y: number;
@@ -13,9 +16,8 @@ export default class Symbol {
         fontSize: number,
         deltaTime: number,
         speed: number,
-        baseSpeed: number = 30,
     ): void {
-        const spacingFactor = speed / baseSpeed;
+        const spacingFactor = speed / BASE_SPEED;
         if (
             this.y * fontSize * spacingFactor > height &&
             Math.random() > randomness
@@ -32,9 +34,8 @@ export default class Symbol {
         color: string,
         fontSize: number,
         speed: number,
-        baseSpeed: number = 30,
     ): void {
-        const spacingFactor = speed / baseSpeed;
+        const spacingFactor = speed / BASE_SPEED;
         ctx.fillStyle = color;
         ctx.fillText(
             text,

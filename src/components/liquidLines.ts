@@ -1,6 +1,6 @@
-import { hsl } from "d3";
 import { customElement, property } from "lit/decorators.js";
 import { BeautifulBackground } from "../BeautifulBackground";
+import { toHsl } from "../utils/color";
 import { stringToArrayConverter } from "../utils/lit";
 
 @customElement("bb-liquid-lines")
@@ -53,9 +53,7 @@ export class BbLiquidLines extends BeautifulBackground {
     protected loop(deltaTime: number): void {
         this.time += deltaTime;
 
-        this.ctx.globalAlpha = this.trailOpacity;
-        this.drawBackground(this.ctx);
-        this.ctx.globalAlpha = 1.0;
+        this.fadeTrail();
 
         const centerY = this.height / 2;
         const startY = centerY - (this.lineCount * this.lineSpacing) / 2;
@@ -69,78 +67,50 @@ export class BbLiquidLines extends BeautifulBackground {
         const ctx = this.ctx;
         const points = 100; // Resolution of the line
         const step = this.width / (points - 1);
-
         const phaseOffset = index * this.lineOffsetStep;
+        const wiggle =
+            Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
+            this.wiggleAmplitude;
+        const waveY = (x: number): number =>
+            baseY +
+            Math.sin(
+                x * this.lineFrequency + this.time * this.speed + phaseOffset,
+            ) *
+                this.lineAmplitude +
+            wiggle;
 
         ctx.beginPath();
         ctx.lineWidth = this.lineWidth;
-
-        // Gradient for 3D look
-        const progress = index / this.lineCount;
-        const currentHue =
-            this.lineHueStart +
-            (this.lineHueEnd - this.lineHueStart) * progress;
-        // Lightness varies for a "depth" effect
-        const baseLightness = 40;
-        const depthLightness =
-            baseLightness + Math.sin(this.time * 0.001 + index * 0.5) * 10;
-
-        const color =
-            this.lineColors && this.lineColors.length > 0
-                ? hsl(this.lineColors[index % this.lineColors.length])
-                : hsl(
-                      currentHue,
-                      this.lineSaturation / 100,
-                      depthLightness / 100,
-                  );
-
-        if (this.lineColors && this.lineColors.length > 0) {
-            color.l = depthLightness / 100;
-        }
-
-        ctx.strokeStyle = color.toString();
+        ctx.strokeStyle = this.lineColor(index);
+        ctx.moveTo(0, waveY(0));
 
         for (let j = 0; j < points - 1; j++) {
             const x1 = j * step;
-
-            const horizontalWave1 =
-                Math.sin(
-                    x1 * this.lineFrequency +
-                        this.time * this.speed +
-                        phaseOffset,
-                ) * this.lineAmplitude;
-
-            const verticalWiggle1 =
-                Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
-                this.wiggleAmplitude;
-
-            const y1 = baseY + horizontalWave1 + verticalWiggle1;
-
             const x2 = (j + 1) * step;
+            const y1 = waveY(x1);
 
-            const horizontalWave2 =
-                Math.sin(
-                    x2 * this.lineFrequency +
-                        this.time * this.speed +
-                        phaseOffset,
-                ) * this.lineAmplitude;
-            const verticalWiggle2 =
-                Math.sin(this.time * this.wiggleSpeed + phaseOffset + index) *
-                this.wiggleAmplitude;
-
-            const y2 = baseY + horizontalWave2 + verticalWiggle2;
-
-            const midX = (x1 + x2) / 2;
-            const midY = (y1 + y2) / 2;
-
-            if (j === 0) {
-                ctx.moveTo(x1, y1);
-            }
-
-            ctx.quadraticCurveTo(x1, y1, midX, midY);
+            ctx.quadraticCurveTo(x1, y1, (x1 + x2) / 2, (y1 + waveY(x2)) / 2);
         }
 
         ctx.stroke();
+    }
+
+    /** The line's color, with a lightness that varies for a "depth" effect. */
+    private lineColor(index: number): string {
+        const lightness = 40 + Math.sin(this.time * 0.001 + index * 0.5) * 10;
+
+        if (this.lineColors.length > 0) {
+            const { h, s } = toHsl(
+                this.lineColors[index % this.lineColors.length],
+            );
+            return `hsl(${h}, ${s * 100}%, ${lightness}%)`;
+        }
+
+        const progress = index / this.lineCount;
+        const hue =
+            this.lineHueStart +
+            (this.lineHueEnd - this.lineHueStart) * progress;
+        return `hsl(${hue}, ${this.lineSaturation}%, ${lightness}%)`;
     }
 }
 

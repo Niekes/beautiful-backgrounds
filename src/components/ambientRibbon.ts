@@ -4,22 +4,13 @@ import { BeautifulBackground } from "../BeautifulBackground";
 import { getRandomFloat } from "../utils/number";
 import { hsla } from "../utils/color";
 
-class Line {
-    public angle: number[];
-    public color: string;
-
-    constructor(angle: number[], color: string) {
-        this.angle = angle;
-        this.color = color;
-    }
-}
-
 class Ribbon {
     public angle: number[];
     private speedSeeds: number[];
     private speedSigns: number[];
     public speed: number[] = [];
-    public lines: Line[] = [];
+    /** The angles of each line, newest last. */
+    public lines: number[][] = [];
 
     constructor(speedMin: number, speedMax: number) {
         this.angle = [
@@ -61,7 +52,7 @@ class Ribbon {
             Math.sin(this.angle[3]),
         ];
 
-        this.lines.push(new Line(nextAngle, "")); // Color set during draw
+        this.lines.push(nextAngle);
 
         if (this.lines.length > maxWidth) {
             this.lines.shift();
@@ -114,11 +105,8 @@ export class BbAmbientRibbon extends BeautifulBackground {
     ribbonLineOpacity: number = 0.2;
 
     private ribbons: Ribbon[] = [];
-    private hue: number = 11;
-    private hueForward: boolean = true;
 
     protected initialize(): void {
-        this.hue = this.ribbonHueStart;
         this.ribbons = [];
         for (let i = 0; i < this.ribbonCount; i++) {
             this.ribbons.push(
@@ -129,13 +117,12 @@ export class BbAmbientRibbon extends BeautifulBackground {
         // Preload
         for (let i = 0; i < this.ribbonCount; i++) {
             for (let j = 0; j < this.ribbonWidth; j++) {
-                this.updateColor();
                 this.ribbons[i].update(this.ribbonWidth);
             }
         }
     }
 
-    protected updated(changedProperties: PropertyValues) {
+    protected updated(changedProperties: PropertyValues): void {
         super.updated(changedProperties);
         if (
             changedProperties.has("ribbonSpeedMin") ||
@@ -157,97 +144,61 @@ export class BbAmbientRibbon extends BeautifulBackground {
         }
     }
 
-    private updateColor() {
-        this.hue += this.hueForward ? 0.05 : -0.05;
-
-        if (this.hue > this.ribbonHueEnd && this.hueForward) {
-            this.hue = this.ribbonHueEnd;
-            this.hueForward = false;
-        } else if (this.hue < this.ribbonHueStart && !this.hueForward) {
-            this.hue = this.ribbonHueStart;
-            this.hueForward = true;
-        }
-    }
-
     protected loop(): void {
-        this.updateColor();
-
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         // Background
         this.drawBackground(this.ctx);
-
-        const diagonal = Math.sqrt(this.width ** 2 + this.height ** 2);
-        const centerX = this.width / 2;
-        const centerY = this.height / 2;
-
-        const radius = diagonal / 2;
-        const radius3 = radius / 3;
-        const rotationRad = (this.ribbonRotation * Math.PI) / 180;
 
         this.ctx.lineWidth = this.ribbonLineWidth;
 
         this.ribbons.forEach((ribbon) => {
             ribbon.update(this.ribbonWidth);
 
-            ribbon.lines.forEach((line, index) => {
-                const angle = line.angle;
-
-                const x1 =
-                    centerX -
-                    radius *
-                        Math.cos(angle[0] * this.ribbonAmplitude + rotationRad);
-                const y1 =
-                    centerY -
-                    radius *
-                        Math.sin(angle[0] * this.ribbonAmplitude + rotationRad);
-                const x2 =
-                    centerX +
-                    radius *
-                        Math.cos(angle[3] * this.ribbonAmplitude + rotationRad);
-                const y2 =
-                    centerY +
-                    radius *
-                        Math.sin(angle[3] * this.ribbonAmplitude + rotationRad);
-
-                const cpx1 =
-                    centerX -
-                    radius3 * Math.cos(angle[1] * this.ribbonAmplitude * 2);
-                const cpy1 =
-                    centerY -
-                    radius3 * Math.sin(angle[1] * this.ribbonAmplitude * 2);
-                const cpx2 =
-                    centerX +
-                    radius3 * Math.cos(angle[2] * this.ribbonAmplitude * 2);
-                const cpy2 =
-                    centerY +
-                    radius3 * Math.sin(angle[2] * this.ribbonAmplitude * 2);
-
+            ribbon.lines.forEach((angle, index) => {
                 const progress = index / (ribbon.lines.length - 1 || 1);
-
-                const lineHue =
-                    this.ribbonHueEnd +
-                    (this.ribbonHueStart - this.ribbonHueEnd) * progress;
-                const lineSaturation =
-                    this.ribbonSaturationEnd +
-                    (this.ribbonSaturationStart - this.ribbonSaturationEnd) *
-                        progress;
-                const lineLightness =
-                    this.ribbonLightnessEnd +
-                    (this.ribbonLightnessStart - this.ribbonLightnessEnd) *
-                        progress;
-
-                this.ctx.strokeStyle = hsla(
-                    lineHue,
-                    lineSaturation,
-                    lineLightness,
-                    this.ribbonLineOpacity,
-                );
-                this.ctx.beginPath();
-                this.ctx.moveTo(x1, y1);
-                this.ctx.bezierCurveTo(cpx1, cpy1, cpx2, cpy2, x2, y2);
-                this.ctx.stroke();
+                this.ctx.strokeStyle = this.lineColor(progress);
+                this.drawLine(angle);
             });
         });
+    }
+
+    /** One line of a ribbon: a bezier curve from edge to edge. */
+    private drawLine(angle: number[]): void {
+        const radius = Math.sqrt(this.width ** 2 + this.height ** 2) / 2;
+        const rotation = (this.ribbonRotation * Math.PI) / 180;
+        const amplitude = this.ribbonAmplitude;
+        const at = (sign: number, r: number, a: number): [number, number] => [
+            this.width / 2 + sign * r * Math.cos(a),
+            this.height / 2 + sign * r * Math.sin(a),
+        ];
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(...at(-1, radius, angle[0] * amplitude + rotation));
+        this.ctx.bezierCurveTo(
+            ...at(-1, radius / 3, angle[1] * amplitude * 2),
+            ...at(1, radius / 3, angle[2] * amplitude * 2),
+            ...at(1, radius, angle[3] * amplitude + rotation),
+        );
+        this.ctx.stroke();
+    }
+
+    /** The color of a line, from the oldest (progress 0) to the newest. */
+    private lineColor(progress: number): string {
+        const mix = (start: number, end: number): number =>
+            end + (start - end) * progress;
+
+        return hsla(
+            mix(this.ribbonHueStart, this.ribbonHueEnd),
+            mix(this.ribbonSaturationStart, this.ribbonSaturationEnd),
+            mix(this.ribbonLightnessStart, this.ribbonLightnessEnd),
+            this.ribbonLineOpacity,
+        );
+    }
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "bb-ambient-ribbon": BbAmbientRibbon;
     }
 }

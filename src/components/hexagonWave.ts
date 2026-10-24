@@ -1,14 +1,13 @@
-import { hsl } from "d3";
 import { type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { BeautifulBackground } from "../BeautifulBackground";
+import { toHsl } from "../utils/color";
 import { stringToArrayConverter } from "../utils/lit";
 
 type HexCell = {
     x: number;
     y: number;
-    phase: number;
-    colorIndex?: number;
+    colorIndex: number;
 };
 
 @customElement("bb-hexagon-wave")
@@ -87,7 +86,6 @@ export class BbHexagonWave extends BeautifulBackground {
                 this.grid.push({
                     x: q * xSpacing + xOffset,
                     y: r * ySpacing,
-                    phase: Math.random() * Math.PI * 2,
                     colorIndex: Math.floor(Math.random() * 1000),
                 });
             }
@@ -97,51 +95,42 @@ export class BbHexagonWave extends BeautifulBackground {
     protected loop(deltaTime: number): void {
         this.time += deltaTime;
 
-        this.ctx.globalAlpha = this.trailOpacity;
-        this.drawBackground(this.ctx);
-        this.ctx.globalAlpha = 1.0;
+        this.fadeTrail();
 
         for (const cell of this.grid) {
-            const waveX = cell.x * this.waveXFactor;
-            const waveY = cell.y * this.waveYFactor;
-            const wavePhase = Math.sin(
-                this.time * this.waveSpeed + waveX + waveY,
-            );
-
-            const offsetY = wavePhase * this.waveAmplitude;
-
-            const lightCoord = cell.x + cell.y;
-            const shade =
-                Math.sin(this.time + lightCoord) * this.shadeAmplitude;
-
-            const lightness =
-                this.baseLightness + wavePhase * this.lightnessRange + shade;
-
-            let fill: string;
-
-            if (this.hexColors && this.hexColors.length > 0) {
-                const colorStr =
-                    this.hexColors[
-                        (cell.colorIndex || 0) % this.hexColors.length
-                    ];
-                const c = hsl(colorStr);
-                fill = `hsl(${c.h}, ${c.s * 100}%, ${lightness}%)`;
-            } else {
-                const totalPath = this.width + this.height;
-                const posFactor = (cell.x + cell.y) / totalPath;
-                const currentHue =
-                    this.hexHueStart +
-                    (this.hexHueEnd - this.hexHueStart) * posFactor;
-                fill = `hsl(${currentHue}, ${this.hexSaturation}%, ${lightness}%)`;
-            }
-
-            this.drawHex(
-                cell.x,
-                cell.y + offsetY,
-                this.hexSize * this.hexScale,
-                fill,
-            );
+            this.drawCell(cell);
         }
+    }
+
+    private drawCell(cell: HexCell): void {
+        const waveX = cell.x * this.waveXFactor;
+        const waveY = cell.y * this.waveYFactor;
+        const wavePhase = Math.sin(this.time * this.waveSpeed + waveX + waveY);
+        const shade =
+            Math.sin(this.time + cell.x + cell.y) * this.shadeAmplitude;
+        const lightness =
+            this.baseLightness + wavePhase * this.lightnessRange + shade;
+
+        this.drawHex(
+            cell.x,
+            cell.y + wavePhase * this.waveAmplitude,
+            this.hexSize * this.hexScale,
+            this.cellFill(cell, lightness),
+        );
+    }
+
+    private cellFill(cell: HexCell, lightness: number): string {
+        if (this.hexColors.length > 0) {
+            const { h, s } = toHsl(
+                this.hexColors[cell.colorIndex % this.hexColors.length],
+            );
+            return `hsl(${h}, ${s * 100}%, ${lightness}%)`;
+        }
+
+        const posFactor = (cell.x + cell.y) / (this.width + this.height);
+        const hue =
+            this.hexHueStart + (this.hexHueEnd - this.hexHueStart) * posFactor;
+        return `hsl(${hue}, ${this.hexSaturation}%, ${lightness}%)`;
     }
 
     private drawHex(x: number, y: number, size: number, fill: string): void {
@@ -151,7 +140,8 @@ export class BbHexagonWave extends BeautifulBackground {
             const angle = ((Math.PI * 2) / 6) * i - Math.PI / 2;
             const px = x + Math.cos(angle) * size;
             const py = y + Math.sin(angle) * size;
-            i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+            // On an empty path the first lineTo starts it, like moveTo.
+            ctx.lineTo(px, py);
         }
         ctx.closePath();
 
