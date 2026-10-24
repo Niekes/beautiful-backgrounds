@@ -4,13 +4,16 @@ import { defineConfig } from "vite-plus";
 import type { UserConfig } from "vite-plus";
 
 // The canvas, custom elements and layout need a real browser, so every test
-// project runs in a headless Chromium.
-const browser = {
-    enabled: true,
-    headless: true,
-    provider: playwright({}),
-    instances: [{ browser: "chromium" as const }],
-};
+// project runs in a headless Chromium. Vitest names the instances in place,
+// so each project gets its own copy.
+function browser() {
+    return {
+        enabled: true,
+        headless: true,
+        provider: playwright({}),
+        instances: [{ browser: "chromium" as const }],
+    };
+}
 
 function entryFileName(chunk: { name?: string }, format: string): string {
     if (chunk.name?.endsWith(".d")) return "index.d.ts";
@@ -26,7 +29,9 @@ const config: UserConfig = {
     },
     lint: {
         ignorePatterns: ["build/**", "coverage/**", "storybook-static/**"],
-        jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
+        jsPlugins: [
+            { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
+        ],
         rules: { "vite-plus/prefer-vite-plus-imports": "error" },
         options: { typeAware: true, typeCheck: true },
     },
@@ -55,6 +60,9 @@ const config: UserConfig = {
         },
     },
 
+    // Pre-bundle Lit up front, so the first test run does not reload.
+    optimizeDeps: { include: ["lit", "lit/decorators.js"] },
+
     // Test configuration
     test: {
         coverage: {
@@ -76,7 +84,7 @@ const config: UserConfig = {
                 test: {
                     name: "unit",
                     include: ["tests/**/*.test.ts"],
-                    browser,
+                    browser: browser(),
                 },
             },
             {
@@ -89,7 +97,7 @@ const config: UserConfig = {
                 ],
                 test: {
                     name: "storybook",
-                    browser,
+                    browser: browser(),
                     setupFiles: [".storybook/vitest.setup.ts"],
                 },
             },
