@@ -12,8 +12,6 @@ export default class Particle {
     private px: number;
     private py: number;
     private initialized: boolean = false;
-    private frequencyX: number;
-    private frequencyY: number;
     private born: number;
     private fadeInDuration: number;
     private fadeOutDuration: number;
@@ -27,12 +25,9 @@ export default class Particle {
         this.lifespan = options.lifespan;
         this.force = options.force ?? 1;
 
-        this.frequencyX = options.frequencyX ?? 1;
-        this.frequencyY = options.frequencyY ?? 1;
-
-        this.gridSides = options.gridSides ?? 6;
-        this.gridSize = options.gridSize ?? 40;
-        this.gridAngle = options.gridAngle ?? Math.PI / 2;
+        this.gridSides = options.gridSides;
+        this.gridSize = options.gridSize;
+        this.gridAngle = options.gridAngle;
 
         this.x = options.x ?? 0;
         this.y = options.y ?? 0;
@@ -47,23 +42,10 @@ export default class Particle {
         this.angle += this.speed * deltaTime;
         this.radius += this.force * deltaTime;
 
-        const newX =
-            centerX + Math.cos(this.angle * this.frequencyX) * this.radius;
-        const newY =
-            centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
-
-        if (!this.initialized) {
-            this.x = newX;
-            this.y = newY;
-            this.px = newX;
-            this.py = newY;
-            this.initialized = true;
-        } else {
-            this.px = this.x;
-            this.py = this.y;
-            this.x = newX;
-            this.y = newY;
-        }
+        this.updatePosition(
+            centerX + Math.cos(this.angle) * this.radius,
+            centerY + Math.sin(this.angle) * this.radius,
+        );
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -96,23 +78,7 @@ export default class Particle {
     private railProgress: number = 0; // 0 to 1
 
     railMove(centerX: number, centerY: number, deltaTime: number): void {
-        if (!this.initialized) {
-            // Initial snap to grid
-            const seedX = this.x;
-            const seedY = this.y;
-
-            const snapped = this.snapToGrid(seedX, seedY, centerX, centerY);
-            this.railFromX = snapped.x;
-            this.railFromY = snapped.y;
-            this.pickNextRailTarget();
-
-            this.x = this.railFromX;
-            this.y = this.railFromY;
-            this.px = this.x;
-            this.py = this.y;
-            this.initialized = true;
-            this.railProgress = 0;
-        }
+        if (!this.initialized) this.enterRail(centerX, centerY);
 
         // Move constant speed based on pixels per frame.
         const pxPerFrame = Math.abs(this.speed) * 20;
@@ -126,15 +92,23 @@ export default class Particle {
         }
 
         // Interpolate
-        const dx = this.railToX - this.railFromX;
-        const dy = this.railToY - this.railFromY;
-        const newX = this.railFromX + dx * this.railProgress;
-        const newY = this.railFromY + dy * this.railProgress;
-
-        this.updatePosition(newX, newY);
+        this.updatePosition(
+            this.railFromX + (this.railToX - this.railFromX) * this.railProgress,
+            this.railFromY + (this.railToY - this.railFromY) * this.railProgress,
+        );
     }
 
-    private pickNextRailTarget() {
+    /** Snaps the particle onto the nearest grid node and picks a first rail. */
+    private enterRail(centerX: number, centerY: number): void {
+        const node = this.snapToGrid(this.x, this.y, centerX, centerY);
+        this.railFromX = node.x;
+        this.railFromY = node.y;
+        this.railProgress = 0;
+        this.pickNextRailTarget();
+        this.updatePosition(node.x, node.y);
+    }
+
+    private pickNextRailTarget(): void {
         const sector = (Math.PI * 2) / this.gridSides;
 
         // Randomly pick one of the k directions (0 to gridSides-1)
@@ -146,49 +120,35 @@ export default class Particle {
         this.railToY = this.railFromY + Math.sin(angle) * this.gridSize;
     }
 
-    private snapToGrid(
-        x: number,
-        y: number,
-        ox: number,
-        oy: number,
-    ): { x: number; y: number } {
-        let rx = x - ox;
-        let ry = y - oy;
+    /** Snaps in the grid's own frame around (ox, oy), then rotates back. */
+    private snapToGrid(x: number, y: number, ox: number, oy: number): Point {
+        const local = rotate(x - ox, y - oy, -this.gridAngle);
+        const node = this.nearestNode(local.x, local.y);
+        const world = rotate(node.x, node.y, this.gridAngle);
 
-        const cos = Math.cos(-this.gridAngle);
-        const sin = Math.sin(-this.gridAngle);
-        const rrx = rx * cos - ry * sin;
-        const rry = rx * sin + ry * cos;
+        return { x: world.x + ox, y: world.y + oy };
+    }
 
-        let sx = rrx;
-        let sy = rry;
+    private nearestNode(x: number, y: number): Point {
         const size = this.gridSize;
 
         if (this.gridSides === 6 || this.gridSides === 3) {
+            // A triangular lattice, whose rails match the hexagon edges.
             const h = (size * Math.sqrt(3)) / 2;
-            let n2 = Math.round(rry / h);
-
-            // For triangular lattice alignment matching hex edges, we need checking parity
-            // But simple triangular lattice snapping is usually sufficient for "rail look"
-            // n1 = (x - n2 * L/2) / L
-            let n1 = Math.round((rrx - (n2 * size) / 2) / size);
-
-            sx = n1 * size + (n2 * size) / 2;
-            sy = n2 * h;
-        } else if (this.gridSides === 4) {
-            sx = Math.round(rrx / size) * size;
-            sy = Math.round(rry / size) * size;
+            const row = Math.round(y / h);
+            const col = Math.round((x - (row * size) / 2) / size);
+            return { x: col * size + (row * size) / 2, y: row * h };
         }
-
-        const finalX =
-            sx * Math.cos(this.gridAngle) - sy * Math.sin(this.gridAngle);
-        const finalY =
-            sx * Math.sin(this.gridAngle) + sy * Math.cos(this.gridAngle);
-
-        return { x: finalX + ox, y: finalY + oy };
+        if (this.gridSides === 4) {
+            return {
+                x: Math.round(x / size) * size,
+                y: Math.round(y / size) * size,
+            };
+        }
+        return { x, y };
     }
 
-    private updatePosition(nx: number, ny: number) {
+    private updatePosition(nx: number, ny: number): void {
         if (!this.initialized) {
             this.x = nx;
             this.y = ny;
@@ -226,11 +186,17 @@ export interface ParticleOptions {
     angle: number;
     lifespan: number;
     force?: number;
-    frequencyX?: number;
-    frequencyY?: number;
-    gridSides?: number;
-    gridSize?: number;
-    gridAngle?: number;
+    gridSides: number;
+    gridSize: number;
+    gridAngle: number;
     x?: number;
     y?: number;
+}
+
+type Point = { x: number; y: number };
+
+function rotate(x: number, y: number, angle: number): Point {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    return { x: x * cos - y * sin, y: x * sin + y * cos };
 }

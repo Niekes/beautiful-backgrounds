@@ -68,28 +68,42 @@ export abstract class BeautifulBackground extends LitElement {
     }
 
     protected drawBackground(ctx: CanvasRenderingContext2D): void {
+        ctx.fillStyle = this.backgroundGradient(ctx);
+        ctx.fillRect(0, 0, this.width, this.height);
+    }
+
+    /**
+     * Paints the background translucently, so the previous frames fade out
+     * into a trail.
+     */
+    protected fadeTrail(): void {
+        this.ctx.globalAlpha = this.trailOpacity;
+        this.drawBackground(this.ctx);
+        this.ctx.globalAlpha = 1.0;
+    }
+
+    /** A gradient at `bgAngle` that spans the canvas from edge to edge. */
+    private backgroundGradient(ctx: CanvasRenderingContext2D): CanvasGradient {
         const angleRad = (this.bgAngle * Math.PI) / 180;
-        const r =
-            (Math.abs(this.width * Math.cos(angleRad)) +
-                Math.abs(this.height * Math.sin(angleRad))) /
-            2;
+        const dx = Math.cos(angleRad);
+        const dy = Math.sin(angleRad);
+        const r = (Math.abs(this.width * dx) + Math.abs(this.height * dy)) / 2;
         const centerX = this.width / 2;
         const centerY = this.height / 2;
 
-        const x0 = centerX - Math.cos(angleRad) * r;
-        const y0 = centerY - Math.sin(angleRad) * r;
-        const x1 = centerX + Math.cos(angleRad) * r;
-        const y1 = centerY + Math.sin(angleRad) * r;
-
-        const gradient = ctx.createLinearGradient(x0, y0, x1, y1);
+        const gradient = ctx.createLinearGradient(
+            centerX - dx * r,
+            centerY - dy * r,
+            centerX + dx * r,
+            centerY + dy * r,
+        );
 
         const colors =
             this.bgColors.length > 0 ? this.bgColors : ["#000", "#000"];
 
         try {
             colors.forEach((color, index) => {
-                const stop = index / (colors.length - 1 || 1);
-                gradient.addColorStop(stop, color);
+                gradient.addColorStop(index / (colors.length - 1 || 1), color);
             });
         } catch {
             // Fallback while typing invalid colors
@@ -97,8 +111,7 @@ export abstract class BeautifulBackground extends LitElement {
             gradient.addColorStop(1, "#000");
         }
 
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, this.width, this.height);
+        return gradient;
     }
 
     protected resizeCanvas(): void {

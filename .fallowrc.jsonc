@@ -1,0 +1,80 @@
+{
+    "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+
+    // The public entry point of the package.
+    "entry": ["index.ts"],
+
+    // Every rule that can catch a violation of the architecture below is an
+    // error, so the gates fail the build.
+    "rules": {
+        "unused-files": "error",
+        "unused-exports": "error",
+        "unused-types": "error",
+        "unused-class-members": "error",
+        "private-type-leaks": "error",
+        "unresolved-imports": "error",
+        "unlisted-dependencies": "error",
+        "duplicate-exports": "error",
+        "circular-dependencies": "error",
+        "re-export-cycle": "error",
+        "boundary-violation": "error",
+        "coverage-gaps": "error",
+        "stale-suppressions": "warn"
+    },
+
+    // The architecture:
+    //
+    //   index.ts          public-api  ->  components, core
+    //   src/components/*  components  ->  core
+    //   src/*, utils/*    core        ->  core
+    //   src/stories/*     stories     ->  public-api, components
+    //   tests/*           tests       ->  public-api, components, core
+    //   scripts/*         tooling     ->  (nothing)
+    //
+    // Dependencies point inwards only: the core never imports a component,
+    // a component never imports another one, and the tooling never imports
+    // from the library at all.
+    "boundaries": {
+        "zones": [
+            { "name": "public-api", "patterns": ["index.ts"] },
+            { "name": "stories", "patterns": ["src/stories/**"] },
+            { "name": "components", "patterns": ["src/components/**"] },
+            { "name": "core", "patterns": ["src/**/*.ts"] },
+            { "name": "tests", "patterns": ["tests/**"] },
+            { "name": "tooling", "patterns": ["scripts/**"] }
+        ],
+        "rules": [
+            { "from": "public-api", "allow": ["components", "core"] },
+            { "from": "components", "allow": ["core"] },
+            { "from": "core", "allow": ["core"] },
+            { "from": "stories", "allow": ["public-api", "components"] },
+            { "from": "tests", "allow": ["public-api", "components", "core"] },
+            { "from": "tooling", "allow": [] }
+        ],
+        // Every analysed file has to belong to a zone, so a new module cannot
+        // be dropped into src/ without being placed in the architecture.
+        "coverage": {
+            "requireAllFiles": true,
+            "allowUnmatched": ["vite.config.ts", ".storybook/**"]
+        },
+        // House rules for the library core.
+        "calls": {
+            "forbidden": [
+                {
+                    "from": "core",
+                    "callee": ["console.*", "debugger"]
+                }
+            ]
+        }
+    },
+
+    // Stories are long declarative tables of controls, and tests have large
+    // describe() blocks; neither is a code quality concern. Both are
+    // exercised by the test suite rather than covered by it.
+    "health": {
+        "ignore": ["tests/**", "src/stories/**", "scripts/**"]
+    },
+    "duplicates": {
+        "ignore": ["tests/**", "src/stories/**", "scripts/**"]
+    }
+}

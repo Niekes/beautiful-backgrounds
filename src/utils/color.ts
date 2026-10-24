@@ -48,7 +48,11 @@ export function toHsl(color: string): Hsl {
     return { h: h * 60, s, l };
 }
 
-function toRgb(color: string): number[] {
+/**
+ * Converts any CSS color to its red, green and blue channels from 0 to 255.
+ * An invalid color turns into black.
+ */
+export function toRgb(color: string): number[] {
     probe ??= document.createElement("canvas").getContext("2d")!;
     probe.fillStyle = "#000";
     probe.fillStyle = color;

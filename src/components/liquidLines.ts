@@ -53,9 +53,7 @@ export class BbLiquidLines extends BeautifulBackground {
     protected loop(deltaTime: number): void {
         this.time += deltaTime;
 
-        this.ctx.globalAlpha = this.trailOpacity;
-        this.drawBackground(this.ctx);
-        this.ctx.globalAlpha = 1.0;
+        this.fadeTrail();
 
         const centerY = this.height / 2;
         const startY = centerY - (this.lineCount * this.lineSpacing) / 2;
