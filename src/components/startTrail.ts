@@ -1,6 +1,9 @@
 import { customElement, property } from "lit/decorators.js";
 import type Particle from "../Particle";
-import { ParticleBackground, type ParticlePlacement } from "../ParticleBackground";
+import {
+    ParticleBackground,
+    type ParticlePlacement,
+} from "../ParticleBackground";
 import { getRandomFloat } from "../utils/number";
 
 @customElement("bb-star-trail")

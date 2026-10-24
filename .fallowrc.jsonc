@@ -19,7 +19,7 @@
         "re-export-cycle": "error",
         "boundary-violation": "error",
         "coverage-gaps": "error",
-        "stale-suppressions": "warn"
+        "stale-suppressions": "warn",
     },
 
     // The architecture:
@@ -41,7 +41,7 @@
             { "name": "components", "patterns": ["src/components/**"] },
             { "name": "core", "patterns": ["src/**/*.ts"] },
             { "name": "tests", "patterns": ["tests/**"] },
-            { "name": "tooling", "patterns": ["scripts/**"] }
+            { "name": "tooling", "patterns": ["scripts/**"] },
         ],
         "rules": [
             { "from": "public-api", "allow": ["components", "core"] },
@@ -49,32 +49,32 @@
             { "from": "core", "allow": ["core"] },
             { "from": "stories", "allow": ["public-api", "components"] },
             { "from": "tests", "allow": ["public-api", "components", "core"] },
-            { "from": "tooling", "allow": [] }
+            { "from": "tooling", "allow": [] },
         ],
         // Every analysed file has to belong to a zone, so a new module cannot
         // be dropped into src/ without being placed in the architecture.
         "coverage": {
             "requireAllFiles": true,
-            "allowUnmatched": ["vite.config.ts", ".storybook/**"]
+            "allowUnmatched": ["vite.config.ts", ".storybook/**"],
         },
         // House rules for the library core.
         "calls": {
             "forbidden": [
                 {
                     "from": "core",
-                    "callee": ["console.*", "debugger"]
-                }
-            ]
-        }
+                    "callee": ["console.*", "debugger"],
+                },
+            ],
+        },
     },
 
     // Stories are long declarative tables of controls, and tests have large
     // describe() blocks; neither is a code quality concern. Both are
     // exercised by the test suite rather than covered by it.
     "health": {
-        "ignore": ["tests/**", "src/stories/**", "scripts/**"]
+        "ignore": ["tests/**", "src/stories/**", "scripts/**"],
     },
     "duplicates": {
-        "ignore": ["tests/**", "src/stories/**", "scripts/**"]
-    }
+        "ignore": ["tests/**", "src/stories/**", "scripts/**"],
+    },
 }

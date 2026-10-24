@@ -106,7 +106,8 @@ export class BbHexagonWave extends BeautifulBackground {
         const waveX = cell.x * this.waveXFactor;
         const waveY = cell.y * this.waveYFactor;
         const wavePhase = Math.sin(this.time * this.waveSpeed + waveX + waveY);
-        const shade = Math.sin(this.time + cell.x + cell.y) * this.shadeAmplitude;
+        const shade =
+            Math.sin(this.time + cell.x + cell.y) * this.shadeAmplitude;
         const lightness =
             this.baseLightness + wavePhase * this.lightnessRange + shade;
 

@@ -33,7 +33,7 @@ In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import { BbStarTrail } from "https://esm.sh/beautiful-backgrounds";
+    import { BbStarTrail } from "https://esm.sh/beautiful-backgrounds";
 </script>
 ```
 

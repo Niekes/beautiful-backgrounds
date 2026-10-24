@@ -132,7 +132,10 @@ export abstract class ParticleBackground extends BeautifulBackground {
         }
         return randomColor(
             [this.particleColorHueStart, this.particleColorHueEnd],
-            [this.particleColorSaturationStart, this.particleColorSaturationEnd],
+            [
+                this.particleColorSaturationStart,
+                this.particleColorSaturationEnd,
+            ],
             [this.particleColorLightnessStart, this.particleColorLightnessEnd],
         );
     }

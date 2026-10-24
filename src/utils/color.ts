@@ -62,5 +62,8 @@ export function toRgb(color: string): number[] {
     if (value.startsWith("#")) {
         return [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16));
     }
-    return value.match(/[\d.]+/g)!.slice(0, 3).map(Number);
+    return value
+        .match(/[\d.]+/g)!
+        .slice(0, 3)
+        .map(Number);
 }

@@ -93,8 +93,10 @@ export default class Particle {
 
         // Interpolate
         this.updatePosition(
-            this.railFromX + (this.railToX - this.railFromX) * this.railProgress,
-            this.railFromY + (this.railToY - this.railFromY) * this.railProgress,
+            this.railFromX +
+                (this.railToX - this.railFromX) * this.railProgress,
+            this.railFromY +
+                (this.railToY - this.railFromY) * this.railProgress,
         );
     }
 
