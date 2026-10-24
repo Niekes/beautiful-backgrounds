@@ -5,7 +5,7 @@ export default defineConfig({
     // Library build configuration
     build: {
         lib: {
-            entry: resolve(__dirname, "index.ts"),
+            entry: resolve(import.meta.dirname, "index.ts"),
             name: "bb",
             fileName: (format) =>
                 `bb.${format === "umd" ? "js" : `${format}.js`}`,
