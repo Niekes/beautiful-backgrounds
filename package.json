@@ -1,6 +1,6 @@
 {
     "name": "beautiful-backgrounds",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "type": "module",
     "repository": {
         "type": "git",
@@ -25,12 +25,17 @@
         "LICENSE"
     ],
     "scripts": {
+        "clean": "rm -rf build",
+        "typecheck": "tsc --noEmit",
         "dev": "vite",
-        "build": "tsc && vite build",
+        "build": "npm run clean && tsc && vite build",
         "build:types": "tsc --emitDeclarationOnly --declaration --outDir build",
         "preview": "vite preview",
+        "pretest": "npm run typecheck",
+        "test": "vitest --project storybook --run",
         "storybook": "storybook dev -p 6006",
-        "build-storybook": "storybook build"
+        "build-storybook": "storybook build",
+        "prepack": "npm run build"
     },
     "dependencies": {},
     "peerDependencies": {

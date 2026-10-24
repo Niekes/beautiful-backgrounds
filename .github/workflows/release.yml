@@ -1,0 +1,60 @@
+name: Release
+
+on:
+    push:
+        branches: [main]
+        paths:
+            - package.json
+    # Retries a release whose publish failed.
+    workflow_dispatch:
+
+jobs:
+    publish:
+        name: Stage on npm
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
+        steps:
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v7
+              with:
+                  # npm stage publish needs the npm that ships with Node 24.
+                  node-version: 24
+                  cache: npm
+                  registry-url: https://registry.npmjs.org
+            - run: npm ci
+            # The Storybook tests run in a headless Chromium.
+            - run: npx playwright install --with-deps chromium
+            - run: npm test
+            - name: Check whether the version is new
+              id: version
+              run: |
+                  VERSION=$(node -p "require('./package.json').version")
+                  if npm view "beautiful-backgrounds@$VERSION" version >/dev/null 2>&1; then
+                      echo "new=false" >> "$GITHUB_OUTPUT"
+                      echo "beautiful-backgrounds@$VERSION is already on npm, skipping the publish."
+                  else
+                      echo "new=true" >> "$GITHUB_OUTPUT"
+                      echo "Publishing beautiful-backgrounds@$VERSION."
+                  fi
+            - name: Stage the publish
+              if: steps.version.outputs.new == 'true'
+              # Trusted publishing: OIDC instead of a token, provenance included.
+              # The version goes live once a maintainer approves it with 2FA.
+              # npm stage publish runs prepack, which typechecks and builds.
+              run: npm stage publish
+            - name: Release on GitHub
+              # Runs for a version that is on npm already as well, so a rerun
+              # adds a missing release. gh creates the X.Y.Z tag on this commit
+              # and takes the notes from the version's section in CHANGELOG.md.
+              run: |
+                  VERSION=$(node -p "require('./package.json').version")
+                  if gh release view "$VERSION" >/dev/null 2>&1; then
+                      echo "$VERSION is released on GitHub already."
+                      exit 0
+                  fi
+                  awk -v v="$VERSION" 'index($0, "## [" v "]") == 1 { f = 1; next } /^## \[/ { f = 0 } f' CHANGELOG.md |
+                      gh release create "$VERSION" --target "$GITHUB_SHA" --title "$VERSION" --notes-file -
+              env:
+                  GH_TOKEN: ${{ github.token }}
