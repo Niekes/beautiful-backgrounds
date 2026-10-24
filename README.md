@@ -50,6 +50,13 @@ A beautiful, flowing animation of multiple ribbons with deep control over wave p
 - 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow)
 - 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/ambientRibbon.ts)
 
+### [Concentric Pulse](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/concentricPulse.ts)
+
+Concentric rings around the center that breathe in a staggered wave while their colors flow outwards through a gradient. You can tune the ring count, spacing, pulse amplitude, speed and colors, from a calm deep-sea glow to a bright neon look.
+
+- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-concentric-pulse--signature-pulse)
+- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/concentricPulse.ts)
+
 ### [Digital Rain](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/digitalRain.ts)
 
 A classic matrix-style falling character effect. Highly customizable with character sets, font sizes, speeds, and complex color gradients. Perfect for a retro-hacker or high-tech aesthetic.
@@ -87,7 +94,7 @@ A beautiful celestial animation featuring orbiting stars with fading trails. You
 
 <!-- Links -->
 
-[build-badge]: https://img.shields.io/github/actions/workflow/status/niekes/beautiful-backgrounds/main.yml
+[build-badge]: https://img.shields.io/github/actions/workflow/status/niekes/beautiful-backgrounds/ci.yml
 [build]: https://github.com/niekes/beautiful-backgrounds/actions
 [coverage-badge]: https://img.shields.io/codecov/c/github/niekes/beautiful-backgrounds.svg
 [coverage]: https://codecov.io/github/niekes/beautiful-backgrounds
