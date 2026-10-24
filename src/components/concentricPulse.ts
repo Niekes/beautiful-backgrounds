@@ -23,14 +23,6 @@ export class BbConcentricPulse extends BeautifulBackground {
     @property({ type: Number, attribute: "ring-spacing" })
     ringSpacing: number = 40;
 
-    protected firstUpdated() {
-        super.firstUpdated();
-    }
-
-    disconnectedCallback() {
-        super.disconnectedCallback();
-    }
-
     private parseRGB(color: string): [number, number, number] {
         const hex = color.startsWith("#") ? color.slice(1) : color;
         if (hex.includes(",")) {

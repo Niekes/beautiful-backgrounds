@@ -1,7 +1,7 @@
-import { hsl } from "d3";
 import { type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { BeautifulBackground } from "../BeautifulBackground";
+import { toHsl } from "../utils/color";
 import { stringToArrayConverter } from "../utils/lit";
 
 type HexCell = {
@@ -124,7 +124,7 @@ export class BbHexagonWave extends BeautifulBackground {
                     this.hexColors[
                         (cell.colorIndex || 0) % this.hexColors.length
                     ];
-                const c = hsl(colorStr);
+                const c = toHsl(colorStr);
                 fill = `hsl(${c.h}, ${c.s * 100}%, ${lightness}%)`;
             } else {
                 const totalPath = this.width + this.height;
@@ -151,7 +151,8 @@ export class BbHexagonWave extends BeautifulBackground {
             const angle = ((Math.PI * 2) / 6) * i - Math.PI / 2;
             const px = x + Math.cos(angle) * size;
             const py = y + Math.sin(angle) * size;
-            i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+            // On an empty path the first lineTo starts it, like moveTo.
+            ctx.lineTo(px, py);
         }
         ctx.closePath();
 

@@ -25,16 +25,21 @@
         "LICENSE"
     ],
     "scripts": {
-        "clean": "rm -rf build",
+        "clean": "rm -rf build coverage",
         "typecheck": "tsc --noEmit",
-        "dev": "vite",
-        "build": "npm run clean && tsc && vite build",
-        "build:types": "tsc --emitDeclarationOnly --declaration --outDir build",
-        "preview": "vite preview",
+        "build": "npm run clean && npm run typecheck && vp pack",
         "pretest": "npm run typecheck",
-        "test": "vitest --project storybook --run",
+        "test": "vp test run",
+        "test:watch": "vp test",
+        "coverage": "vp test run --coverage",
+        "fmt": "vp fmt",
+        "lint:code": "vp lint && vp fmt --check",
+        "lint:fallow": "fallow dead-code --ci --format ${FALLOW_FORMAT:-human} && fallow health --ci --coverage-gaps --min-score 100 --format ${FALLOW_FORMAT:-human} && fallow dupes --ci --format ${FALLOW_FORMAT:-human}",
+        "lint": "npm run lint:code && npm run lint:fallow",
+        "hooks:install": "fallow hooks install --target git && fallow hooks install --target agent --agent claude",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",
+        "gifs": "npm run build-storybook && node scripts/record-gifs.mjs",
         "prepack": "npm run build"
     },
     "dependencies": {},
@@ -46,17 +51,18 @@
         "@storybook/addon-docs": "^10.6.3",
         "@storybook/addon-vitest": "^10.6.3",
         "@storybook/web-components-vite": "^10.6.3",
-        "@types/d3": "^7.4.3",
         "@types/node": "^26.6.5",
-        "@vitest/coverage-v8": "^5.0.5",
-        "d3": "^7.9.0",
+        "@vitest/browser-playwright": "5.0.5",
+        "@vitest/coverage-v8": "5.0.5",
+        "fallow": "3.35.0",
+        "gifenc": "^1.0.3",
+        "lit": "^3.3.3",
+        "playwright": "^1.64.1",
         "storybook": "^10.6.3",
         "typescript": "~7.0.2",
-        "vite": "^8.3.5",
-        "vitest": "^5.0.5",
-        "lit": "^3.3.3",
-        "@vitest/browser-playwright": "^5.0.5",
-        "playwright": "^1.64.1"
+        "vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+        "vite-plus": "1.4.0",
+        "vitest": "5.0.5"
     },
     "keywords": [
         "canvas",
@@ -78,5 +84,12 @@
     ],
     "author": "Niekes",
     "license": "MIT",
-    "description": "A collection of customizable web components for creating dynamic, animated backgrounds, featuring a variety of effects including a star field and a digital rain. "
+    "description": "A collection of customizable web components for creating dynamic, animated backgrounds, featuring a variety of effects including a star field and a digital rain. ",
+    "overrides": {
+        "vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+        "vitest": "5.0.5",
+        "storybook": {
+            "vite-plus": "$vite-plus"
+        }
+    }
 }

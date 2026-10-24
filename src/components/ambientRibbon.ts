@@ -135,7 +135,7 @@ export class BbAmbientRibbon extends BeautifulBackground {
         }
     }
 
-    protected updated(changedProperties: PropertyValues) {
+    protected updated(changedProperties: PropertyValues): void {
         super.updated(changedProperties);
         if (
             changedProperties.has("ribbonSpeedMin") ||

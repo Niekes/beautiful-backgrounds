@@ -43,33 +43,12 @@ export default class Particle {
         this.fadeOutDuration = this.lifespan * 0.5;
     }
 
-    circularMove(centerX: number, centerY: number, deltaTime: number) {
+    circularMove(centerX: number, centerY: number, deltaTime: number): void {
         this.angle += this.speed * deltaTime;
         this.radius += this.force * deltaTime;
 
         const newX =
             centerX + Math.cos(this.angle * this.frequencyX) * this.radius;
-        const newY =
-            centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
-
-        if (!this.initialized) {
-            this.x = newX;
-            this.y = newY;
-            this.px = newX;
-            this.py = newY;
-            this.initialized = true;
-        } else {
-            this.px = this.x;
-            this.py = this.y;
-            this.x = newX;
-            this.y = newY;
-        }
-    }
-
-    sinusMove(centerX: number, centerY: number, deltaTime: number) {
-        this.angle += this.speed * deltaTime;
-
-        const newX = centerX + this.angle * 100;
         const newY =
             centerY + Math.sin(this.angle * this.frequencyY) * this.radius;
 
@@ -116,7 +95,7 @@ export default class Particle {
     private railToY: number = 0;
     private railProgress: number = 0; // 0 to 1
 
-    railMove(centerX: number, centerY: number, deltaTime: number) {
+    railMove(centerX: number, centerY: number, deltaTime: number): void {
         if (!this.initialized) {
             // Initial snap to grid
             const seedX = this.x;

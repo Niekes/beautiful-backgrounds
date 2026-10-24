@@ -5,7 +5,7 @@
         "useDefineForClassFields": false,
         "module": "ESNext",
         "lib": ["ES2022", "DOM", "DOM.Iterable"],
-        "types": ["vite/client", "node"],
+        "types": ["vite/client", "node", "@vitest/browser-playwright"],
         "skipLibCheck": true,
 
         /* Bundler mode */
@@ -13,9 +13,10 @@
         "allowImportingTsExtensions": true,
         "verbatimModuleSyntax": true,
         "moduleDetection": "force",
+        "noEmit": true,
+        /* vp pack writes the .d.ts files with oxc, which needs them */
+        "isolatedDeclarations": true,
         "declaration": true,
-        "emitDeclarationOnly": true,
-        "declarationDir": "build",
 
         /* Linting */
         "strict": true,
@@ -23,5 +24,5 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["src", "index.ts"]
+    "include": ["src", "index.ts", "tests", "vite.config.ts"]
 }

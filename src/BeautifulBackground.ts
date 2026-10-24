@@ -1,4 +1,4 @@
-import { css, LitElement } from "lit";
+import { css, LitElement, type CSSResultGroup } from "lit";
 import { property } from "lit/decorators.js";
 import { debounce } from "./utils/function";
 import { stringToArrayConverter } from "./utils/lit";
@@ -35,7 +35,7 @@ export abstract class BeautifulBackground extends LitElement {
         this.debouncedResize = debounce(this.resizeCanvas.bind(this), 100);
     }
 
-    protected handleVisibilityChange = () => {
+    protected handleVisibilityChange = (): void => {
         if (document.visibilityState === "hidden") {
             this.stopAnimation();
         } else {
@@ -43,10 +43,7 @@ export abstract class BeautifulBackground extends LitElement {
         }
     };
 
-    protected firstUpdated() {
-        if (!this.shadowRoot) {
-            this.attachShadow({ mode: "open" });
-        }
+    protected firstUpdated(): void {
         this.shadowRoot!.appendChild(this.canvas);
 
         this.resizeCanvas();
@@ -60,7 +57,7 @@ export abstract class BeautifulBackground extends LitElement {
         );
     }
 
-    disconnectedCallback() {
+    disconnectedCallback(): void {
         super.disconnectedCallback();
         window.removeEventListener("resize", this.debouncedResize);
         document.removeEventListener(
@@ -94,7 +91,7 @@ export abstract class BeautifulBackground extends LitElement {
                 const stop = index / (colors.length - 1 || 1);
                 gradient.addColorStop(stop, color);
             });
-        } catch (e) {
+        } catch {
             // Fallback while typing invalid colors
             gradient.addColorStop(0, "#000");
             gradient.addColorStop(1, "#000");
@@ -127,7 +124,7 @@ export abstract class BeautifulBackground extends LitElement {
         // Override me
     }
 
-    protected startAnimation() {
+    protected startAnimation(): void {
         if (this.animationFrameId !== null) return;
 
         let lastTime = performance.now();
@@ -140,14 +137,14 @@ export abstract class BeautifulBackground extends LitElement {
         this.animationFrameId = requestAnimationFrame(animate);
     }
 
-    protected stopAnimation() {
+    protected stopAnimation(): void {
         if (this.animationFrameId !== null) {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
     }
 
-    static styles = css`
+    static styles: CSSResultGroup = css`
         :host {
             border-radius: inherit;
             display: flex;
@@ -156,7 +153,7 @@ export abstract class BeautifulBackground extends LitElement {
 
     protected abstract loop(deltaTime: number): void;
 
-    render() {
+    render(): void {
         return;
     }
 }
