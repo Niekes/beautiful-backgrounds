@@ -53,9 +53,7 @@ describe.each([
 ])("<%s>", (tag, Element) => {
     it("is registered as a BeautifulBackground", () => {
         expect(customElements.get(tag)).toBe(Element);
-        expect(document.createElement(tag)).toBeInstanceOf(
-            BeautifulBackground,
-        );
+        expect(document.createElement(tag)).toBeInstanceOf(BeautifulBackground);
     });
 });
 

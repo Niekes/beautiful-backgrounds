@@ -61,7 +61,8 @@
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",
         "gifs": "npm run build-storybook && node scripts/record-gifs.mjs",
-        "prepack": "npm run build"
+        "prepack": "npm run build",
+        "badges": "node scripts/badges.mjs"
     },
     "dependencies": {},
     "devDependencies": {
