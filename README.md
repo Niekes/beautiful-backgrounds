@@ -1,104 +1,127 @@
-# Beautiful Backgrounds
+<p align="center">
+  <a href="https://github.com/sponsors/niekes"><img src="https://img.shields.io/badge/Sponsor_beautiful--backgrounds-EA4AAA?logo=githubsponsors&logoColor=white&style=for-the-badge" alt="Sponsor beautiful-backgrounds"></a>
+</p>
 
-[![Build][build-badge]][build]
-[![Coverage][coverage-badge]][coverage]
-[![Npm][npm-badge]][npm]
-[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@main/badge/badge-storybook.svg)](https://niekes.github.io/beautiful-backgrounds/)
-<a href="https://github.com/niekes/beautiful-backgrounds"><img src="https://img.shields.io/github/stars/niekes/beautiful-backgrounds" alt="stars" /></a>
-<a href="https://github.com/sponsors/niekes"><img src="https://img.shields.io/badge/sponsor-30363D?logo=GitHub-Sponsors&logoColor=#EA4AAA" alt="sponsor this project" /></a>
+<p align="center">
+  <strong>Animated canvas backgrounds for the web, as drop-in web components.</strong><br>
+  Free and open source, kept alive by one maintainer and the people who sponsor the work.
+</p>
 
-The "Beautiful Backgrounds" library offers a collection of customizable web components designed to enhance web pages with visually appealing animated backgrounds. Easy to integrate and use, these components are perfect for adding dynamic and interactive elements to your web applications.
+<p align="center">
+  <a href="https://github.com/niekes/beautiful-backgrounds/actions/workflows/ci.yml"><img src="https://github.com/niekes/beautiful-backgrounds/actions/workflows/ci.yml/badge.svg" alt="Build"></a>
+  <a href="https://github.com/niekes/beautiful-backgrounds/actions/workflows/ci.yml"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/niekes/beautiful-backgrounds/main/.github/badges/coverage.json" alt="Coverage"></a>
+  <a href="https://fallow.tools/docs/explanations/health/"><img src="https://raw.githubusercontent.com/niekes/beautiful-backgrounds/main/.github/badges/health.svg" alt="fallow health"></a>
+  <a href="https://www.npmjs.com/package/beautiful-backgrounds"><img src="https://img.shields.io/npm/dt/beautiful-backgrounds" alt="npm downloads"></a>
+  <a href="https://www.npmjs.com/package/beautiful-backgrounds"><img src="https://img.shields.io/npm/v/beautiful-backgrounds" alt="npm version"></a>
+  <a href="https://github.com/Niekes/beautiful-backgrounds/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/beautiful-backgrounds" alt="License"></a>
+  <img src="https://img.shields.io/badge/TypeScript-Ready-blue" alt="TypeScript">
+  <a href="https://niekes.github.io/beautiful-backgrounds/"><img src="https://cdn.jsdelivr.net/gh/storybookjs/brand@main/badge/badge-storybook.svg" alt="Storybook"></a>
+  <a href="https://github.com/niekes/beautiful-backgrounds"><img src="https://img.shields.io/github/stars/niekes/beautiful-backgrounds" alt="GitHub stars"></a>
+  <a href="https://github.com/sponsors/niekes"><img src="https://img.shields.io/github/sponsors/niekes?logo=GitHub+Sponsors&logoColor=%23EA4AAA&style=flat" alt="GitHub Sponsors"></a>
+</p>
 
-[EXAMPLES][examples]
-
-## Features
-
-- **Multiple Background Components**: A variety of background components, each offering unique visual effects.
-- **Customizable and Interactive**: Each component comes with customizable properties to suit different design needs.
-- **Responsive and Efficient**: Components are responsive to screen size changes and optimized for performance.
-
-## Installation
-
-Using [`npm`][npm]:
-
-```sh
-npm i beautiful-backgrounds --save
-```
-
-```js
-import { BbStarTrail } from "beautiful-backgrounds";
-```
-
-In browsers with [`esm.sh`][esmsh]:
-
-```html
-<script type="module">
-    import { BbStarTrail } from "https://esm.sh/beautiful-backgrounds";
-</script>
-```
-
-## Usage
-
-The best way to explore all the possibilities, interactive controls, and properties for each background is through our [Storybook](https://niekes.github.io/beautiful-backgrounds/). It provides a real-time environment to tweak parameters and see the results instantly.
+<p align="center">
+  <a href="https://niekes.github.io/beautiful-backgrounds/">Storybook</a> ·
+  <a href="#using-beautiful-backgrounds">Getting started</a> ·
+  <a href="#backgrounds">Backgrounds</a> ·
+  <a href="#sponsor-beautiful-backgrounds">Sponsor</a>
+</p>
 
 ---
 
-### [Ambient Ribbon](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/ambientRibbon.ts)
+<table>
+    <tr style="background-color: #f6f8fa">
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow"><img src="assets/examples/ambient-ribbon.gif" alt="Ambient Ribbon"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain"><img src="assets/examples/digital-rain.gif" alt="Digital Rain"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network"><img src="assets/examples/neon-rails.gif" alt="Neon Rails"></a></td>
+    </tr>
+    <tr style="background-color: #f6f8fa">
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar"><img src="assets/examples/hexagon-wave.gif" alt="Hexagon Wave"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow"><img src="assets/examples/liquid-lines.gif" alt="Liquid Lines"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-concentric-pulse--signature-pulse"><img src="assets/examples/concentric-pulse.gif" alt="Concentric Pulse"></a></td>
+    </tr>
+    <tr style="background-color: #f6f8fa">
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
 
-A beautiful, flowing animation of multiple ribbons with deep control over wave physics, rotation, and color transitions. Perfect for high-end, elegant design themes.
+Every background has live controls in the [Storybook](https://niekes.github.io/beautiful-backgrounds/).
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/ambientRibbon.ts)
+## Sponsor beautiful-backgrounds
 
-### [Concentric Pulse](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/concentricPulse.ts)
+**beautiful-backgrounds** is free, and it always will be. There is no company behind it — just one maintainer working in spare time — so the cost of keeping it alive is paid for by the people who use it.
 
-Concentric rings around the center that breathe in a staggered wave while their colors flow outwards through a gradient. You can tune the ring count, spacing, pulse amplitude, speed and colors, from a calm deep-sea glow to a bright neon look.
+If a background made your site better, [become a sponsor](https://github.com/sponsors/niekes).
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-concentric-pulse--signature-pulse)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/concentricPulse.ts)
+| Tier        | What you get                                                                                |
+| ----------- | ------------------------------------------------------------------------------------------- |
+| **$5/mo**   | Your name in the [sponsors list](#sponsors) and my sincere thanks                           |
+| **$25/mo**  | The above, plus your logo in the README and in the Storybook, and priority issue triage     |
+| **$100/mo** | The above, plus direct email access for feature requests and a mention in the release notes |
 
-### [Digital Rain](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/digitalRain.ts)
+Where the money goes:
 
-A classic matrix-style falling character effect. Highly customizable with character sets, font sizes, speeds, and complex color gradients. Perfect for a retro-hacker or high-tech aesthetic.
+- **Issue triage and bug fixes.** Sponsorship buys a reply within a couple of days instead of whenever I get to it.
+- **Backgrounds that keep running smoothly.** Testing across browsers and devices as Lit, the canvas APIs and the browsers move on.
+- **The Storybook.** The live examples and controls for every background.
+- **Time for new work.** More backgrounds, better performance on low-power devices, and more ways to configure them.
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/digitalRain.ts)
+Prefer a one-off? The [sponsor page](https://github.com/sponsors/niekes) also takes one-time contributions.
 
-### [Hexagon Wave](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/hexagonWave.ts)
+**Need a company sponsorship or an invoice?** [Get in touch](mailto:s@niekes.com).
 
-A sleek, organic waving grid of hexagons (or other polygons). It features dynamic shading, lightness boosts, and wave physics that create a premium, rhythmic motion across the screen.
+## Sponsors
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/hexagonWave.ts)
+Thank you to the people who make this possible. Sponsors at $25/mo and above get their logo in this README and in the Storybook; everyone gets their name below.
 
-### [Liquid Lines](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/liquidLines.ts)
+<!-- New sponsors go below this line, one per line. -->
 
-A fluid, undulating animation of multiple lines with gradients and 3D depth effects. It offers extensive control over wave physics, line thickness, and color transitions, making it perfect for organic or "liquid" design themes.
+## Using beautiful-backgrounds
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/liquidLines.ts)
+```bash
+npm install beautiful-backgrounds
+```
 
-### [Neon Rails](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/neonRails.ts)
+Importing the package registers every background as a custom element:
 
-Fast-moving particles that follow a geometric grid, creating long neon trails. It's ideal for "electric" or "cyberpunk" themes, offering deep control over particle lifespan, grid geometry, and trail opacity.
+```js
+import "beautiful-backgrounds";
+```
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/neonRails.ts)
+Or straight from a CDN, without a build step:
 
-### [Star Trail](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/startTrail.ts)
+```html
+<script type="module" src="https://esm.sh/beautiful-backgrounds"></script>
+```
 
-A beautiful celestial animation featuring orbiting stars with fading trails. You can adjust orbit radii, star sizes, and colors to create anything from a subtle night sky to a vibrant cosmic nebula.
+Then size an element like any other block, and set its attributes:
 
-- 📖 [View in Storybook](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)
-- 🔗 [Source Code](https://github.com/niekes/beautiful-backgrounds/blob/main/src/components/startTrail.ts)
+```html
+<bb-star-trail
+    bg-colors="#000010, #001040"
+    particle-amount="800"
+    style="width: 100%; height: 400px"
+></bb-star-trail>
+```
 
-<!-- Links -->
+Each background fills its element, redraws at the new size when the window resizes, and pauses while the tab is hidden. Every attribute is listed with a live control in the [Storybook](https://niekes.github.io/beautiful-backgrounds/).
 
-[build-badge]: https://img.shields.io/github/actions/workflow/status/niekes/beautiful-backgrounds/ci.yml
-[build]: https://github.com/niekes/beautiful-backgrounds/actions
-[coverage-badge]: https://img.shields.io/codecov/c/github/niekes/beautiful-backgrounds.svg
-[coverage]: https://codecov.io/github/niekes/beautiful-backgrounds
-[esmsh]: https://esm.sh
-[examples]: https://niekes.github.io/beautiful-backgrounds/
-[npm-badge]: https://img.shields.io/npm/v/beautiful-backgrounds
-[npm]: https://www.npmjs.com/package/beautiful-backgrounds
+## Backgrounds
+
+| Background                                                                                                                    | Element                 | Looks like                                                     |
+| ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------- |
+| [Ambient Ribbon](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow)      | `<bb-ambient-ribbon>`   | Flowing ribbons of light with control over waves and rotation  |
+| [Concentric Pulse](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-concentric-pulse--signature-pulse) | `<bb-concentric-pulse>` | Rings that breathe around the center while colors flow outward |
+| [Digital Rain](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain)     | `<bb-digital-rain>`     | Matrix-style falling characters                                |
+| [Hexagon Wave](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar)        | `<bb-hexagon-wave>`     | A shaded grid of hexagons rolling like a wave                  |
+| [Liquid Lines](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow)         | `<bb-liquid-lines>`     | Undulating lines with a sense of depth                         |
+| [Neon Rails](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)          | `<bb-neon-rails>`       | Particles racing along a geometric grid, leaving neon trails   |
+| [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)             | `<bb-star-trail>`       | Orbiting stars with fading trails                              |
+
+The source of each one lives in [`src/components`](src/components). To build your own, extend `BeautifulBackground` and implement its `loop()`.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=niekes/beautiful-backgrounds&type=date&legend=bottom-right)](https://www.star-history.com/#niekes/beautiful-backgrounds&type=date&legend=bottom-right)

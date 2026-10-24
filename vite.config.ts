@@ -25,7 +25,13 @@ const config: UserConfig = {
         tabWidth: 4,
         printWidth: 80,
         trailingComma: "all",
-        ignorePatterns: ["build/**", "coverage/**", "storybook-static/**"],
+        ignorePatterns: [
+            "build/**",
+            "coverage/**",
+            "storybook-static/**",
+            // Written by `npm run badges` in CI.
+            ".github/badges/**",
+        ],
     },
     lint: {
         ignorePatterns: ["build/**", "coverage/**", "storybook-static/**"],
