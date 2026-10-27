@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
-import { hsla, randomColor, toHsl, toRgb } from "../src/utils/color";
+import { gradient, hsla, randomColor, toHsl, toRgb } from "../src/utils/color";
 import { debounce } from "../src/utils/function";
 import { stringToArrayConverter } from "../src/utils/lit";
+import { createTerrain } from "../src/utils/terrain";
 import { getRandomFloat, getRandomInt } from "../src/utils/number";
 
 afterEach(() => {
@@ -58,6 +59,33 @@ describe("toRgb", () => {
     });
 });
 
+describe("gradient", () => {
+    it("runs evenly from the first color to the last", () => {
+        expect(gradient(["#ff0000", "#0000ff"], 3)).toEqual([
+            "rgb(255, 0, 0)",
+            "rgb(128, 0, 128)",
+            "rgb(0, 0, 255)",
+        ]);
+    });
+
+    it("passes through every color in between", () => {
+        expect(gradient(["#ff0000", "#00ff00", "#0000ff"], 5)).toEqual([
+            "rgb(255, 0, 0)",
+            "rgb(128, 128, 0)",
+            "rgb(0, 255, 0)",
+            "rgb(0, 128, 128)",
+            "rgb(0, 0, 255)",
+        ]);
+    });
+
+    it("repeats a single color", () => {
+        expect(gradient(["#00ff00"], 2)).toEqual([
+            "rgb(0, 255, 0)",
+            "rgb(0, 255, 0)",
+        ]);
+    });
+});
+
 describe("toHsl", () => {
     it.each([
         ["red", { h: 0, s: 1, l: 0.5 }],
@@ -105,5 +133,27 @@ describe("stringToArrayConverter", () => {
         expect(stringToArrayConverter.toAttribute!(["a", "b"], Array)).toBe(
             "a,b",
         );
+    });
+});
+
+describe("createTerrain", () => {
+    it("is a smooth terrain between 0 and 1", () => {
+        const terrain = createTerrain();
+        for (let i = 0; i < 100; i++) {
+            const [x, y] = [i * 0.37 - 10, i * 0.53 - 10];
+            const height = terrain(x, y);
+
+            expect(height).toBeGreaterThanOrEqual(0);
+            expect(height).toBeLessThan(1);
+            expect(Math.abs(terrain(x + 0.001, y) - height)).toBeLessThan(0.01);
+        }
+    });
+
+    it("is flat when every random height is the same", () => {
+        vi.spyOn(Math, "random").mockReturnValue(0.5);
+        const terrain = createTerrain();
+
+        expect(terrain(1.3, -7.2)).toBeCloseTo(0.5 * 0.9375);
+        expect(terrain(-40.1, 99.9)).toBeCloseTo(0.5 * 0.9375);
     });
 });

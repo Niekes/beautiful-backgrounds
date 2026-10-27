@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `<bb-contour-flow>` (`BbContourFlow`): particles flow downhill across an
+  invisible terrain, and their faint lines pile up into topographic contour
+  lines, with `particle-count`, `flow-speed`, `terrain-size`, `line-colors`
+  and `line-opacity`. The `line-colors` run from the lowest ground to the
+  highest, so the colors flow along the lines. The lines stay until
+  `trail-opacity` fades them.
+
+### Removed
+
+- **Breaking:** `<bb-concentric-pulse>` (`BbConcentricPulse`). Use
+  `<bb-contour-flow>` instead.
+
 ### Changed
 
 - The bundle no longer includes d3-color: the browser parses the colors in
@@ -20,8 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The first frame after a background starts, or after its tab shows again,
   no longer runs backwards in time.
-- `<bb-concentric-pulse>` no longer stops with a single ring color or an
-  empty `ring-colors` attribute, and accepts every CSS color.
 - Gray colors in `hex-colors` and `line-colors` no longer produce an
   invalid color.
 - `HTMLElementTagNameMap` knows `bb-ambient-ribbon`.
