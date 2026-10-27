@@ -38,7 +38,7 @@
     <tr style="background-color: #f6f8fa">
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar"><img src="assets/examples/hexagon-wave.gif" alt="Hexagon Wave"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow"><img src="assets/examples/liquid-lines.gif" alt="Liquid Lines"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-concentric-pulse--signature-pulse"><img src="assets/examples/concentric-pulse.gif" alt="Concentric Pulse"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-contour-flow--topographic-moss"><img src="assets/examples/contour-flow.gif" alt="Contour Flow"></a></td>
     </tr>
     <tr style="background-color: #f6f8fa">
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
@@ -110,15 +110,15 @@ Each background fills its element, redraws at the new size when the window resiz
 
 ## Backgrounds
 
-| Background                                                                                                                    | Element                 | Looks like                                                     |
-| ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------- |
-| [Ambient Ribbon](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow)      | `<bb-ambient-ribbon>`   | Flowing ribbons of light with control over waves and rotation  |
-| [Concentric Pulse](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-concentric-pulse--signature-pulse) | `<bb-concentric-pulse>` | Rings that breathe around the center while colors flow outward |
-| [Digital Rain](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain)     | `<bb-digital-rain>`     | Matrix-style falling characters                                |
-| [Hexagon Wave](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar)        | `<bb-hexagon-wave>`     | A shaded grid of hexagons rolling like a wave                  |
-| [Liquid Lines](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow)         | `<bb-liquid-lines>`     | Undulating lines with a sense of depth                         |
-| [Neon Rails](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)          | `<bb-neon-rails>`       | Particles racing along a geometric grid, leaving neon trails   |
-| [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)             | `<bb-star-trail>`       | Orbiting stars with fading trails                              |
+| Background                                                                                                                | Element               | Looks like                                                                           |
+| ------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------ |
+| [Ambient Ribbon](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow)  | `<bb-ambient-ribbon>` | Flowing ribbons of light with control over waves and rotation                        |
+| [Contour Flow](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-contour-flow--topographic-moss)    | `<bb-contour-flow>`   | Topographic contour lines, drawn by particles flowing downhill and colored by height |
+| [Digital Rain](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain) | `<bb-digital-rain>`   | Matrix-style falling characters                                                      |
+| [Hexagon Wave](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar)    | `<bb-hexagon-wave>`   | A shaded grid of hexagons rolling like a wave                                        |
+| [Liquid Lines](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow)     | `<bb-liquid-lines>`   | Undulating lines with a sense of depth                                               |
+| [Neon Rails](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)      | `<bb-neon-rails>`     | Particles racing along a geometric grid, leaving neon trails                         |
+| [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)         | `<bb-star-trail>`     | Orbiting stars with fading trails                                                    |
 
 The source of each one lives in [`src/components`](src/components). To build your own, extend `BeautifulBackground` and implement its `loop()`.
 

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 import {
     BeautifulBackground,
     BbAmbientRibbon,
-    BbConcentricPulse,
+    BbContourFlow,
     BbDigitalRain,
     BbHexagonWave,
     BbLiquidLines,
@@ -44,7 +44,7 @@ afterEach(() => {
 
 describe.each([
     ["bb-ambient-ribbon", BbAmbientRibbon],
-    ["bb-concentric-pulse", BbConcentricPulse],
+    ["bb-contour-flow", BbContourFlow],
     ["bb-digital-rain", BbDigitalRain],
     ["bb-hexagon-wave", BbHexagonWave],
     ["bb-liquid-lines", BbLiquidLines],
@@ -108,45 +108,203 @@ describe("bb-ambient-ribbon", () => {
     });
 });
 
-describe("bb-concentric-pulse", () => {
-    it("draws rings in colors between its ring colors", async () => {
-        const el = await mount<BbConcentricPulse>("bb-concentric-pulse", {
-            "ring-colors": "#ff0000, #0000ff",
+describe("bb-contour-flow", () => {
+    type FlowParticle = { x: number; y: number; dx: number; dy: number };
+    const particles = (el: BbContourFlow): FlowParticle[] =>
+        (el as unknown as { particles: FlowParticle[] }).particles;
+
+    it("draws its lines in shades between its line colors", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "line-colors": "#ff0000, #0000ff",
+            "line-opacity": "1",
+        });
+        const seen = styles(el, () => {
+            frame(el);
+            frame(el);
+        });
+
+        expect(seen).toContain("rgb(255, 0, 0)");
+        expect(seen).toContain("rgb(0, 0, 255)");
+        for (const color of seen) expect(color).toMatch(/^rgb\(\d+, 0, \d+\)$/);
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("draws in its default color without line colors", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "line-colors": "",
         });
         const seen = styles(el, () => frame(el));
-        const rings = [...seen].filter((s) => s.startsWith("rgba"));
 
-        expect(rings.length).toBeGreaterThan(1);
-        for (const ring of rings) {
-            expect(ring).toMatch(/^rgba\(\d+, 0, \d+, [\d.]+\)$/);
+        expect([...seen]).toEqual(["rgb(137, 150, 78)"]);
+    });
+
+    it("starts over when its size or terrain changes", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-amount": "10",
+        });
+        const first = particles(el);
+
+        el.flowSpeed = 50;
+        await el.updateComplete;
+        frame(el);
+        expect(particles(el)).toBe(first);
+
+        el.particleAmount = 20;
+        await el.updateComplete;
+        frame(el);
+        expect(particles(el)).toHaveLength(20);
+
+        for (const change of [
+            () => (el.terrainSize = 500),
+            () => (el.lineColors = ["#ff0000"]),
+            () => (el.width = 600),
+        ]) {
+            const before = particles(el);
+            change();
+            await el.updateComplete;
+            frame(el);
+            expect(particles(el)).not.toBe(before);
         }
     });
 
-    it.each([
-        ["one ring color", { "ring-colors": "#00ff00" }, /^rgba\(0, 255, 0,/],
-        ["no ring colors", { "ring-colors": "" }, /^rgba\(\d+, \d+, 255,/],
-    ])("draws with %s", async (_, attributes, color) => {
-        const el = await mount<BbConcentricPulse>(
-            "bb-concentric-pulse",
-            attributes,
-        );
-        const seen = styles(el, () => frame(el));
-        const rings = [...seen].filter((s) => s.startsWith("rgba"));
+    it("wraps particles around the edges", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-amount": "50",
+        });
+        const [particle] = particles(el);
+        Object.assign(particle, { x: 499.9, y: 0.1, dx: 1, dy: -1 });
 
-        expect(rings.length).toBeGreaterThan(0);
-        rings.forEach((ring) => expect(ring).toMatch(color));
+        for (let i = 0; i < 100; i++) frame(el);
+        for (const { x, y } of particles(el)) {
+            expect(x).toBeGreaterThanOrEqual(0);
+            expect(x).toBeLessThan(500);
+            expect(y).toBeGreaterThanOrEqual(0);
+            expect(y).toBeLessThan(400);
+        }
     });
 
-    it("skips rings with a negative radius", async () => {
-        const el = await mount<BbConcentricPulse>("bb-concentric-pulse", {
-            "ring-count": "1",
-            "ring-spacing": "0",
-            "ring-amplitude": "-1000",
+    it("respawns particles somewhere new at the end of their life", async () => {
+        const random = vi.spyOn(Math, "random").mockReturnValue(0.5);
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-amount": "1",
+            "particle-life": "1",
+            "flow-speed": "0",
         });
-        vi.spyOn(Math, "sin").mockReturnValue(1);
-        const arc = vi.spyOn(el.ctx, "arc");
+        frame(el, 0.9);
+        expect(particles(el)[0]).toMatchObject({ x: 250, y: 200 });
+
+        random.mockReturnValue(0.1);
+        frame(el, 0.2);
+        expect(particles(el)[0]).toMatchObject({ x: 50, y: 40 });
+    });
+
+    it("fades its lines away until at most a trace is left", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-amount": "0",
+            "trail-opacity": "0.005",
+        });
+        // As faint as a single stroke of a line.
+        el.ctx.globalAlpha = 0.05;
+        el.ctx.fillStyle = "#fff";
+        el.ctx.fillRect(0, 0, el.width, el.height);
+        el.ctx.globalAlpha = 1;
+
+        for (let i = 0; i < 600; i++) frame(el);
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        const left = data.filter((_, i) => i % 4 === 3);
+        expect(Math.max(...left)).toBeLessThanOrEqual(4);
+    });
+
+    it("keeps its lines for good without a trail", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-amount": "0",
+            "trail-opacity": "0",
+        });
+        el.ctx.fillStyle = "#fff";
+        el.ctx.fillRect(0, 0, el.width, el.height);
+
+        for (let i = 0; i < 100; i++) frame(el);
+        expect(el.ctx.getImageData(1, 1, 1, 1).data[3]).toBe(255);
+    });
+
+    it.each([
+        ["#ff0000, #0000ff", "linear-gradient(rgb(255, 0, 0), rgb(0, 0, 255))"],
+        ["#00ff00", "rgb(0, 255, 0)"],
+        ["", "rgb(0, 0, 0)"],
+    ])("shows %j behind its lines", async (colors, background) => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "bg-colors": colors,
+            "bg-angle": "90",
+        });
+
+        expect(el.canvas.style.background).toBe(background);
+    });
+
+    /**
+     * The opacity of the lines at each height, from the lowest ground to the
+     * highest, over one frame. Their colors run from red (low) to blue (high).
+     */
+    function lightByHeight(el: BbContourFlow, deltaTime: number): number[] {
+        const light = new Map<number, number>();
+        vi.spyOn(el.ctx, "stroke").mockImplementation(() => {
+            const red = parseInt(String(el.ctx.strokeStyle).slice(1, 3), 16);
+            light.set(255 - red, el.ctx.globalAlpha);
+        });
+        frame(el, deltaTime);
+        vi.mocked(el.ctx.stroke).mockRestore();
+        return [...light].sort(([a], [b]) => a - b).map(([, alpha]) => alpha);
+    }
+
+    it("keeps every line at its line opacity without a pulse", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "line-colors": "#ff0000, #0000ff",
+            "line-opacity": "0.2",
+            "pulse-strength": "0",
+        });
+
+        expect(new Set(lightByHeight(el, 0.1))).toEqual(new Set([0.2]));
+    });
+
+    it("sends waves of light downhill", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "line-colors": "#ff0000, #0000ff",
+            "line-opacity": "0.5",
+            "pulse-strength": "1",
+            "pulse-speed": "1",
+        });
+        const before = lightByHeight(el, 0.1);
+        const after = lightByHeight(el, 0.1);
+
+        expect(Math.max(...before)).toBeCloseTo(1, 2);
+        expect(Math.min(...before)).toBeCloseTo(0, 2);
+        // How far the light moved, in heights: the best match of the two.
+        const mismatch = (shift: number): number =>
+            after.reduce(
+                (sum, alpha, i) =>
+                    sum + Math.abs(alpha - (before[i + shift] ?? alpha)),
+                0,
+            );
+        const shifts = Array.from({ length: 21 }, (_, i) => i - 10);
+        const moved = shifts.reduce((a, b) =>
+            mismatch(b) < mismatch(a) ? b : a,
+        );
+        expect(moved).toBeGreaterThan(0);
+    });
+
+    it("leaves particles standing on a flat terrain", async () => {
+        vi.spyOn(Math, "random").mockReturnValue(0.5);
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-amount": "1",
+        });
         frame(el);
-        expect(arc).not.toHaveBeenCalled();
+
+        expect(particles(el)[0]).toMatchObject({
+            x: 250,
+            y: 200,
+            dx: 0,
+            dy: 0,
+        });
     });
 });
 

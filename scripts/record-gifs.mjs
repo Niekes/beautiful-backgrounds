@@ -26,9 +26,9 @@ const STORIES = {
         "bb-ambient-ribbon",
         "backgrounds-ambient-ribbon--signature-flow",
     ],
-    "concentric-pulse": [
-        "bb-concentric-pulse",
-        "backgrounds-concentric-pulse--signature-pulse",
+    "contour-flow": [
+        "bb-contour-flow",
+        "backgrounds-contour-flow--topographic-moss",
     ],
     "digital-rain": [
         "bb-digital-rain",
