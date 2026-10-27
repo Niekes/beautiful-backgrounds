@@ -142,7 +142,8 @@ export abstract class BeautifulBackground extends LitElement {
 
         let lastTime = performance.now();
         const animate = (now: number) => {
-            const deltaTime = (now - lastTime) / 1000;
+            // The first frame's timestamp can lie before performance.now().
+            const deltaTime = Math.max(0, now - lastTime) / 1000;
             lastTime = now;
             this.loop(deltaTime);
             this.animationFrameId = requestAnimationFrame(animate);

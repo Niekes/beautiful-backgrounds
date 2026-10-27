@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The first frame after a background starts, or after its tab shows again,
+  no longer runs backwards in time.
 - `<bb-concentric-pulse>` no longer stops with a single ring color or an
   empty `ring-colors` attribute, and accepts every CSS color.
 - Gray colors in `hex-colors` and `line-colors` no longer produce an
