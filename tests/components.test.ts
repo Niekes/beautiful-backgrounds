@@ -140,7 +140,7 @@ describe("bb-contour-flow", () => {
 
     it("starts over when its size or terrain changes", async () => {
         const el = await mount<BbContourFlow>("bb-contour-flow", {
-            "particle-count": "10",
+            "particle-amount": "10",
         });
         const first = particles(el);
 
@@ -149,7 +149,7 @@ describe("bb-contour-flow", () => {
         frame(el);
         expect(particles(el)).toBe(first);
 
-        el.particleCount = 20;
+        el.particleAmount = 20;
         await el.updateComplete;
         frame(el);
         expect(particles(el)).toHaveLength(20);
@@ -169,7 +169,7 @@ describe("bb-contour-flow", () => {
 
     it("wraps particles around the edges", async () => {
         const el = await mount<BbContourFlow>("bb-contour-flow", {
-            "particle-count": "50",
+            "particle-amount": "50",
         });
         const [particle] = particles(el);
         Object.assign(particle, { x: 499.9, y: 0.1, dx: 1, dy: -1 });
@@ -186,7 +186,7 @@ describe("bb-contour-flow", () => {
     it("respawns particles somewhere new at the end of their life", async () => {
         const random = vi.spyOn(Math, "random").mockReturnValue(0.5);
         const el = await mount<BbContourFlow>("bb-contour-flow", {
-            "particle-count": "1",
+            "particle-amount": "1",
             "particle-life": "1",
             "flow-speed": "0",
         });
@@ -200,7 +200,7 @@ describe("bb-contour-flow", () => {
 
     it("fades its lines away until at most a trace is left", async () => {
         const el = await mount<BbContourFlow>("bb-contour-flow", {
-            "particle-count": "0",
+            "particle-amount": "0",
             "trail-opacity": "0.005",
         });
         // As faint as a single stroke of a line.
@@ -218,7 +218,7 @@ describe("bb-contour-flow", () => {
 
     it("keeps its lines for good without a trail", async () => {
         const el = await mount<BbContourFlow>("bb-contour-flow", {
-            "particle-count": "0",
+            "particle-amount": "0",
             "trail-opacity": "0",
         });
         el.ctx.fillStyle = "#fff";
@@ -295,7 +295,7 @@ describe("bb-contour-flow", () => {
     it("leaves particles standing on a flat terrain", async () => {
         vi.spyOn(Math, "random").mockReturnValue(0.5);
         const el = await mount<BbContourFlow>("bb-contour-flow", {
-            "particle-count": "1",
+            "particle-amount": "1",
         });
         frame(el);
 

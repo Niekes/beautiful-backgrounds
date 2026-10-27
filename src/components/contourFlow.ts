@@ -51,8 +51,8 @@ type FlowParticle = {
  */
 @customElement("bb-contour-flow")
 export class BbContourFlow extends BeautifulBackground {
-    @property({ type: Number, attribute: "particle-count" })
-    particleCount: number = 4500;
+    @property({ type: Number, attribute: "particle-amount" })
+    particleAmount: number = 4500;
 
     /** The average life of a particle, in seconds. */
     @property({ type: Number, attribute: "particle-life" })
@@ -106,7 +106,7 @@ export class BbContourFlow extends BeautifulBackground {
         this.terrain = createTerrain();
         this.survey();
         this.shades = gradient(this.colors(), SHADES);
-        this.particles = Array.from({ length: this.particleCount }, () =>
+        this.particles = Array.from({ length: this.particleAmount }, () =>
             this.spawn(),
         );
         this.builtFor = this.settings();
@@ -178,7 +178,7 @@ export class BbContourFlow extends BeautifulBackground {
             this.width,
             this.height,
             this.terrainSize,
-            this.particleCount,
+            this.particleAmount,
             this.lineColors,
         ].join(" ");
     }

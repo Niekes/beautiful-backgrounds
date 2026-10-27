@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `<bb-contour-flow>` (`BbContourFlow`): particles flow downhill across an
   invisible terrain, and their faint lines pile up into topographic contour
-  lines, with `particle-count`, `particle-life`, `flow-speed`,
+  lines, with `particle-amount`, `particle-life`, `flow-speed`,
   `terrain-size`, `line-colors`, `line-opacity`, `pulse-strength` and
   `pulse-speed`. The `line-colors` run from the lowest ground to the
   highest, so the colors flow along the lines, and waves of light run

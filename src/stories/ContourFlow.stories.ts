@@ -8,7 +8,7 @@ const meta: Meta = {
     render: (args) => {
         return html`
             <bb-contour-flow
-                particle-count=${args.particleCount}
+                particle-amount=${args.particleAmount}
                 particle-life=${args.particleLife}
                 flow-speed=${args.flowSpeed}
                 terrain-size=${args.terrainSize}
@@ -24,7 +24,7 @@ const meta: Meta = {
         `;
     },
     argTypes: {
-        particleCount: {
+        particleAmount: {
             control: { type: "range", min: 100, max: 20000, step: 100 },
         },
         particleLife: {
@@ -51,7 +51,7 @@ const meta: Meta = {
         },
     },
     args: {
-        particleCount: 4500,
+        particleAmount: 4500,
         particleLife: 6,
         flowSpeed: 132,
         terrainSize: 3333,
@@ -89,7 +89,7 @@ export const DesertDunes: Story = {
 
 export const ArcticSurvey: Story = {
     args: {
-        particleCount: 6000,
+        particleAmount: 6000,
         lineColors: "#bfe6ff",
         lineOpacity: 0.04,
         bgColors: "#06141f, #0b2233",
@@ -116,7 +116,7 @@ export const Blueprint: Story = {
 
 export const EmberRidge: Story = {
     args: {
-        particleCount: 8000,
+        particleAmount: 8000,
         flowSpeed: 200,
         lineColors: "#ff6a00, #ffd000",
         lineOpacity: 0.04,
