@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-27
+
+A major release: `<bb-contour-flow>` replaces `<bb-concentric-pulse>`. Its
+attributes differ, so a page that uses `<bb-concentric-pulse>` needs a new
+setup, which the Contour Flow stories show with live controls. It also
+brings three more backgrounds, and trails and thin lines that no longer
+break up into pixels.
+
 ### Added
 
 - `<bb-contour-flow>` (`BbContourFlow`): particles flow downhill across an
@@ -17,6 +25,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   highest, so the colors flow along the lines, and waves of light run
   downhill. Particles start over somewhere new at the end of their life and
   old lines fade, so the picture never fills up.
+- `<bb-smoke-ring>` (`BbSmokeRing`): a wavy ring of light gives off smoke
+  that drifts outward and swirls where its own colors push it, after Vanta's
+  Halo but without WebGL, with `ring-colors`, `ring-size`, `ring-wobble` and
+  `speed`. The ring runs through its `ring-colors`, and its light adds to
+  the background, so it shows best on a dark one.
+- `<bb-light-shafts>` (`BbLightShafts`): upright shafts of soft light drift
+  sideways, after Tibix's "Crystal Parallax", with `shaft-colors`,
+  `shaft-amount` and `speed`. Each shaft lies at its own depth: nearer ones
+  are wider and brighter and drift faster. Their light adds to the
+  background, so they show best on a dark one, and a `trail-opacity` below
+  1 smears them as they drift.
+- `<bb-silk-waves>` (`BbSilkWaves`): a sea of rolling waves in one color,
+  seen from above its front and shaded from its troughs to its crests, after
+  Vanta's Waves but without WebGL, with `silk-color`, `swell`, `sheen`,
+  `reach` and `speed`.
 
 ### Removed
 
@@ -25,10 +48,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Trails fade all the way out. A low `trail-opacity` used to round the
+  faintest traces back to themselves, so they stayed for good and piled up
+  into jagged, pixelated remains, most of all on high-density screens. Every
+  background now fades a scattered share of its pixels at a time instead,
+  as `<bb-contour-flow>` already did, and shows its background from CSS
+  behind the canvas. `clean-trail="false"` brings the old trails back.
+  `<bb-smoke-ring>`, `<bb-light-shafts>` and `<bb-silk-waves>` keep it off,
+  as they paint over their background on the canvas themselves.
+- Lines are never drawn thinner than two pixels of the screen. A thinner
+  `ribbon-line-width`, `line-width` or particle size is drawn that wide and
+  as much fainter, so it gives off the same light, and many thin lines side
+  by side no longer break up into a grid of pixels.
 - The bundle no longer includes d3-color: the browser parses the colors in
   `hex-colors` and `line-colors`, so newer formats such as `oklch()` work
   too. Both builds are minified, and `bb.es.js` shrinks from 105 kB to
-  41 kB.
+  42 kB.
 - The package no longer ships the declaration files of the stories or the
   Vite logo.
 

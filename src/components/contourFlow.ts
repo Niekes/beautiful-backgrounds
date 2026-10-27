@@ -1,4 +1,3 @@
-import { type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { BeautifulBackground } from "../BeautifulBackground";
 import { gradient } from "../utils/color";
@@ -23,10 +22,6 @@ const STEER = 3 / 2.2 ** 2;
 const SHADES = 128;
 /** Waves of light on the way from the highest ground to the lowest. */
 const PULSE_WAVES = 2;
-/** How much a fade takes off the pixels it reaches. */
-const FADE = 0.1;
-/** The fade masks repeat every MASK_SIZE px. */
-const MASK_SIZE = 64;
 
 const CIRCLE = Array.from({ length: SAMPLES }, (_, i) => {
     const angle = (i / SAMPLES) * Math.PI * 2;
@@ -93,8 +88,6 @@ export class BbContourFlow extends BeautifulBackground {
     private lowest: number = 0;
     private highest: number = 0;
     private shades: string[] = [];
-    private fadeMasks: CanvasPattern[] = [];
-    private fadeTurn: number = 0;
     private time: number = 0;
     private particles: FlowParticle[] = [];
     /** The size and settings the terrain and particles were made for. */
@@ -130,47 +123,6 @@ export class BbContourFlow extends BeautifulBackground {
             this.move(particle, step, paths[this.shadeIndex(particle)]);
         }
         this.stroke(paths);
-    }
-
-    protected updated(changedProperties: PropertyValues): void {
-        super.updated(changedProperties);
-        this.canvas.style.background = this.cssBackground();
-    }
-
-    /** The lines sit on a clear canvas, over the background in CSS. */
-    protected drawBackground(ctx: CanvasRenderingContext2D): void {
-        ctx.clearRect(0, 0, this.width, this.height);
-    }
-
-    /** The background gradient at `bgAngle`, as CSS counts the angle. */
-    private cssBackground(): string {
-        const colors = this.bgColors.length > 0 ? this.bgColors : ["#000"];
-        if (colors.length === 1) return colors[0];
-        return `linear-gradient(${this.bgAngle + 90}deg, ${colors.join(", ")})`;
-    }
-
-    /**
-     * Fades the lines by `trailOpacity` per frame. The canvas keeps 8 bits per
-     * channel, so a fade that faint would round the faintest lines back to
-     * themselves, and they would stay for good. Instead, each frame fades a
-     * scattered share of the pixels by FADE, which averages out the same.
-     */
-    protected fadeTrail(): void {
-        if (this.trailOpacity <= 0) return;
-
-        const strength = Math.max(this.trailOpacity, FADE);
-        const turns = Math.round(strength / this.trailOpacity);
-        if (this.fadeMasks.length !== turns) {
-            this.fadeMasks = fadeMasks(this.ctx, turns);
-        }
-
-        const ctx = this.ctx;
-        ctx.save();
-        ctx.globalCompositeOperation = "destination-out";
-        ctx.globalAlpha = Math.min(1, strength);
-        ctx.fillStyle = this.fadeMasks[this.fadeTurn++ % turns];
-        ctx.fillRect(0, 0, this.width, this.height);
-        ctx.restore();
     }
 
     private settings(): string {
@@ -285,30 +237,6 @@ function downhill(terrain: Terrain, x: number, y: number): [number, number] {
     // A flat terrain has no way down.
     const drop = (heights[high] - heights[low]) / (Math.hypot(dx, dy) || 1);
     return [dx * drop, dy * drop];
-}
-
-/**
- * Masks for `turns` fades in a row, each over a different scattered share of
- * the pixels, so that together they reach every pixel once.
- */
-function fadeMasks(
-    ctx: CanvasRenderingContext2D,
-    turns: number,
-): CanvasPattern[] {
-    const turnOf = Array.from({ length: MASK_SIZE ** 2 }, () =>
-        Math.floor(Math.random() * turns),
-    );
-
-    return Array.from({ length: turns }, (_, turn) => {
-        const mask = new ImageData(MASK_SIZE, MASK_SIZE);
-        turnOf.forEach((t, i) => {
-            if (t === turn) mask.data[i * 4 + 3] = 255;
-        });
-        const tile = document.createElement("canvas");
-        tile.width = tile.height = MASK_SIZE;
-        tile.getContext("2d")!.putImageData(mask, 0, 0);
-        return ctx.createPattern(tile, "repeat")!;
-    });
 }
 
 function wrap(value: number, size: number): number {

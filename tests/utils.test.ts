@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 import { gradient, hsla, randomColor, toHsl, toRgb } from "../src/utils/color";
 import { debounce } from "../src/utils/function";
 import { stringToArrayConverter } from "../src/utils/lit";
+import { strokeLine } from "../src/utils/line";
 import { createTerrain } from "../src/utils/terrain";
 import { getRandomFloat, getRandomInt } from "../src/utils/number";
 
@@ -155,5 +156,45 @@ describe("createTerrain", () => {
 
         expect(terrain(1.3, -7.2)).toBeCloseTo(0.5 * 0.9375);
         expect(terrain(-40.1, 99.9)).toBeCloseTo(0.5 * 0.9375);
+    });
+});
+
+describe("strokeLine", () => {
+    /**
+     * The opacity of each pixel row that a line across a canvas of pixel ratio
+     * 2 leaves, `width` px wide at y = 10 px.
+     */
+    function rows(width: number, alpha: number = 1): number[] {
+        const canvas = document.createElement("canvas");
+        canvas.width = 20;
+        canvas.height = 40;
+        const ctx = canvas.getContext("2d")!;
+        ctx.scale(2, 2);
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.moveTo(0, 10);
+        ctx.lineTo(10, 10);
+        strokeLine(ctx, width);
+        expect(ctx.globalAlpha).toBe(alpha);
+
+        const { data } = ctx.getImageData(10, 0, 1, 40);
+        return Array.from(data).filter((_, i) => i % 4 === 3);
+    }
+
+    it("strokes a line as wide as it is", () => {
+        const opacity = rows(3);
+        expect(opacity.slice(17, 23)).toEqual([255, 255, 255, 255, 255, 255]);
+        expect([opacity[16], opacity[23]]).toEqual([0, 0]);
+    });
+
+    it("strokes a hairline two screen pixels wide, and as much fainter", () => {
+        // A quarter of the width, at half the opacity: an eighth of 255.
+        const opacity = rows(0.25, 0.5);
+        expect(opacity.slice(19, 21)).toEqual([32, 32]);
+        expect([opacity[18], opacity[21]]).toEqual([0, 0]);
+    });
+
+    it.each([0, -1])("strokes nothing %d px wide", (width) => {
+        expect(Math.max(...rows(width))).toBe(0);
     });
 });

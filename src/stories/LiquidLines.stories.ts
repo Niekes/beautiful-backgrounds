@@ -24,6 +24,7 @@ const meta: Meta = {
                 wiggle-amplitude=${args.wiggleAmplitude}
                 wiggle-speed=${args.wiggleSpeed}
                 trail-opacity=${args.trailOpacity}
+                clean-trail=${args.cleanTrail}
                 style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-liquid-lines>
         `;
@@ -57,6 +58,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0, max: 1, step: 0.05 },
         },
+        cleanTrail: { control: "boolean" },
     },
     args: {
         bgColors: "#000000, #000000",
@@ -75,6 +77,7 @@ const meta: Meta = {
         wiggleAmplitude: 20,
         wiggleSpeed: 0.3,
         trailOpacity: 0.1,
+        cleanTrail: true,
     },
 };
 

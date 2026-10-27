@@ -26,6 +26,7 @@ const meta: Meta = {
             particle-amount=${args.particleAmount}
             particle-force=${args.particleForce}
             trail-opacity=${args.trailOpacity}
+            clean-trail=${args.cleanTrail}
             particle-colors=${args.particleColors}
             style="width: 100%; height: 500px; border-radius: 15px"
         ></bb-star-trail>`;
@@ -75,6 +76,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
+        cleanTrail: { control: "boolean" },
     },
     args: {
         bgColors: "#000, #000",
@@ -93,6 +95,7 @@ const meta: Meta = {
         particleSpeedMin: 0.1,
         particleSpeedMax: 0.2,
         trailOpacity: 0.1,
+        cleanTrail: true,
         particleColors: "",
     },
 };

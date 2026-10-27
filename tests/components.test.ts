@@ -5,8 +5,11 @@ import {
     BbContourFlow,
     BbDigitalRain,
     BbHexagonWave,
+    BbLightShafts,
     BbLiquidLines,
     BbNeonRails,
+    BbSilkWaves,
+    BbSmokeRing,
     BbStarTrail,
 } from "../index";
 import { frame, mount, unmountAll } from "./mount";
@@ -47,8 +50,11 @@ describe.each([
     ["bb-contour-flow", BbContourFlow],
     ["bb-digital-rain", BbDigitalRain],
     ["bb-hexagon-wave", BbHexagonWave],
+    ["bb-light-shafts", BbLightShafts],
     ["bb-liquid-lines", BbLiquidLines],
     ["bb-neon-rails", BbNeonRails],
+    ["bb-silk-waves", BbSilkWaves],
+    ["bb-smoke-ring", BbSmokeRing],
     ["bb-star-trail", BbStarTrail],
 ])("<%s>", (tag, Element) => {
     it("is registered as a BeautifulBackground", () => {
@@ -375,6 +381,220 @@ describe("bb-hexagon-wave", () => {
     });
 });
 
+describe("bb-light-shafts", () => {
+    /** The red, green and blue of the whole canvas, each summed. */
+    function allLight(el: BbLightShafts): number[] {
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        const sums = [0, 0, 0];
+        data.forEach((value, i) => {
+            if (i % 4 < 3) sums[i % 4] += value;
+        });
+        return sums;
+    }
+
+    /** The red of every pixel of the canvas. */
+    function redPixels(el: BbLightShafts): number[] {
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        return Array.from(data).filter((_, i) => i % 4 === 0);
+    }
+
+    /** The red of each column of the canvas, summed from top to bottom. */
+    function redColumns(el: BbLightShafts): number[] {
+        const columns = new Array<number>(el.canvas.width).fill(0);
+        redPixels(el).forEach((red, i) => (columns[i % columns.length] += red));
+        return columns;
+    }
+
+    /** Where the middle of `columns`' light is, in canvas pixels. */
+    function middle(columns: number[]): number {
+        const total = columns.reduce((sum, red) => sum + red, 0);
+        return columns.reduce((sum, red, x) => sum + red * x, 0) / total;
+    }
+
+    /**
+     * A lone red shaft on black, all of whose random choices are `random`,
+     * shown where it starts.
+     */
+    async function lone(
+        random: number,
+        attributes: Record<string, string> = {},
+        size?: { width: number; height: number },
+    ): Promise<BbLightShafts> {
+        vi.spyOn(Math, "random").mockReturnValue(random);
+        const el = await mount<BbLightShafts>(
+            "bb-light-shafts",
+            {
+                "shaft-colors": "#ff0000",
+                "bg-colors": "#000",
+                "shaft-amount": "1",
+                ...attributes,
+            },
+            size,
+        );
+        frame(el, 0);
+        return el;
+    }
+
+    it("shines in its shaft colors", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "#ff0000",
+            "bg-colors": "#000",
+        });
+        frame(el);
+
+        const [red, green, blue] = allLight(el);
+        expect(red).toBeGreaterThan(0);
+        expect([green, blue]).toEqual([0, 0]);
+    });
+
+    it("shines in its default colors without shaft colors", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "",
+            "bg-colors": "#000",
+        });
+        frame(el);
+
+        const [red, green, blue] = allLight(el);
+        expect(blue).toBeGreaterThan(red);
+        expect(blue).toBeGreaterThan(green);
+    });
+
+    it("adds its light to the background", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "#ff0000",
+            "bg-colors": "#0000ff",
+        });
+        frame(el);
+
+        const { width, height } = el.canvas;
+        const [red, , blue] = allLight(el);
+        expect(red).toBeGreaterThan(0);
+        expect(blue).toBe(255 * width * height);
+    });
+
+    it("lets nearer shafts shine brighter, look wider and drift faster", async () => {
+        /** How bright and wide a lone shaft is, and how far it drifts. */
+        async function look(random: number) {
+            const el = await lone(random, {}, { width: 600, height: 200 });
+            const before = redColumns(el);
+            for (let i = 0; i < 30; i++) frame(el);
+            const after = redColumns(el);
+            const peak = Math.max(...after);
+            return {
+                brightness: Math.max(...redPixels(el)),
+                width: after.filter((red) => red > peak / 2).length,
+                drift: middle(after) - middle(before),
+            };
+        }
+
+        const [a, b] = [await look(0.2), await look(0.8)];
+        const [near, far] = a.brightness > b.brightness ? [a, b] : [b, a];
+        expect(near.brightness).toBeGreaterThan(1.5 * far.brightness);
+        expect(near.width).toBeGreaterThan(2 * far.width);
+        expect(far.drift).toBeGreaterThan(0);
+        expect(near.drift).toBeGreaterThan(2 * far.drift);
+    });
+
+    it("brings shafts that drift out on the right back in on the left", async () => {
+        // Starts at the right edge.
+        const el = await lone(0.999);
+        const left = () => redColumns(el).slice(0, 100);
+        const right = () => redColumns(el).slice(200);
+        expect(Math.max(...left())).toBe(0);
+
+        for (let i = 0; i < 15; i++) frame(el, 1);
+        expect(Math.max(...left())).toBeGreaterThan(0);
+        expect(Math.max(...right())).toBe(0);
+    });
+
+    /** How far a lone shaft drifts in `frames` frames, in canvas pixels. */
+    async function drift(
+        frames: number,
+        attributes: Record<string, string> = {},
+        deltaTime: number = 1 / 60,
+    ): Promise<number> {
+        const el = await lone(0.3, attributes);
+        const before = middle(redColumns(el));
+        for (let i = 0; i < frames; i++) frame(el, deltaTime);
+        return middle(redColumns(el)) - before;
+    }
+
+    it("plays at its speed", async () => {
+        const oneSecondAtDouble = await drift(60, { speed: "2" });
+        const twoSeconds = await drift(120, { speed: "1" });
+        expect(oneSecondAtDouble).toBeGreaterThan(10);
+        expect(oneSecondAtDouble).toBeCloseTo(twoSeconds, 1);
+    });
+
+    it("looks the same at any frame rate", async () => {
+        expect(await drift(240, {}, 1 / 120)).toBeCloseTo(await drift(120), 1);
+    });
+
+    it.each(["0", "-1"])("stands still at speed %s", async (speed) => {
+        expect(await drift(60, { speed })).toBe(0);
+    });
+
+    it("starts over across its new size", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "#ff0000",
+            "bg-colors": "#000",
+        });
+        frame(el);
+
+        el.style.width = "900px";
+        window.dispatchEvent(new Event("resize"));
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        frame(el);
+        const dpr = el.canvas.width / el.width;
+        const farRight = redColumns(el).slice(600 * dpr);
+        expect(Math.max(...farRight)).toBeGreaterThan(0);
+    });
+
+    it("starts over with its new shaft amount and colors", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "#ff0000",
+            "bg-colors": "#000",
+            "shaft-amount": "0",
+        });
+        frame(el);
+        expect(allLight(el)).toEqual([0, 0, 0]);
+
+        el.shaftAmount = 5;
+        frame(el);
+        expect(allLight(el)[0]).toBeGreaterThan(0);
+
+        el.shaftColors = ["#0000ff"];
+        frame(el);
+        const [red, , blue] = allLight(el);
+        expect(red).toBe(0);
+        expect(blue).toBeGreaterThan(0);
+    });
+
+    /** A lone shaft's columns before and after drifting half a second. */
+    async function trail(attributes: Record<string, string> = {}) {
+        const el = await lone(0.3, { speed: "10", ...attributes });
+        const before = redColumns(el);
+        for (let i = 0; i < 30; i++) frame(el);
+        return [before, redColumns(el)];
+    }
+
+    it("leaves no trail by default", async () => {
+        const [before, after] = await trail();
+        const lit = before.flatMap((red, x) => (red > 0 ? [after[x]] : []));
+        expect(lit.length).toBeGreaterThan(0);
+        expect(Math.max(...lit)).toBe(0);
+    });
+
+    it("smears its shafts sideways with a lower trail opacity", async () => {
+        const sum = (columns: number[]) => columns.reduce((a, b) => a + b);
+        const [, sharp] = await trail();
+        const [, smeared] = await trail({ "trail-opacity": "0.05" });
+        expect(sum(smeared)).toBeGreaterThan(2 * sum(sharp));
+    });
+});
+
 describe("bb-liquid-lines", () => {
     it("colors its lines in a hue range by default", async () => {
         const el = await mount<BbLiquidLines>("bb-liquid-lines");
@@ -428,6 +648,502 @@ describe.each([
 
         expect([...seen].some((s) => s.startsWith("hsl("))).toBe(true);
     });
+});
+
+describe("bb-smoke-ring", () => {
+    /** A pixel on the ring of a 300 x 200 canvas, whose radius is 40 px. */
+    const RING_X = 150 + 37;
+
+    /** The red, green and blue of the canvas at (x, y), in CSS px. */
+    function light(el: BbSmokeRing, x: number, y: number): number[] {
+        const dpr = el.canvas.width / el.width;
+        const { data } = el.ctx.getImageData(x * dpr, y * dpr, 1, 1);
+        return Array.from(data).slice(0, 3);
+    }
+
+    /** The red, green and blue of the whole canvas, summed. */
+    function allLight(el: BbSmokeRing): number {
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        return data.reduce((sum, value, i) => sum + (i % 4 < 3 ? value : 0));
+    }
+
+    /** All the light on a black background after `frames` frames. */
+    async function lightAfter(
+        frames: number,
+        attributes: Record<string, string> = {},
+        deltaTime: number = 1 / 60,
+    ): Promise<number> {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "bg-colors": "#000",
+            ...attributes,
+        });
+        for (let i = 0; i < frames; i++) frame(el, deltaTime);
+        return allLight(el);
+    }
+
+    it("shines in its ring color around the middle", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#ff0000",
+            "bg-colors": "#000",
+        });
+        for (let i = 0; i < 10; i++) frame(el);
+
+        const [red, green, blue] = light(el, RING_X, 100);
+        expect(red).toBeGreaterThan(50);
+        expect([green, blue]).toEqual([0, 0]);
+        expect(light(el, 150, 100)).toEqual([0, 0, 0]);
+        expect(light(el, 5, 5)).toEqual([0, 0, 0]);
+    });
+
+    it("adds its light to the background", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#ff0000",
+            "bg-colors": "#0000ff",
+        });
+        for (let i = 0; i < 10; i++) frame(el);
+
+        const [red, green, blue] = light(el, RING_X, 100);
+        expect(red).toBeGreaterThan(50);
+        expect([green, blue]).toEqual([0, 255]);
+    });
+
+    it("shines around the middle of a canvas bigger than its buffer", async () => {
+        // 800 x 400 is more than the buffer holds, so the smoke is stretched:
+        // the ring's radius is 80 px.
+        const el = await mount<BbSmokeRing>(
+            "bb-smoke-ring",
+            { "ring-colors": "#ff0000", "bg-colors": "#000" },
+            { width: 800, height: 400 },
+        );
+        for (let i = 0; i < 10; i++) frame(el);
+
+        expect(light(el, 400 + 75, 200)[0]).toBeGreaterThan(50);
+        expect(light(el, 400, 200)).toEqual([0, 0, 0]);
+    });
+
+    it("turns the way its smoke drifts", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#ffffff",
+            "bg-colors": "#000",
+            "trail-opacity": "0.05",
+        });
+        /** The direction from the middle to the middle of all light. */
+        function direction(): number {
+            const { width, height } = el.canvas;
+            const { data } = el.ctx.getImageData(0, 0, width, height);
+            let [x, y] = [0, 0];
+            for (let i = 0; i < data.length; i += 4) {
+                const pixel = i / 4;
+                x += data[i] * ((pixel % width) - width / 2);
+                y += data[i] * (Math.floor(pixel / width) - height / 2);
+            }
+            return Math.atan2(y, x);
+        }
+
+        for (let i = 0; i < 180; i++) frame(el);
+        const before = direction();
+        for (let i = 0; i < 360; i++) frame(el);
+        const turn = direction() - before;
+        const turned = Math.abs(Math.atan2(Math.sin(turn), Math.cos(turn)));
+        expect(turned).toBeGreaterThan(0.2);
+    });
+
+    it("runs through its ring colors", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#ff0000, #0000ff",
+            "bg-colors": "#000",
+        });
+        frame(el, 0.01);
+        const [red, , blue] = light(el, RING_X, 100);
+        expect(red).toBeGreaterThan(0);
+        expect(blue).toBe(0);
+
+        for (let i = 0; i < 100; i++) frame(el, 0.1);
+        expect(light(el, RING_X, 100)[2]).toBeGreaterThan(0);
+    });
+
+    it("shines in its default colors without ring colors", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "",
+            "bg-colors": "#000",
+        });
+        for (let i = 0; i < 10; i++) frame(el);
+
+        expect(Math.max(...light(el, RING_X, 100))).toBeGreaterThan(50);
+    });
+
+    it("lets its smoke drift out beyond the ring", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#0000ff",
+            "bg-colors": "#000",
+        });
+        frame(el);
+        expect(light(el, 150 + 56, 100)).toEqual([0, 0, 0]);
+
+        for (let i = 0; i < 180; i++) frame(el);
+        expect(light(el, 150 + 56, 100)[2]).toBeGreaterThan(10);
+    });
+
+    it("pushes its smoke left by its green and down by its red", async () => {
+        /**
+         * Which way the smoke leans after two seconds: left (+) or right (-),
+         * and up (+) or down (-), 50 px either side of the middle.
+         */
+        async function lean(color: string): Promise<number[]> {
+            const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+                "ring-colors": color,
+                "bg-colors": "#000",
+            });
+            for (let i = 0; i < 120; i++) frame(el);
+            const sum = (x: number, y: number): number =>
+                light(el, x, y).reduce((a, b) => a + b, 0);
+            // Pixels 100 and 199 lie equally far from the middle, at 150.
+            return [
+                sum(100, 100) - sum(199, 100),
+                sum(150, 50) - sum(150, 149),
+            ];
+        }
+
+        // Yellow is red with green, and green with red.
+        const [redSideways] = await lean("#ff0000");
+        const [, greenUpDown] = await lean("#00ff00");
+        const [yellowSideways, yellowUpDown] = await lean("#ffff00");
+        expect(yellowSideways).toBeGreaterThan(redSideways);
+        expect(yellowUpDown).toBeLessThan(greenUpDown);
+    });
+
+    it("fades its smoke faster with a higher trail opacity", async () => {
+        const fast = await lightAfter(120, { "trail-opacity": "0.05" });
+        const slow = await lightAfter(120, { "trail-opacity": "0.002" });
+        expect(fast).toBeLessThan(0.5 * slow);
+    });
+
+    it("looks the same at any frame rate", async () => {
+        const at60 = await lightAfter(120);
+        const at120 = await lightAfter(240, {}, 1 / 120);
+        // Not exactly: every step blurs the smoke a little.
+        expect(at120).toBeGreaterThan(0.8 * at60);
+        expect(at120).toBeLessThan(1.2 * at60);
+    });
+
+    it("plays at its speed", async () => {
+        const oneSecondAtDouble = await lightAfter(60, { speed: "2" });
+        const twoSeconds = await lightAfter(120, { speed: "1" });
+        expect(oneSecondAtDouble).toBeGreaterThan(0.8 * twoSeconds);
+        expect(oneSecondAtDouble).toBeLessThan(1.2 * twoSeconds);
+    });
+
+    it("softens its light into the pixels around it", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "bg-colors": "#000",
+            "ring-colors": "#ffffff",
+            "ring-wobble": "0",
+            // Only the light of the last frame, without any smoke.
+            "trail-opacity": "1",
+        });
+        frame(el, 1 / 15);
+
+        // Pixel 190 lies just outside the ring's radius of 40 px, where the
+        // ring itself gives off no light; pixel 189 lies just inside.
+        expect(light(el, 189, 100)[0]).toBeGreaterThan(0);
+        expect(light(el, 190, 100)[0]).toBeGreaterThan(0);
+        expect(light(el, 192, 100)[0]).toBe(0);
+    });
+
+    it("swells its ring into waves", async () => {
+        /** The spread of the ring's light around a circle near its edge. */
+        async function unevenness(ringWobble: string): Promise<number> {
+            const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+                "bg-colors": "#000",
+                "ring-colors": "#ffffff",
+                "ring-wobble": ringWobble,
+                // Only the light of the last frame, without any smoke.
+                "trail-opacity": "1",
+            });
+            for (let i = 0; i < 60; i++) frame(el);
+            const around = Array.from({ length: 28 }, (_, k) => {
+                const angle = (k / 28) * 2 * Math.PI;
+                const x = Math.round(150 + 37 * Math.cos(angle));
+                const y = Math.round(100 + 37 * Math.sin(angle));
+                return light(el, x, y)[0];
+            });
+            return Math.max(...around) - Math.min(...around);
+        }
+
+        expect(await unevenness("0.1")).toBeGreaterThan(
+            2 * (await unevenness("0")),
+        );
+    });
+
+    it("shows no ring at size 0, and the ring again at a size", async () => {
+        // An odd size puts a pixel right in the middle of the ring.
+        const el = await mount<BbSmokeRing>(
+            "bb-smoke-ring",
+            { "ring-colors": "#ff0000", "bg-colors": "#000", "ring-size": "0" },
+            { width: 301, height: 201 },
+        );
+        for (let i = 0; i < 60; i++) frame(el);
+        expect(drewSomething(el)).toBe(false);
+
+        el.ringSize = 0.2;
+        for (let i = 0; i < 10; i++) frame(el);
+        expect(light(el, RING_X, 100)[0]).toBeGreaterThan(50);
+    });
+
+    it("starts over in the middle of its new size", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "bg-colors": "#000",
+            "ring-colors": "#ffffff",
+        });
+        for (let i = 0; i < 10; i++) frame(el);
+
+        el.style.width = "600px";
+        window.dispatchEvent(new Event("resize"));
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        for (let i = 0; i < 10; i++) frame(el);
+        expect(light(el, 300 + 37, 100)[0]).toBeGreaterThan(50);
+    });
+
+    it.each([0, -1])("stands still at speed %d", async (speed) => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "bg-colors": "#000",
+        });
+        for (let i = 0; i < 30; i++) frame(el);
+        el.speed = speed;
+        const before = allLight(el);
+
+        for (let i = 0; i < 30; i++) frame(el);
+        expect(before).toBeGreaterThan(0);
+        expect(allLight(el)).toBe(before);
+    });
+
+    it.each([
+        ["2", "1"],
+        ["-1", "0"],
+    ])("treats a trail opacity of %s as %s", async (outside, inside) => {
+        expect(await lightAfter(60, { "trail-opacity": outside })).toBe(
+            await lightAfter(60, { "trail-opacity": inside }),
+        );
+    });
+
+    it("moves on by no more than a moment after a long pause", async () => {
+        async function smoke(pause: number): Promise<number> {
+            const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+                "bg-colors": "#000",
+            });
+            for (let i = 0; i < 30; i++) frame(el);
+            frame(el, pause);
+            return allLight(el);
+        }
+
+        expect(await smoke(0.5)).toBe(await smoke(1));
+    });
+});
+
+describe("bb-silk-waves", () => {
+    /** The whole canvas as red, green and blue channels. */
+    function data(el: BbSilkWaves): number[] {
+        const { width, height } = el.canvas;
+        return Array.from(el.ctx.getImageData(0, 0, width, height).data);
+    }
+
+    /** How much the two canvases differ, at most. */
+    function maxDiff(one: number[], other: number[]): number {
+        return one.reduce(
+            (diff, value, i) => Math.max(diff, Math.abs(value - other[i])),
+            0,
+        );
+    }
+
+    /** The topmost row whose pixel is more blue than red: the silk's crest. */
+    function topSeaY(el: BbSilkWaves): number {
+        const { width, height } = el.canvas;
+        const { data: pixels } = el.ctx.getImageData(0, 0, width, height);
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const i = (y * width + x) * 4;
+                if (pixels[i + 2] > pixels[i]) return y;
+            }
+        }
+        return height;
+    }
+
+    /** Every color the bottom half shows. */
+    function colors(el: BbSilkWaves): Set<number> {
+        const { width, height } = el.canvas;
+        const { data: pixels } = el.ctx.getImageData(0, 0, width, height);
+        const seen = new Set<number>();
+        for (let y = height / 2; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const i = (y * width + x) * 4;
+                seen.add(
+                    pixels[i] * 2 ** 16 +
+                        pixels[i + 1] * 2 ** 8 +
+                        pixels[i + 2],
+                );
+            }
+        }
+        return seen;
+    }
+
+    async function sea(
+        attributes: Record<string, string> = {},
+        frames: number = 1,
+        deltaTime: number = 1 / 60,
+    ): Promise<BbSilkWaves> {
+        const el = await mount<BbSilkWaves>("bb-silk-waves", attributes);
+        for (let i = 0; i < frames; i++) frame(el, deltaTime);
+        return el;
+    }
+
+    it("draws its silk in shades of its color", async () => {
+        const el = await sea({ "silk-color": "#ff0000", "bg-colors": "#000" });
+        const seen = colors(el);
+        expect(seen.size).toBeGreaterThan(5);
+        for (const color of seen) {
+            const [red, green, blue] = [
+                Math.floor(color / 2 ** 16),
+                Math.floor(color / 2 ** 8) % 2 ** 8,
+                color % 2 ** 8,
+            ];
+            expect(red).toBeGreaterThan(green);
+            expect(green).toBe(blue);
+        }
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("shines in its default color without a silk-color", async () => {
+        const el = await sea({ "silk-color": "", "bg-colors": "#000" });
+        const dpr = el.canvas.width / el.width;
+        const { data: pixel } = el.ctx.getImageData(150 * dpr, 190 * dpr, 1, 1);
+        expect(pixel[2]).toBeGreaterThan(pixel[1]);
+        expect(pixel[1]).toBeGreaterThan(pixel[0]);
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("fades into its background at the horizon", async () => {
+        const el = await sea({ "bg-colors": "#ff0000" });
+        const dpr = el.canvas.width / el.width;
+        const at = (x: number, y: number): number[] =>
+            Array.from(el.ctx.getImageData(x * dpr, y * dpr, 1, 1).data).slice(
+                0,
+                3,
+            );
+        expect(at(150, 2)).toEqual([255, 0, 0]);
+        expect(at(150, 190)[2]).toBeGreaterThan(100);
+    });
+
+    it("rises higher with a bigger swell", async () => {
+        const topSeaYAt = async (swell: string): Promise<number> =>
+            topSeaY(
+                await sea({
+                    "silk-color": "#0000ff",
+                    "bg-colors": "#ff0000",
+                    swell,
+                }),
+            );
+        expect(await topSeaYAt("0.6")).toBeLessThan(
+            (await topSeaYAt("0.02")) - 10,
+        );
+    });
+
+    it("lies larger the nearer it reaches", async () => {
+        const topSeaYAt = async (reach: string): Promise<number> =>
+            topSeaY(
+                await sea({
+                    "silk-color": "#0000ff",
+                    "bg-colors": "#ff0000",
+                    reach,
+                }),
+            );
+        expect(await topSeaYAt("0.15")).toBeLessThan(
+            (await topSeaYAt("4")) - 10,
+        );
+    });
+
+    it("shines brighter at a higher sheen", async () => {
+        const spread = (el: BbSilkWaves): number => {
+            let diff = 0;
+            const seen = colors(el);
+            for (const a of seen) {
+                for (const b of seen) {
+                    const [ra, ga, ba] = [
+                        Math.floor(a / 2 ** 16),
+                        Math.floor(a / 2 ** 8) % 2 ** 8,
+                        a % 2 ** 8,
+                    ];
+                    const [rb, gb, bb] = [
+                        Math.floor(b / 2 ** 16),
+                        Math.floor(b / 2 ** 8) % 2 ** 8,
+                        b % 2 ** 8,
+                    ];
+                    diff = Math.max(
+                        diff,
+                        Math.abs(ra - rb),
+                        Math.abs(ga - gb),
+                        Math.abs(ba - bb),
+                    );
+                }
+            }
+            return diff;
+        };
+        // A matte silk keeps its color's own lightness everywhere, give or
+        // take the canvas's gradient dithering.
+        expect(spread(await sea({ sheen: "0" }))).toBeLessThanOrEqual(6);
+        expect(spread(await sea({ sheen: "0.73" }))).toBeGreaterThan(20);
+        // A sheen of 1 caps its crest lightness at 95%.
+        expect(
+            spread(await sea({ "silk-color": "#ffb36b", sheen: "1" })),
+        ).toBeGreaterThan(20);
+    });
+
+    it("plays at its speed", async () => {
+        const oneSecondAtDouble = data(await sea({ speed: "2" }, 60));
+        const twoSeconds = data(await sea({ speed: "1" }, 120));
+        expect(maxDiff(oneSecondAtDouble, twoSeconds)).toBeLessThanOrEqual(3);
+    });
+
+    it("looks the same at any frame rate", async () => {
+        const at60 = data(await sea({}, 60));
+        const at120 = data(await sea({}, 120, 1 / 120));
+        expect(maxDiff(at60, at120)).toBeLessThanOrEqual(3);
+    });
+
+    it.each([0, -1])("stands still at speed %d", async (speed) => {
+        const el = await sea({ speed: `${speed}` }, 30);
+        const before = data(el);
+        expect(before.some((value, i) => i % 4 !== 3 && value > 0)).toBe(true);
+        for (let i = 0; i < 30; i++) frame(el);
+        expect(data(el)).toEqual(before);
+    });
+
+    it("stands still at a speed it cannot read", async () => {
+        expect(data(await sea({ speed: "abc" }))).toEqual(
+            data(await sea({ speed: "abc" }, 30)),
+        );
+    });
+
+    it("treats a swell it cannot read as none", async () => {
+        expect(data(await sea({ swell: "abc" }))).toEqual(
+            data(await sea({ swell: "0" })),
+        );
+    });
+
+    it("treats a sheen it cannot read as none", async () => {
+        expect(data(await sea({ sheen: "abc" }))).toEqual(
+            data(await sea({ sheen: "0" })),
+        );
+    });
+
+    it.each(["abc", "0"])(
+        "reaches as far as its default at %s",
+        async (reach) => {
+            expect(data(await sea({ reach }))).toEqual(
+                data(await sea({ reach: "0.65" })),
+            );
+        },
+    );
 });
 
 describe("bb-star-trail", () => {

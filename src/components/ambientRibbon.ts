@@ -3,6 +3,7 @@ import type { PropertyValues } from "lit";
 import { BeautifulBackground } from "../BeautifulBackground";
 import { getRandomFloat } from "../utils/number";
 import { hsla } from "../utils/color";
+import { strokeLine } from "../utils/line";
 
 class Ribbon {
     public angle: number[];
@@ -150,8 +151,6 @@ export class BbAmbientRibbon extends BeautifulBackground {
         // Background
         this.drawBackground(this.ctx);
 
-        this.ctx.lineWidth = this.ribbonLineWidth;
-
         this.ribbons.forEach((ribbon) => {
             ribbon.update(this.ribbonWidth);
 
@@ -180,7 +179,7 @@ export class BbAmbientRibbon extends BeautifulBackground {
             ...at(1, radius / 3, angle[2] * amplitude * 2),
             ...at(1, radius, angle[3] * amplitude + rotation),
         );
-        this.ctx.stroke();
+        strokeLine(this.ctx, this.ribbonLineWidth);
     }
 
     /** The color of a line, from the oldest (progress 0) to the newest. */

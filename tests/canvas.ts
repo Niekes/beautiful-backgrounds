@@ -14,6 +14,7 @@ export function recordingContext(): CanvasRenderingContext2D & {
     return {
         calls,
         globalAlpha: 1,
+        getTransform: () => new DOMMatrix(),
         beginPath: vi.fn(),
         stroke: vi.fn(),
         moveTo: record("moveTo"),
