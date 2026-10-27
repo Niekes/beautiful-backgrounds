@@ -183,6 +183,115 @@ describe("bb-contour-flow", () => {
         }
     });
 
+    it("respawns particles somewhere new at the end of their life", async () => {
+        const random = vi.spyOn(Math, "random").mockReturnValue(0.5);
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-count": "1",
+            "particle-life": "1",
+            "flow-speed": "0",
+        });
+        frame(el, 0.9);
+        expect(particles(el)[0]).toMatchObject({ x: 250, y: 200 });
+
+        random.mockReturnValue(0.1);
+        frame(el, 0.2);
+        expect(particles(el)[0]).toMatchObject({ x: 50, y: 40 });
+    });
+
+    it("fades its lines away until at most a trace is left", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-count": "0",
+            "trail-opacity": "0.005",
+        });
+        // As faint as a single stroke of a line.
+        el.ctx.globalAlpha = 0.05;
+        el.ctx.fillStyle = "#fff";
+        el.ctx.fillRect(0, 0, el.width, el.height);
+        el.ctx.globalAlpha = 1;
+
+        for (let i = 0; i < 600; i++) frame(el);
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        const left = data.filter((_, i) => i % 4 === 3);
+        expect(Math.max(...left)).toBeLessThanOrEqual(4);
+    });
+
+    it("keeps its lines for good without a trail", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "particle-count": "0",
+            "trail-opacity": "0",
+        });
+        el.ctx.fillStyle = "#fff";
+        el.ctx.fillRect(0, 0, el.width, el.height);
+
+        for (let i = 0; i < 100; i++) frame(el);
+        expect(el.ctx.getImageData(1, 1, 1, 1).data[3]).toBe(255);
+    });
+
+    it.each([
+        ["#ff0000, #0000ff", "linear-gradient(rgb(255, 0, 0), rgb(0, 0, 255))"],
+        ["#00ff00", "rgb(0, 255, 0)"],
+        ["", "rgb(0, 0, 0)"],
+    ])("shows %j behind its lines", async (colors, background) => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "bg-colors": colors,
+            "bg-angle": "90",
+        });
+
+        expect(el.canvas.style.background).toBe(background);
+    });
+
+    /**
+     * The opacity of the lines at each height, from the lowest ground to the
+     * highest, over one frame. Their colors run from red (low) to blue (high).
+     */
+    function lightByHeight(el: BbContourFlow, deltaTime: number): number[] {
+        const light = new Map<number, number>();
+        vi.spyOn(el.ctx, "stroke").mockImplementation(() => {
+            const red = parseInt(String(el.ctx.strokeStyle).slice(1, 3), 16);
+            light.set(255 - red, el.ctx.globalAlpha);
+        });
+        frame(el, deltaTime);
+        vi.mocked(el.ctx.stroke).mockRestore();
+        return [...light].sort(([a], [b]) => a - b).map(([, alpha]) => alpha);
+    }
+
+    it("keeps every line at its line opacity without a pulse", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "line-colors": "#ff0000, #0000ff",
+            "line-opacity": "0.2",
+            "pulse-strength": "0",
+        });
+
+        expect(new Set(lightByHeight(el, 0.1))).toEqual(new Set([0.2]));
+    });
+
+    it("sends waves of light downhill", async () => {
+        const el = await mount<BbContourFlow>("bb-contour-flow", {
+            "line-colors": "#ff0000, #0000ff",
+            "line-opacity": "0.5",
+            "pulse-strength": "1",
+            "pulse-speed": "1",
+        });
+        const before = lightByHeight(el, 0.1);
+        const after = lightByHeight(el, 0.1);
+
+        expect(Math.max(...before)).toBeCloseTo(1, 2);
+        expect(Math.min(...before)).toBeCloseTo(0, 2);
+        // How far the light moved, in heights: the best match of the two.
+        const mismatch = (shift: number): number =>
+            after.reduce(
+                (sum, alpha, i) =>
+                    sum + Math.abs(alpha - (before[i + shift] ?? alpha)),
+                0,
+            );
+        const shifts = Array.from({ length: 21 }, (_, i) => i - 10);
+        const moved = shifts.reduce((a, b) =>
+            mismatch(b) < mismatch(a) ? b : a,
+        );
+        expect(moved).toBeGreaterThan(0);
+    });
+
     it("leaves particles standing on a flat terrain", async () => {
         vi.spyOn(Math, "random").mockReturnValue(0.5);
         const el = await mount<BbContourFlow>("bb-contour-flow", {
@@ -190,7 +299,7 @@ describe("bb-contour-flow", () => {
         });
         frame(el);
 
-        expect(particles(el)[0]).toEqual({
+        expect(particles(el)[0]).toMatchObject({
             x: 250,
             y: 200,
             dx: 0,

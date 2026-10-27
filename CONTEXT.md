@@ -28,3 +28,8 @@ _Avoid_: gradient, force, vector field
 A visible line that forms where the strokes of many particles following the
 **Flow** pile up.
 _Avoid_: path, isoline
+
+**Pulse**:
+Waves of light that run along the **Contours**, from the highest ground of
+the **Terrain** to the lowest.
+_Avoid_: blink, glow, breathing

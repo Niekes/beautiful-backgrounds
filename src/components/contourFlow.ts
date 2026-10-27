@@ -1,3 +1,4 @@
+import { type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { BeautifulBackground } from "../BeautifulBackground";
 import { gradient } from "../utils/color";
@@ -20,6 +21,12 @@ const SAMPLE_RADIUS = 0.1;
 const STEER = 3 / 2.2 ** 2;
 /** Shades of the line colors, from the lowest ground to the highest. */
 const SHADES = 128;
+/** Waves of light on the way from the highest ground to the lowest. */
+const PULSE_WAVES = 2;
+/** How much a fade takes off the pixels it reaches. */
+const FADE = 0.1;
+/** The fade masks repeat every MASK_SIZE px. */
+const MASK_SIZE = 64;
 
 const CIRCLE = Array.from({ length: SAMPLES }, (_, i) => {
     const angle = (i / SAMPLES) * Math.PI * 2;
@@ -32,6 +39,9 @@ type FlowParticle = {
     /** The direction of travel, a unit vector (or zero before the first turn). */
     dx: number;
     dy: number;
+    /** Seconds since it started, and how many it lives. */
+    age: number;
+    life: number;
 };
 
 /**
@@ -44,8 +54,20 @@ export class BbContourFlow extends BeautifulBackground {
     @property({ type: Number, attribute: "particle-count" })
     particleCount: number = 4500;
 
+    /** The average life of a particle, in seconds. */
+    @property({ type: Number, attribute: "particle-life" })
+    particleLife: number = 6;
+
+    /** How far the light swells and ebbs, from 0 (not at all) to 1. */
+    @property({ type: Number, attribute: "pulse-strength" })
+    pulseStrength: number = 0.5;
+
+    /** Waves of light per second. */
+    @property({ type: Number, attribute: "pulse-speed" })
+    pulseSpeed: number = 0.1;
+
     @property({ type: Number, attribute: "line-opacity" })
-    lineOpacity: number = 0.05;
+    lineOpacity: number = 0.08;
 
     @property({ type: Number, attribute: "flow-speed" })
     flowSpeed: number = 132;
@@ -60,8 +82,8 @@ export class BbContourFlow extends BeautifulBackground {
     })
     lineColors: string[] = DEFAULT_COLORS;
 
-    // The lines pile up for good, unless asked to fade.
-    trailOpacity: number = 0;
+    // The lines fade slowly, so the picture never fills up.
+    trailOpacity: number = 0.005;
 
     private cols: number = 0;
     private rows: number = 0;
@@ -71,6 +93,9 @@ export class BbContourFlow extends BeautifulBackground {
     private lowest: number = 0;
     private highest: number = 0;
     private shades: string[] = [];
+    private fadeMasks: CanvasPattern[] = [];
+    private fadeTurn: number = 0;
+    private time: number = 0;
     private particles: FlowParticle[] = [];
     /** The size and settings the terrain and particles were made for. */
     private builtFor: string = "";
@@ -92,14 +117,60 @@ export class BbContourFlow extends BeautifulBackground {
         // A new size or terrain starts the picture over.
         if (this.builtFor !== this.settings()) this.initialize();
 
+        this.time += deltaTime;
         this.fadeTrail();
 
         const step = this.flowSpeed * deltaTime;
         const paths = this.shades.map(() => new Path2D());
         for (const particle of this.particles) {
+            particle.age += deltaTime;
+            if (particle.age > particle.life) {
+                Object.assign(particle, this.spawn());
+            }
             this.move(particle, step, paths[this.shadeIndex(particle)]);
         }
         this.stroke(paths);
+    }
+
+    protected updated(changedProperties: PropertyValues): void {
+        super.updated(changedProperties);
+        this.canvas.style.background = this.cssBackground();
+    }
+
+    /** The lines sit on a clear canvas, over the background in CSS. */
+    protected drawBackground(ctx: CanvasRenderingContext2D): void {
+        ctx.clearRect(0, 0, this.width, this.height);
+    }
+
+    /** The background gradient at `bgAngle`, as CSS counts the angle. */
+    private cssBackground(): string {
+        const colors = this.bgColors.length > 0 ? this.bgColors : ["#000"];
+        if (colors.length === 1) return colors[0];
+        return `linear-gradient(${this.bgAngle + 90}deg, ${colors.join(", ")})`;
+    }
+
+    /**
+     * Fades the lines by `trailOpacity` per frame. The canvas keeps 8 bits per
+     * channel, so a fade that faint would round the faintest lines back to
+     * themselves, and they would stay for good. Instead, each frame fades a
+     * scattered share of the pixels by FADE, which averages out the same.
+     */
+    protected fadeTrail(): void {
+        if (this.trailOpacity <= 0) return;
+
+        const strength = Math.max(this.trailOpacity, FADE);
+        const turns = Math.round(strength / this.trailOpacity);
+        if (this.fadeMasks.length !== turns) {
+            this.fadeMasks = fadeMasks(this.ctx, turns);
+        }
+
+        const ctx = this.ctx;
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.globalAlpha = Math.min(1, strength);
+        ctx.fillStyle = this.fadeMasks[this.fadeTurn++ % turns];
+        ctx.fillRect(0, 0, this.width, this.height);
+        ctx.restore();
     }
 
     private settings(): string {
@@ -152,7 +223,16 @@ export class BbContourFlow extends BeautifulBackground {
             y: Math.random() * this.rows * CELL,
             dx: 0,
             dy: 0,
+            age: 0,
+            life: this.particleLife * (0.5 + Math.random()),
         };
+    }
+
+    /** The light at the height of a shade, in waves that run downhill. */
+    private pulse(shadeIndex: number): number {
+        const height = shadeIndex / SHADES;
+        const phase = this.pulseSpeed * this.time + height * PULSE_WAVES;
+        return 1 + this.pulseStrength * Math.sin(phase * 2 * Math.PI);
     }
 
     /** Turns the particle with the flow and moves it a step along its path. */
@@ -181,9 +261,10 @@ export class BbContourFlow extends BeautifulBackground {
 
         ctx.save();
         ctx.translate(-MARGIN, -MARGIN);
-        ctx.globalAlpha = this.lineOpacity;
         ctx.lineWidth = 1;
         paths.forEach((path, i) => {
+            const alpha = this.lineOpacity * this.pulse(i);
+            ctx.globalAlpha = Math.min(1, Math.max(0, alpha));
             ctx.strokeStyle = this.shades[i];
             ctx.stroke(path);
         });
@@ -204,6 +285,30 @@ function downhill(terrain: Terrain, x: number, y: number): [number, number] {
     // A flat terrain has no way down.
     const drop = (heights[high] - heights[low]) / (Math.hypot(dx, dy) || 1);
     return [dx * drop, dy * drop];
+}
+
+/**
+ * Masks for `turns` fades in a row, each over a different scattered share of
+ * the pixels, so that together they reach every pixel once.
+ */
+function fadeMasks(
+    ctx: CanvasRenderingContext2D,
+    turns: number,
+): CanvasPattern[] {
+    const turnOf = Array.from({ length: MASK_SIZE ** 2 }, () =>
+        Math.floor(Math.random() * turns),
+    );
+
+    return Array.from({ length: turns }, (_, turn) => {
+        const mask = new ImageData(MASK_SIZE, MASK_SIZE);
+        turnOf.forEach((t, i) => {
+            if (t === turn) mask.data[i * 4 + 3] = 255;
+        });
+        const tile = document.createElement("canvas");
+        tile.width = tile.height = MASK_SIZE;
+        tile.getContext("2d")!.putImageData(mask, 0, 0);
+        return ctx.createPattern(tile, "repeat")!;
+    });
 }
 
 function wrap(value: number, size: number): number {

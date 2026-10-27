@@ -9,10 +9,13 @@ const meta: Meta = {
         return html`
             <bb-contour-flow
                 particle-count=${args.particleCount}
+                particle-life=${args.particleLife}
                 flow-speed=${args.flowSpeed}
                 terrain-size=${args.terrainSize}
                 line-colors=${args.lineColors}
                 line-opacity=${args.lineOpacity}
+                pulse-strength=${args.pulseStrength}
+                pulse-speed=${args.pulseSpeed}
                 bg-colors=${args.bgColors}
                 bg-angle=${args.bgAngle}
                 trail-opacity=${args.trailOpacity}
@@ -24,6 +27,9 @@ const meta: Meta = {
         particleCount: {
             control: { type: "range", min: 100, max: 20000, step: 100 },
         },
+        particleLife: {
+            control: { type: "range", min: 0.5, max: 60, step: 0.5 },
+        },
         flowSpeed: { control: { type: "range", min: 0, max: 600, step: 1 } },
         terrainSize: {
             control: { type: "range", min: 200, max: 10000, step: 1 },
@@ -32,21 +38,30 @@ const meta: Meta = {
         lineOpacity: {
             control: { type: "range", min: 0.005, max: 1, step: 0.005 },
         },
+        pulseStrength: {
+            control: { type: "range", min: 0, max: 1, step: 0.05 },
+        },
+        pulseSpeed: {
+            control: { type: "range", min: 0, max: 2, step: 0.01 },
+        },
         bgColors: { control: "text" },
         bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
         trailOpacity: {
-            control: { type: "range", min: 0, max: 1, step: 0.005 },
+            control: { type: "range", min: 0, max: 0.2, step: 0.001 },
         },
     },
     args: {
         particleCount: 4500,
+        particleLife: 6,
         flowSpeed: 132,
         terrainSize: 3333,
         lineColors: "#89964e",
-        lineOpacity: 0.05,
+        lineOpacity: 0.08,
+        pulseStrength: 0.5,
+        pulseSpeed: 0.1,
         bgColors: "#002222",
         bgAngle: 0,
-        trailOpacity: 0,
+        trailOpacity: 0.005,
     },
 };
 
@@ -110,12 +125,12 @@ export const EmberRidge: Story = {
     },
 };
 
-export const FadingCurrents: Story = {
+export const PulseWaves: Story = {
     args: {
-        particleCount: 3000,
-        lineColors: "#7fffd4",
-        lineOpacity: 0.3,
-        trailOpacity: 0.05,
+        lineColors: "#1b3a6b, #7fffd4",
+        lineOpacity: 0.08,
+        pulseStrength: 1,
+        pulseSpeed: 0.2,
         bgColors: "#001a1a",
     },
 };
