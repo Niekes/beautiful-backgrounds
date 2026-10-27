@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-27
+
+A major release: `<bb-contour-flow>` replaces `<bb-concentric-pulse>`. Its
+attributes differ, so a page that uses `<bb-concentric-pulse>` needs a new
+setup, which the Contour Flow stories show with live controls.
+
 ### Added
 
 - `<bb-contour-flow>` (`BbContourFlow`): particles flow downhill across an
@@ -28,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The bundle no longer includes d3-color: the browser parses the colors in
   `hex-colors` and `line-colors`, so newer formats such as `oklch()` work
   too. Both builds are minified, and `bb.es.js` shrinks from 105 kB to
-  41 kB.
+  42 kB.
 - The package no longer ships the declaration files of the stories or the
   Vite logo.
 
