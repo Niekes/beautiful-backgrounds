@@ -94,6 +94,13 @@ export class BbSmokeRing extends BeautifulBackground {
     private smoke: Float32Array = new Float32Array();
     /** The next frame's smoke, worked out from this one's. */
     private next: Float32Array = new Float32Array();
+    /**
+     * The smoke as it shows: each pixel's light mixed with its four
+     * neighbours'. The smoke pushes itself by these colors too, so that
+     * neighbouring pixels push alike and its edges grow smooth instead of
+     * jagged.
+     */
+    private soft: Float32Array = new Float32Array();
     private image: ImageData = new ImageData(1, 1);
     private buffer: HTMLCanvasElement = document.createElement("canvas");
     /** The size the buffer was made for. */
@@ -108,6 +115,7 @@ export class BbSmokeRing extends BeautifulBackground {
         this.rows = Math.max(1, Math.round(this.height * scale));
         this.smoke = new Float32Array(this.columns * this.rows * 3);
         this.next = new Float32Array(this.smoke.length);
+        this.soft = new Float32Array(this.smoke.length);
         this.image = new ImageData(this.columns, this.rows);
         this.buffer.width = this.columns;
         this.buffer.height = this.rows;
@@ -122,6 +130,7 @@ export class BbSmokeRing extends BeautifulBackground {
         this.time += step;
         this.drift(60 * step);
         this.shine(60 * step);
+        this.soften();
         this.show();
     }
 
@@ -135,7 +144,7 @@ export class BbSmokeRing extends BeautifulBackground {
      * side, and the rest from where its own colors push it.
      */
     private drift(frames: number): void {
-        const { columns, rows, smoke } = this;
+        const { columns, rows, soft } = this;
         const zoom = DRIFT ** frames;
         const fade = Math.min(1, Math.max(0, this.trailOpacity));
         const keep = (1 - fade) ** frames;
@@ -158,8 +167,8 @@ export class BbSmokeRing extends BeautifulBackground {
                     i,
                 );
                 this.takeSmoke(
-                    x + (smoke[i + 1] - SWIRL_REST) * pushX,
-                    y - (smoke[i] - SWIRL_REST) * pushY,
+                    x + (soft[i + 1] - SWIRL_REST) * pushX,
+                    y - (soft[i] - SWIRL_REST) * pushY,
                     SWIRL_SHARE,
                     i,
                 );
@@ -240,13 +249,38 @@ export class BbSmokeRing extends BeautifulBackground {
         );
     }
 
-    /** Paints the smoke onto the background, adding its light. */
+    /** Mixes each pixel's light with its four neighbours' into `soft`. */
+    private soften(): void {
+        const { columns, rows, smoke } = this;
+        for (let y = 0; y < rows; y++) {
+            const above = Math.max(y - 1, 0) * columns;
+            const below = Math.min(y + 1, rows - 1) * columns;
+            for (let x = 0; x < columns; x++) {
+                const i = (y * columns + x) * 3;
+                const left = (y * columns + Math.max(x - 1, 0)) * 3;
+                const right = (y * columns + Math.min(x + 1, columns - 1)) * 3;
+                const up = (above + x) * 3;
+                const down = (below + x) * 3;
+                for (let k = 0; k < 3; k++) {
+                    this.soft[i + k] =
+                        (smoke[i + k] +
+                            smoke[left + k] +
+                            smoke[right + k] +
+                            smoke[up + k] +
+                            smoke[down + k]) /
+                        5;
+                }
+            }
+        }
+    }
+
+    /** Paints the soft smoke onto the background, adding its light. */
     private show(): void {
         const pixels = this.image.data;
-        for (let i = 0, j = 0; i < this.smoke.length; i += 3, j += 4) {
-            pixels[j] = this.smoke[i] * 255;
-            pixels[j + 1] = this.smoke[i + 1] * 255;
-            pixels[j + 2] = this.smoke[i + 2] * 255;
+        for (let i = 0, j = 0; i < this.soft.length; i += 3, j += 4) {
+            pixels[j] = this.soft[i] * 255;
+            pixels[j + 1] = this.soft[i + 1] * 255;
+            pixels[j + 2] = this.soft[i + 2] * 255;
             pixels[j + 3] = 255;
         }
         this.buffer.getContext("2d")!.putImageData(this.image, 0, 0);

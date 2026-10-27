@@ -616,6 +616,23 @@ describe("bb-smoke-ring", () => {
         expect(oneSecondAtDouble).toBeLessThan(1.2 * twoSeconds);
     });
 
+    it("softens its light into the pixels around it", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "bg-colors": "#000",
+            "ring-colors": "#ffffff",
+            "ring-wobble": "0",
+            // Only the light of the last frame, without any smoke.
+            "trail-opacity": "1",
+        });
+        frame(el, 1 / 15);
+
+        // Pixel 190 lies just outside the ring's radius of 40 px, where the
+        // ring itself gives off no light; pixel 189 lies just inside.
+        expect(light(el, 189, 100)[0]).toBeGreaterThan(0);
+        expect(light(el, 190, 100)[0]).toBeGreaterThan(0);
+        expect(light(el, 192, 100)[0]).toBe(0);
+    });
+
     it("swells its ring into waves", async () => {
         /** The spread of the ring's light around a circle near its edge. */
         async function unevenness(ringWobble: string): Promise<number> {
