@@ -1,3 +1,5 @@
+import { strokeLine } from "./utils/line";
+
 export default class Particle {
     private size: number;
     private speed: number;
@@ -53,12 +55,11 @@ export default class Particle {
         ctx.beginPath();
 
         ctx.lineCap = "round";
-        ctx.lineWidth = this.size * 2;
         ctx.strokeStyle = this.color;
 
         ctx.moveTo(this.px, this.py);
         ctx.lineTo(this.x, this.y);
-        ctx.stroke();
+        strokeLine(ctx, this.size * 2);
 
         ctx.globalAlpha = 1;
     }

@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   background, so they show best on a dark one, and a `trail-opacity` below
   1 smears them as they drift.
 
+### Changed
+
+- Lines are never drawn thinner than two pixels of the screen. A thinner
+  `ribbon-line-width`, `line-width` or particle size is drawn that wide and
+  as much fainter, so it gives off the same light, and many thin lines side
+  by side no longer break up into a grid of pixels.
+
 ## [2.0.0] - 2026-10-27
 
 A major release: `<bb-contour-flow>` replaces `<bb-concentric-pulse>`. Its

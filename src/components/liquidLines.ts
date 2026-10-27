@@ -1,6 +1,7 @@
 import { customElement, property } from "lit/decorators.js";
 import { BeautifulBackground } from "../BeautifulBackground";
 import { toHsl } from "../utils/color";
+import { strokeLine } from "../utils/line";
 import { stringToArrayConverter } from "../utils/lit";
 
 @customElement("bb-liquid-lines")
@@ -80,7 +81,6 @@ export class BbLiquidLines extends BeautifulBackground {
             wiggle;
 
         ctx.beginPath();
-        ctx.lineWidth = this.lineWidth;
         ctx.strokeStyle = this.lineColor(index);
         ctx.moveTo(0, waveY(0));
 
@@ -92,7 +92,7 @@ export class BbLiquidLines extends BeautifulBackground {
             ctx.quadraticCurveTo(x1, y1, (x1 + x2) / 2, (y1 + waveY(x2)) / 2);
         }
 
-        ctx.stroke();
+        strokeLine(ctx, this.lineWidth);
     }
 
     /** The line's color, with a lightness that varies for a "depth" effect. */
