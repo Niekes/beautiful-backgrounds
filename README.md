@@ -43,7 +43,7 @@
     <tr style="background-color: #f6f8fa">
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula"><img src="assets/examples/smoke-ring.gif" alt="Smoke Ring"></a></td>
-        <td></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-light-shafts--crystal"><img src="assets/examples/light-shafts.gif" alt="Light Shafts"></a></td>
     </tr>
 </table>
 
@@ -116,6 +116,7 @@ Each background fills its element, redraws at the new size when the window resiz
 | [Contour Flow](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-contour-flow--topographic-moss)    | `<bb-contour-flow>`   | Topographic contour lines, drawn by particles flowing downhill and colored by height |
 | [Digital Rain](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain) | `<bb-digital-rain>`   | Matrix-style falling characters                                                      |
 | [Hexagon Wave](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar)    | `<bb-hexagon-wave>`   | A shaded grid of hexagons rolling like a wave                                        |
+| [Light Shafts](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-light-shafts--crystal)             | `<bb-light-shafts>`   | Upright shafts of soft light drifting sideways, the nearer ones faster               |
 | [Liquid Lines](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow)     | `<bb-liquid-lines>`   | Undulating lines with a sense of depth                                               |
 | [Neon Rails](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)      | `<bb-neon-rails>`     | Particles racing along a geometric grid, leaving neon trails                         |
 | [Smoke Ring](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula)                  | `<bb-smoke-ring>`     | A wavy ring of light giving off colored smoke that drifts outward and swirls         |

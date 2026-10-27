@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `<bb-light-shafts>` (`BbLightShafts`): upright shafts of soft light drift
+  sideways, after Tibix's "Crystal Parallax", with `shaft-colors`,
+  `shaft-amount` and `speed`. Each shaft lies at its own depth: nearer ones
+  are wider and brighter and drift faster. Their light adds to the
+  background, so they show best on a dark one, and a `trail-opacity` below
+  1 smears them as they drift.
+
 ## [2.0.0] - 2026-10-27
 
 A major release: `<bb-contour-flow>` replaces `<bb-concentric-pulse>`. Its

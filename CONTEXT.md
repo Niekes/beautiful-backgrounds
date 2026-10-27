@@ -43,3 +43,13 @@ _Avoid_: circle, halo, flower
 The light a **Ring** has given off. It drifts outward, swirls where its own
 colors push it, and fades with the **Trail**.
 _Avoid_: feedback, echo, glow
+
+**Shaft**:
+An upright band of soft light that fades out at its top and bottom and
+drifts sideways.
+_Avoid_: bar, crystal, beam, streak
+
+**Depth**:
+How far away a **Shaft** is. Nearer shafts are wider, brighter and drift
+faster than far ones.
+_Avoid_: layer, z, distance

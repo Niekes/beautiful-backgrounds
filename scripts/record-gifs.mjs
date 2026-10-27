@@ -38,6 +38,7 @@ const STORIES = {
         "bb-hexagon-wave",
         "backgrounds-hexagon-wave--honeycomb-pulsar",
     ],
+    "light-shafts": ["bb-light-shafts", "backgrounds-light-shafts--crystal"],
     "liquid-lines": [
         "bb-liquid-lines",
         "backgrounds-liquid-lines--serpentine-flow",

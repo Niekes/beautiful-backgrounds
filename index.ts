@@ -3,6 +3,7 @@ export { BbAmbientRibbon } from "./src/components/ambientRibbon";
 export { BbContourFlow } from "./src/components/contourFlow";
 export { BbDigitalRain } from "./src/components/digitalRain";
 export { BbHexagonWave } from "./src/components/hexagonWave";
+export { BbLightShafts } from "./src/components/lightShafts";
 export { BbLiquidLines } from "./src/components/liquidLines";
 export { BbNeonRails } from "./src/components/neonRails";
 export { BbSmokeRing } from "./src/components/smokeRing";

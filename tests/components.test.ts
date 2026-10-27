@@ -5,6 +5,7 @@ import {
     BbContourFlow,
     BbDigitalRain,
     BbHexagonWave,
+    BbLightShafts,
     BbLiquidLines,
     BbNeonRails,
     BbSmokeRing,
@@ -48,6 +49,7 @@ describe.each([
     ["bb-contour-flow", BbContourFlow],
     ["bb-digital-rain", BbDigitalRain],
     ["bb-hexagon-wave", BbHexagonWave],
+    ["bb-light-shafts", BbLightShafts],
     ["bb-liquid-lines", BbLiquidLines],
     ["bb-neon-rails", BbNeonRails],
     ["bb-smoke-ring", BbSmokeRing],
@@ -374,6 +376,220 @@ describe("bb-hexagon-wave", () => {
         el.hexSize = 100;
         await el.updateComplete;
         expect(grid().length).toBeLessThan(before.length);
+    });
+});
+
+describe("bb-light-shafts", () => {
+    /** The red, green and blue of the whole canvas, each summed. */
+    function allLight(el: BbLightShafts): number[] {
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        const sums = [0, 0, 0];
+        data.forEach((value, i) => {
+            if (i % 4 < 3) sums[i % 4] += value;
+        });
+        return sums;
+    }
+
+    /** The red of every pixel of the canvas. */
+    function redPixels(el: BbLightShafts): number[] {
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        return Array.from(data).filter((_, i) => i % 4 === 0);
+    }
+
+    /** The red of each column of the canvas, summed from top to bottom. */
+    function redColumns(el: BbLightShafts): number[] {
+        const columns = new Array<number>(el.canvas.width).fill(0);
+        redPixels(el).forEach((red, i) => (columns[i % columns.length] += red));
+        return columns;
+    }
+
+    /** Where the middle of `columns`' light is, in canvas pixels. */
+    function middle(columns: number[]): number {
+        const total = columns.reduce((sum, red) => sum + red, 0);
+        return columns.reduce((sum, red, x) => sum + red * x, 0) / total;
+    }
+
+    /**
+     * A lone red shaft on black, all of whose random choices are `random`,
+     * shown where it starts.
+     */
+    async function lone(
+        random: number,
+        attributes: Record<string, string> = {},
+        size?: { width: number; height: number },
+    ): Promise<BbLightShafts> {
+        vi.spyOn(Math, "random").mockReturnValue(random);
+        const el = await mount<BbLightShafts>(
+            "bb-light-shafts",
+            {
+                "shaft-colors": "#ff0000",
+                "bg-colors": "#000",
+                "shaft-amount": "1",
+                ...attributes,
+            },
+            size,
+        );
+        frame(el, 0);
+        return el;
+    }
+
+    it("shines in its shaft colors", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "#ff0000",
+            "bg-colors": "#000",
+        });
+        frame(el);
+
+        const [red, green, blue] = allLight(el);
+        expect(red).toBeGreaterThan(0);
+        expect([green, blue]).toEqual([0, 0]);
+    });
+
+    it("shines in its default colors without shaft colors", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "",
+            "bg-colors": "#000",
+        });
+        frame(el);
+
+        const [red, green, blue] = allLight(el);
+        expect(blue).toBeGreaterThan(red);
+        expect(blue).toBeGreaterThan(green);
+    });
+
+    it("adds its light to the background", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "#ff0000",
+            "bg-colors": "#0000ff",
+        });
+        frame(el);
+
+        const { width, height } = el.canvas;
+        const [red, , blue] = allLight(el);
+        expect(red).toBeGreaterThan(0);
+        expect(blue).toBe(255 * width * height);
+    });
+
+    it("lets nearer shafts shine brighter, look wider and drift faster", async () => {
+        /** How bright and wide a lone shaft is, and how far it drifts. */
+        async function look(random: number) {
+            const el = await lone(random, {}, { width: 600, height: 200 });
+            const before = redColumns(el);
+            for (let i = 0; i < 30; i++) frame(el);
+            const after = redColumns(el);
+            const peak = Math.max(...after);
+            return {
+                brightness: Math.max(...redPixels(el)),
+                width: after.filter((red) => red > peak / 2).length,
+                drift: middle(after) - middle(before),
+            };
+        }
+
+        const [a, b] = [await look(0.2), await look(0.8)];
+        const [near, far] = a.brightness > b.brightness ? [a, b] : [b, a];
+        expect(near.brightness).toBeGreaterThan(1.5 * far.brightness);
+        expect(near.width).toBeGreaterThan(2 * far.width);
+        expect(far.drift).toBeGreaterThan(0);
+        expect(near.drift).toBeGreaterThan(2 * far.drift);
+    });
+
+    it("brings shafts that drift out on the right back in on the left", async () => {
+        // Starts at the right edge.
+        const el = await lone(0.999);
+        const left = () => redColumns(el).slice(0, 100);
+        const right = () => redColumns(el).slice(200);
+        expect(Math.max(...left())).toBe(0);
+
+        for (let i = 0; i < 15; i++) frame(el, 1);
+        expect(Math.max(...left())).toBeGreaterThan(0);
+        expect(Math.max(...right())).toBe(0);
+    });
+
+    /** How far a lone shaft drifts in `frames` frames, in canvas pixels. */
+    async function drift(
+        frames: number,
+        attributes: Record<string, string> = {},
+        deltaTime: number = 1 / 60,
+    ): Promise<number> {
+        const el = await lone(0.3, attributes);
+        const before = middle(redColumns(el));
+        for (let i = 0; i < frames; i++) frame(el, deltaTime);
+        return middle(redColumns(el)) - before;
+    }
+
+    it("plays at its speed", async () => {
+        const oneSecondAtDouble = await drift(60, { speed: "2" });
+        const twoSeconds = await drift(120, { speed: "1" });
+        expect(oneSecondAtDouble).toBeGreaterThan(10);
+        expect(oneSecondAtDouble).toBeCloseTo(twoSeconds, 1);
+    });
+
+    it("looks the same at any frame rate", async () => {
+        expect(await drift(240, {}, 1 / 120)).toBeCloseTo(await drift(120), 1);
+    });
+
+    it.each(["0", "-1"])("stands still at speed %s", async (speed) => {
+        expect(await drift(60, { speed })).toBe(0);
+    });
+
+    it("starts over across its new size", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "#ff0000",
+            "bg-colors": "#000",
+        });
+        frame(el);
+
+        el.style.width = "900px";
+        window.dispatchEvent(new Event("resize"));
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        frame(el);
+        const dpr = el.canvas.width / el.width;
+        const farRight = redColumns(el).slice(600 * dpr);
+        expect(Math.max(...farRight)).toBeGreaterThan(0);
+    });
+
+    it("starts over with its new shaft amount and colors", async () => {
+        const el = await mount<BbLightShafts>("bb-light-shafts", {
+            "shaft-colors": "#ff0000",
+            "bg-colors": "#000",
+            "shaft-amount": "0",
+        });
+        frame(el);
+        expect(allLight(el)).toEqual([0, 0, 0]);
+
+        el.shaftAmount = 5;
+        frame(el);
+        expect(allLight(el)[0]).toBeGreaterThan(0);
+
+        el.shaftColors = ["#0000ff"];
+        frame(el);
+        const [red, , blue] = allLight(el);
+        expect(red).toBe(0);
+        expect(blue).toBeGreaterThan(0);
+    });
+
+    /** A lone shaft's columns before and after drifting half a second. */
+    async function trail(attributes: Record<string, string> = {}) {
+        const el = await lone(0.3, { speed: "10", ...attributes });
+        const before = redColumns(el);
+        for (let i = 0; i < 30; i++) frame(el);
+        return [before, redColumns(el)];
+    }
+
+    it("leaves no trail by default", async () => {
+        const [before, after] = await trail();
+        const lit = before.flatMap((red, x) => (red > 0 ? [after[x]] : []));
+        expect(lit.length).toBeGreaterThan(0);
+        expect(Math.max(...lit)).toBe(0);
+    });
+
+    it("smears its shafts sideways with a lower trail opacity", async () => {
+        const sum = (columns: number[]) => columns.reduce((a, b) => a + b);
+        const [, sharp] = await trail();
+        const [, smeared] = await trail({ "trail-opacity": "0.05" });
+        expect(sum(smeared)).toBeGreaterThan(2 * sum(sharp));
     });
 });
 
