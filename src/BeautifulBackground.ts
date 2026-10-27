@@ -1,7 +1,12 @@
-import { css, LitElement, type CSSResultGroup } from "lit";
+import { css, LitElement, type CSSResultGroup, type PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { debounce } from "./utils/function";
 import { stringToArrayConverter } from "./utils/lit";
+
+/** How much a clean trail takes off the pixels it reaches each frame. */
+const CLEAN_FADE = 0.1;
+/** The masks of a clean trail repeat every MASK_SIZE px. */
+const MASK_SIZE = 64;
 
 export abstract class BeautifulBackground extends LitElement {
     @property({
@@ -25,6 +30,20 @@ export abstract class BeautifulBackground extends LitElement {
 
     @property({ type: Number, attribute: "trail-opacity" })
     public trailOpacity: number = 0.1;
+
+    /**
+     * Whether the trail fades all the way out, instead of leaving its
+     * faintest traces for good. The background then shows from CSS, behind
+     * the canvas. `clean-trail="false"` turns it off.
+     */
+    @property({
+        attribute: "clean-trail",
+        converter: (value) => value !== "false",
+    })
+    public cleanTrail: boolean = true;
+
+    private fadeMasks: CanvasPattern[] = [];
+    private fadeTurn: number = 0;
 
     protected debouncedResize: () => void;
 
@@ -67,7 +86,19 @@ export abstract class BeautifulBackground extends LitElement {
         this.stopAnimation();
     }
 
+    protected updated(changedProperties: PropertyValues): void {
+        super.updated(changedProperties);
+        this.canvas.style.background = this.cleanTrail
+            ? this.cssBackground()
+            : "";
+    }
+
+    /** Paints the background, or clears the canvas over it for a clean trail. */
     protected drawBackground(ctx: CanvasRenderingContext2D): void {
+        if (this.cleanTrail) {
+            ctx.clearRect(0, 0, this.width, this.height);
+            return;
+        }
         ctx.fillStyle = this.backgroundGradient(ctx);
         ctx.fillRect(0, 0, this.width, this.height);
     }
@@ -77,9 +108,44 @@ export abstract class BeautifulBackground extends LitElement {
      * into a trail.
      */
     protected fadeTrail(): void {
+        if (this.cleanTrail) {
+            this.fadeTrailCleanly();
+            return;
+        }
         this.ctx.globalAlpha = this.trailOpacity;
         this.drawBackground(this.ctx);
         this.ctx.globalAlpha = 1.0;
+    }
+
+    /**
+     * Fades the previous frames by `trailOpacity`. The canvas keeps 8 bits per
+     * channel, so a fade that faint would round the faintest traces back to
+     * themselves, and they would stay for good. Instead, each frame fades a
+     * scattered share of the pixels by CLEAN_FADE, which averages out the same.
+     */
+    private fadeTrailCleanly(): void {
+        if (this.trailOpacity <= 0) return;
+
+        const strength = Math.max(this.trailOpacity, CLEAN_FADE);
+        const turns = Math.round(strength / this.trailOpacity);
+        if (this.fadeMasks.length !== turns) {
+            this.fadeMasks = fadeMasks(this.ctx, turns);
+        }
+
+        const ctx = this.ctx;
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.globalAlpha = Math.min(1, strength);
+        ctx.fillStyle = this.fadeMasks[this.fadeTurn++ % turns];
+        ctx.fillRect(0, 0, this.width, this.height);
+        ctx.restore();
+    }
+
+    /** The background gradient at `bgAngle`, as CSS counts the angle. */
+    private cssBackground(): string {
+        const colors = this.bgColors.length > 0 ? this.bgColors : ["#000"];
+        if (colors.length === 1) return colors[0];
+        return `linear-gradient(${this.bgAngle + 90}deg, ${colors.join(", ")})`;
     }
 
     /** A gradient at `bgAngle` that spans the canvas from edge to edge. */
@@ -170,4 +236,28 @@ export abstract class BeautifulBackground extends LitElement {
     render(): void {
         return;
     }
+}
+
+/**
+ * Masks for `turns` fades in a row, each over a different scattered share of
+ * the pixels, so that together they reach every pixel once.
+ */
+function fadeMasks(
+    ctx: CanvasRenderingContext2D,
+    turns: number,
+): CanvasPattern[] {
+    const turnOf = Array.from({ length: MASK_SIZE ** 2 }, () =>
+        Math.floor(Math.random() * turns),
+    );
+
+    return Array.from({ length: turns }, (_, turn) => {
+        const mask = new ImageData(MASK_SIZE, MASK_SIZE);
+        turnOf.forEach((t, i) => {
+            if (t === turn) mask.data[i * 4 + 3] = 255;
+        });
+        const tile = document.createElement("canvas");
+        tile.width = tile.height = MASK_SIZE;
+        tile.getContext("2d")!.putImageData(mask, 0, 0);
+        return ctx.createPattern(tile, "repeat")!;
+    });
 }

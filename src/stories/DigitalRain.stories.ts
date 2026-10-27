@@ -21,6 +21,7 @@ const meta: Meta = {
                 bg-colors=${args.bgColors}
                 bg-angle=${args.bgAngle}
                 trail-opacity=${args.trailOpacity}
+                clean-trail=${args.cleanTrail}
                 font-colors=${args.fontColors}
                 style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-digital-rain>
@@ -45,6 +46,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
+        cleanTrail: { control: "boolean" },
         fontColors: { control: "text" },
         bgColors: { control: "text" },
         bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
@@ -64,6 +66,7 @@ const meta: Meta = {
         fontColorLightnessEnd: 50,
         speed: 10,
         trailOpacity: 0.1,
+        cleanTrail: true,
         fontColors: "",
     },
 };

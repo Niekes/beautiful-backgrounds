@@ -14,6 +14,7 @@ const meta: Meta = {
                 bg-colors=${args.bgColors}
                 bg-angle=${args.bgAngle}
                 trail-opacity=${args.trailOpacity}
+                clean-trail=${args.cleanTrail}
                 style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-light-shafts>
         `;
@@ -29,6 +30,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0, max: 1, step: 0.01 },
         },
+        cleanTrail: { control: "boolean" },
     },
     args: {
         shaftColors: "#47d1d1, #475ed1, #a347d1",
@@ -37,6 +39,7 @@ const meta: Meta = {
         bgColors: "#000, #141a3a, #000",
         bgAngle: 90,
         trailOpacity: 1,
+        cleanTrail: false,
     },
 };
 

@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Trails fade all the way out. A low `trail-opacity` used to round the
+  faintest traces back to themselves, so they stayed for good and piled up
+  into jagged, pixelated remains, most of all on high-density screens. Every
+  background now fades a scattered share of its pixels at a time instead,
+  as `<bb-contour-flow>` already did, and shows its background from CSS
+  behind the canvas. `clean-trail="false"` brings the old trails back.
+  `<bb-smoke-ring>` and `<bb-light-shafts>` keep it off, as their light adds
+  to the background on the canvas.
 - Lines are never drawn thinner than two pixels of the screen. A thinner
   `ribbon-line-width`, `line-width` or particle size is drawn that wide and
   as much fainter, so it gives off the same light, and many thin lines side

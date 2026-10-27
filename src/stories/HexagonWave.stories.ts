@@ -22,6 +22,7 @@ const meta: Meta = {
                 hex-saturation=${args.hexSaturation}
                 hex-scale=${args.hexScale}
                 trail-opacity=${args.trailOpacity}
+                clean-trail=${args.cleanTrail}
                 hex-colors=${args.hexColors}
                 style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-hexagon-wave>
@@ -56,6 +57,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0, max: 1, step: 0.05 },
         },
+        cleanTrail: { control: "boolean" },
         bgColors: { control: "text" },
         bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
         hexColors: { control: "text" },
@@ -75,6 +77,7 @@ const meta: Meta = {
         hexSaturation: 60,
         hexScale: 1.0,
         trailOpacity: 0.1,
+        cleanTrail: true,
         hexColors: "",
     },
 };

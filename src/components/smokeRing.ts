@@ -84,8 +84,10 @@ export class BbSmokeRing extends BeautifulBackground {
     @property({ type: Number, attribute: "speed" })
     speed: number = 1;
 
-    // The smoke fades slowly, so it can drift far.
+    // The smoke fades slowly, so it can drift far, in its own buffer: the
+    // canvas shows the buffer whole, background included.
     trailOpacity: number = 0.005;
+    cleanTrail: boolean = false;
 
     private time: number = 0;
     private columns: number = 0;

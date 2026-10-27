@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
-import { BbHexagonWave } from "../index";
-import { mount, nextFrame, unmountAll } from "./mount";
+import { BbHexagonWave, BbNeonRails, type BeautifulBackground } from "../index";
+import { frame, mount, nextFrame, unmountAll } from "./mount";
 
 const TAG = "bb-hexagon-wave";
 
 /** The color of the canvas pixel at (x, y), in CSS pixels. */
-function pixel(el: BbHexagonWave, x: number, y: number): number[] {
+function pixel(el: BeautifulBackground, x: number, y: number): number[] {
     const dpr = el.canvas.width / el.width;
     return Array.from(el.ctx.getImageData(x * dpr, y * dpr, 1, 1).data).slice(
         0,
@@ -128,6 +128,7 @@ describe("BeautifulBackground", () => {
             const el = await mount<BbHexagonWave>(TAG, {
                 "bg-colors": "#ff0000, #0000ff",
                 "bg-angle": "90",
+                "clean-trail": "false",
             });
             paintBackground(el);
 
@@ -138,6 +139,7 @@ describe("BeautifulBackground", () => {
         it("fills a single color evenly", async () => {
             const el = await mount<BbHexagonWave>(TAG, {
                 "bg-colors": "#00ff00",
+                "clean-trail": "false",
             });
             paintBackground(el);
 
@@ -150,11 +152,87 @@ describe("BeautifulBackground", () => {
             async (colors) => {
                 const el = await mount<BbHexagonWave>(TAG, {
                     "bg-colors": colors,
+                    "clean-trail": "false",
                 });
                 paintBackground(el);
 
                 expect(pixel(el, 150, 100)).toEqual([0, 0, 0]);
             },
         );
+    });
+
+    describe("clean trail", () => {
+        /** A background without particles, so only its trail changes it. */
+        function bare(
+            attributes: Record<string, string>,
+        ): Promise<BbNeonRails> {
+            return mount<BbNeonRails>("bb-neon-rails", {
+                "particle-amount": "0",
+                "trail-opacity": "0.0125",
+                ...attributes,
+            });
+        }
+
+        /** Lays a faint white trace over the whole canvas. */
+        function trace(el: BeautifulBackground): void {
+            el.ctx.globalAlpha = 0.05;
+            el.ctx.fillStyle = "#fff";
+            el.ctx.fillRect(0, 0, el.width, el.height);
+            el.ctx.globalAlpha = 1;
+        }
+
+        /** The opacity of the canvas pixel at (x, y), in CSS pixels. */
+        function opacity(el: BeautifulBackground, x: number, y: number) {
+            const dpr = el.canvas.width / el.width;
+            return el.ctx.getImageData(x * dpr, y * dpr, 1, 1).data[3];
+        }
+
+        it("fades faint traces all the way out by default", async () => {
+            const el = await bare({});
+            trace(el);
+
+            for (let i = 0; i < 600; i++) frame(el);
+            const { width, height } = el.canvas;
+            const { data } = el.ctx.getImageData(0, 0, width, height);
+            const left = data.filter((_, i) => i % 4 === 3);
+            expect(Math.max(...left)).toBeLessThanOrEqual(4);
+        });
+
+        it("keeps faint traces for good when off", async () => {
+            const el = await bare({ "clean-trail": "false" });
+            trace(el);
+            const [before] = pixel(el, 150, 100);
+
+            for (let i = 0; i < 600; i++) frame(el);
+            expect(before).toBeGreaterThan(0);
+            expect(pixel(el, 150, 100)[0]).toBe(before);
+        });
+
+        it("shows the background behind the canvas, from CSS", async () => {
+            const el = await bare({
+                "bg-colors": "#ff0000, #0000ff",
+                "bg-angle": "90",
+            });
+            frame(el);
+
+            expect(el.canvas.style.background).toBe(
+                "linear-gradient(rgb(255, 0, 0), rgb(0, 0, 255))",
+            );
+            expect(opacity(el, 150, 100)).toBe(0);
+        });
+
+        it("paints the background on the canvas once off", async () => {
+            const el = await bare({
+                "bg-colors": "#00ff00",
+                "trail-opacity": "1",
+            });
+            el.setAttribute("clean-trail", "false");
+            await el.updateComplete;
+            frame(el);
+
+            expect(el.canvas.style.background).toBe("");
+            expect(pixel(el, 150, 100)).toEqual([0, 255, 0]);
+            expect(opacity(el, 150, 100)).toBe(255);
+        });
     });
 });

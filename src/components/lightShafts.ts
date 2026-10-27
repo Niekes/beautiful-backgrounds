@@ -73,8 +73,10 @@ export class BbLightShafts extends BeautifulBackground {
     @property({ type: Number, attribute: "speed" })
     speed: number = 1;
 
-    // Without a trail, like Crystal Parallax.
+    // Without a trail, like Crystal Parallax, and on the canvas's own
+    // background, so the light adds to it.
     trailOpacity: number = 1;
+    cleanTrail: boolean = false;
 
     private shafts: Shaft[] = [];
     /** The size, amount and colors the shafts were made for. */
@@ -117,7 +119,7 @@ export class BbLightShafts extends BeautifulBackground {
 
     private settings(): string {
         const { width, height, shaftAmount, shaftColors } = this;
-        return `${width} ${height} ${shaftAmount} ${shaftColors}`;
+        return `${width} ${height} ${shaftAmount} ${shaftColors.join(",")}`;
     }
 
     /** A new shaft in `color`, somewhere on the canvas, at a random depth. */

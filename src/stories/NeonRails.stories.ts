@@ -29,6 +29,7 @@ const meta: Meta = {
                 grid-size=${args.gridSize}
                 grid-angle=${angle}
                 trail-opacity=${args.trailOpacity}
+                clean-trail=${args.cleanTrail}
                 particle-colors=${args.particleColors}
                 style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-neon-rails>
@@ -79,6 +80,7 @@ const meta: Meta = {
         trailOpacity: {
             control: { type: "range", min: 0.001, max: 1, step: 0.001 },
         },
+        cleanTrail: { control: "boolean" },
     },
     args: {
         bgColors: "#000, #000",
@@ -100,6 +102,7 @@ const meta: Meta = {
         gridSize: 60,
         gridAngle: 180,
         trailOpacity: 0.0125,
+        cleanTrail: true,
         particleColors: "",
     },
 };

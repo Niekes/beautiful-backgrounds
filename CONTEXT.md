@@ -11,7 +11,8 @@ _Avoid_: component, effect, animation
 
 **Trail**:
 The fading of earlier frames, so moving things leave a streak. A trail
-opacity of 0 means nothing ever fades.
+opacity of 0 means nothing ever fades. A clean trail fades all the way out;
+any other leaves its faintest traces for good.
 _Avoid_: fade, afterglow
 
 **Terrain**:
