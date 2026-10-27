@@ -47,6 +47,7 @@ const STORIES = {
         "bb-neon-rails",
         "backgrounds-neon-rails--cyber-grid-network",
     ],
+    "silk-waves": ["bb-silk-waves", "backgrounds-silk-waves--deep-tide"],
     "smoke-ring": ["bb-smoke-ring", "backgrounds-smoke-ring--nebula"],
     "star-trail": ["bb-star-trail", "backgrounds-star-trail--galactic-vortex"],
 };
@@ -78,18 +79,26 @@ function serve() {
     return new Promise((resolve) => server.listen(0, () => resolve(server)));
 }
 
-/** Reads the background's canvas as RGBA bytes. */
-async function grab(page, tag) {
-    const base64 = await page.evaluate((tag) => {
-        const el = document.querySelector(tag);
-        const { width, height } = el.canvas;
-        const data = el.ctx.getImageData(0, 0, width, height).data;
+/**
+ * Reads the background as it shows, as RGBA bytes. The canvas alone is not
+ * enough: with a clean trail it is see-through, over a background in CSS.
+ */
+async function grab(page, el) {
+    const png = (await el.screenshot()).toString("base64");
+    const base64 = await page.evaluate(async (png) => {
+        const image = await createImageBitmap(
+            await (await fetch(`data:image/png;base64,${png}`)).blob(),
+        );
+        const canvas = new OffscreenCanvas(image.width, image.height);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0);
+        const { data } = ctx.getImageData(0, 0, image.width, image.height);
         let binary = "";
         for (let i = 0; i < data.length; i += 0x8000) {
             binary += String.fromCharCode(...data.subarray(i, i + 0x8000));
         }
         return btoa(binary);
-    }, tag);
+    }, png);
     return new Uint8Array(Buffer.from(base64, "base64"));
 }
 
@@ -113,14 +122,18 @@ async function record(page, port, name, [tag, id]) {
     await page.waitForTimeout(WARM_UP_MS);
 
     const gif = GIFEncoder();
+    const start = Date.now();
     for (let i = 0; i < FPS * SECONDS; i++) {
-        const rgba = await grab(page, tag);
+        const rgba = await grab(page, el);
         const palette = quantize(rgba, 256);
         gif.writeFrame(applyPalette(rgba, palette), WIDTH, HEIGHT, {
             palette,
             delay: 1000 / FPS,
         });
-        await page.waitForTimeout(1000 / FPS);
+        // Grabbing takes a while, so wait only for the rest of the frame.
+        await page.waitForTimeout(
+            Math.max(0, start + ((i + 1) * 1000) / FPS - Date.now()),
+        );
     }
     gif.finish();
 
