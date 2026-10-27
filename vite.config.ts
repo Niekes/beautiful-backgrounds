@@ -71,6 +71,9 @@ const config: UserConfig = {
 
     // Test configuration
     test: {
+        // The CI runners draw on the canvas about 15 times slower than a
+        // laptop, so a test that runs a few hundred frames needs longer there.
+        testTimeout: 60_000,
         coverage: {
             provider: "v8",
             // json-summary feeds the coverage badge, json feeds fallow.
