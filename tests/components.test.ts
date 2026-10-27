@@ -8,6 +8,7 @@ import {
     BbLightShafts,
     BbLiquidLines,
     BbNeonRails,
+    BbSilkWaves,
     BbSmokeRing,
     BbStarTrail,
 } from "../index";
@@ -52,6 +53,7 @@ describe.each([
     ["bb-light-shafts", BbLightShafts],
     ["bb-liquid-lines", BbLiquidLines],
     ["bb-neon-rails", BbNeonRails],
+    ["bb-silk-waves", BbSilkWaves],
     ["bb-smoke-ring", BbSmokeRing],
     ["bb-star-trail", BbStarTrail],
 ])("<%s>", (tag, Element) => {
@@ -937,6 +939,211 @@ describe("bb-smoke-ring", () => {
 
         expect(await smoke(0.5)).toBe(await smoke(1));
     });
+});
+
+describe("bb-silk-waves", () => {
+    /** The whole canvas as red, green and blue channels. */
+    function data(el: BbSilkWaves): number[] {
+        const { width, height } = el.canvas;
+        return Array.from(el.ctx.getImageData(0, 0, width, height).data);
+    }
+
+    /** How much the two canvases differ, at most. */
+    function maxDiff(one: number[], other: number[]): number {
+        return one.reduce(
+            (diff, value, i) => Math.max(diff, Math.abs(value - other[i])),
+            0,
+        );
+    }
+
+    /** The topmost row whose pixel is more blue than red: the silk's crest. */
+    function topSeaY(el: BbSilkWaves): number {
+        const { width, height } = el.canvas;
+        const { data: pixels } = el.ctx.getImageData(0, 0, width, height);
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const i = (y * width + x) * 4;
+                if (pixels[i + 2] > pixels[i]) return y;
+            }
+        }
+        return height;
+    }
+
+    /** Every color the bottom half shows. */
+    function colors(el: BbSilkWaves): Set<number> {
+        const { width, height } = el.canvas;
+        const { data: pixels } = el.ctx.getImageData(0, 0, width, height);
+        const seen = new Set<number>();
+        for (let y = height / 2; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const i = (y * width + x) * 4;
+                seen.add(
+                    pixels[i] * 2 ** 16 +
+                        pixels[i + 1] * 2 ** 8 +
+                        pixels[i + 2],
+                );
+            }
+        }
+        return seen;
+    }
+
+    async function sea(
+        attributes: Record<string, string> = {},
+        frames: number = 1,
+        deltaTime: number = 1 / 60,
+    ): Promise<BbSilkWaves> {
+        const el = await mount<BbSilkWaves>("bb-silk-waves", attributes);
+        for (let i = 0; i < frames; i++) frame(el, deltaTime);
+        return el;
+    }
+
+    it("draws its silk in shades of its color", async () => {
+        const el = await sea({ "silk-color": "#ff0000", "bg-colors": "#000" });
+        const seen = colors(el);
+        expect(seen.size).toBeGreaterThan(5);
+        for (const color of seen) {
+            const [red, green, blue] = [
+                Math.floor(color / 2 ** 16),
+                Math.floor(color / 2 ** 8) % 2 ** 8,
+                color % 2 ** 8,
+            ];
+            expect(red).toBeGreaterThan(green);
+            expect(green).toBe(blue);
+        }
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("shines in its default color without a silk-color", async () => {
+        const el = await sea({ "silk-color": "", "bg-colors": "#000" });
+        const dpr = el.canvas.width / el.width;
+        const { data: pixel } = el.ctx.getImageData(150 * dpr, 190 * dpr, 1, 1);
+        expect(pixel[2]).toBeGreaterThan(pixel[1]);
+        expect(pixel[1]).toBeGreaterThan(pixel[0]);
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("fades into its background at the horizon", async () => {
+        const el = await sea({ "bg-colors": "#ff0000" });
+        const dpr = el.canvas.width / el.width;
+        const at = (x: number, y: number): number[] =>
+            Array.from(el.ctx.getImageData(x * dpr, y * dpr, 1, 1).data).slice(
+                0,
+                3,
+            );
+        expect(at(150, 2)).toEqual([255, 0, 0]);
+        expect(at(150, 190)[2]).toBeGreaterThan(100);
+    });
+
+    it("rises higher with a bigger swell", async () => {
+        const topSeaYAt = async (swell: string): Promise<number> =>
+            topSeaY(
+                await sea({
+                    "silk-color": "#0000ff",
+                    "bg-colors": "#ff0000",
+                    swell,
+                }),
+            );
+        expect(await topSeaYAt("0.6")).toBeLessThan(
+            (await topSeaYAt("0.02")) - 10,
+        );
+    });
+
+    it("lies larger the nearer it reaches", async () => {
+        const topSeaYAt = async (reach: string): Promise<number> =>
+            topSeaY(
+                await sea({
+                    "silk-color": "#0000ff",
+                    "bg-colors": "#ff0000",
+                    reach,
+                }),
+            );
+        expect(await topSeaYAt("0.15")).toBeLessThan(
+            (await topSeaYAt("4")) - 10,
+        );
+    });
+
+    it("shines brighter at a higher sheen", async () => {
+        const spread = (el: BbSilkWaves): number => {
+            let diff = 0;
+            const seen = colors(el);
+            for (const a of seen) {
+                for (const b of seen) {
+                    const [ra, ga, ba] = [
+                        Math.floor(a / 2 ** 16),
+                        Math.floor(a / 2 ** 8) % 2 ** 8,
+                        a % 2 ** 8,
+                    ];
+                    const [rb, gb, bb] = [
+                        Math.floor(b / 2 ** 16),
+                        Math.floor(b / 2 ** 8) % 2 ** 8,
+                        b % 2 ** 8,
+                    ];
+                    diff = Math.max(
+                        diff,
+                        Math.abs(ra - rb),
+                        Math.abs(ga - gb),
+                        Math.abs(ba - bb),
+                    );
+                }
+            }
+            return diff;
+        };
+        // A matte silk keeps its color's own lightness everywhere, give or
+        // take the canvas's gradient dithering.
+        expect(spread(await sea({ sheen: "0" }))).toBeLessThanOrEqual(6);
+        expect(spread(await sea({ sheen: "0.73" }))).toBeGreaterThan(20);
+        // A sheen of 1 caps its crest lightness at 95%.
+        expect(
+            spread(await sea({ "silk-color": "#ffb36b", sheen: "1" })),
+        ).toBeGreaterThan(20);
+    });
+
+    it("plays at its speed", async () => {
+        const oneSecondAtDouble = data(await sea({ speed: "2" }, 60));
+        const twoSeconds = data(await sea({ speed: "1" }, 120));
+        expect(maxDiff(oneSecondAtDouble, twoSeconds)).toBeLessThanOrEqual(3);
+    });
+
+    it("looks the same at any frame rate", async () => {
+        const at60 = data(await sea({}, 60));
+        const at120 = data(await sea({}, 120, 1 / 120));
+        expect(maxDiff(at60, at120)).toBeLessThanOrEqual(3);
+    });
+
+    it.each([0, -1])("stands still at speed %d", async (speed) => {
+        const el = await sea({ speed: `${speed}` }, 30);
+        const before = data(el);
+        expect(before.some((value, i) => i % 4 !== 3 && value > 0)).toBe(true);
+        for (let i = 0; i < 30; i++) frame(el);
+        expect(data(el)).toEqual(before);
+    });
+
+    it("stands still at a speed it cannot read", async () => {
+        expect(data(await sea({ speed: "abc" }))).toEqual(
+            data(await sea({ speed: "abc" }, 30)),
+        );
+    });
+
+    it("treats a swell it cannot read as none", async () => {
+        expect(data(await sea({ swell: "abc" }))).toEqual(
+            data(await sea({ swell: "0" })),
+        );
+    });
+
+    it("treats a sheen it cannot read as none", async () => {
+        expect(data(await sea({ sheen: "abc" }))).toEqual(
+            data(await sea({ sheen: "0" })),
+        );
+    });
+
+    it.each(["abc", "0"])(
+        "reaches as far as its default at %s",
+        async (reach) => {
+            expect(data(await sea({ reach }))).toEqual(
+                data(await sea({ reach: "0.65" })),
+            );
+        },
+    );
 });
 
 describe("bb-star-trail", () => {

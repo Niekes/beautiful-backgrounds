@@ -6,5 +6,6 @@ export { BbHexagonWave } from "./src/components/hexagonWave";
 export { BbLightShafts } from "./src/components/lightShafts";
 export { BbLiquidLines } from "./src/components/liquidLines";
 export { BbNeonRails } from "./src/components/neonRails";
+export { BbSilkWaves } from "./src/components/silkWaves";
 export { BbSmokeRing } from "./src/components/smokeRing";
 export { BbStarTrail } from "./src/components/startTrail";
