@@ -33,3 +33,13 @@ _Avoid_: path, isoline
 Waves of light that run along the **Contours**, from the highest ground of
 the **Terrain** to the lowest.
 _Avoid_: blink, glow, breathing
+
+**Ring**:
+A thin, wavy line of light that slowly runs through its colors and keeps
+giving off **Smoke**.
+_Avoid_: circle, halo, flower
+
+**Smoke**:
+The light a **Ring** has given off. It drifts outward, swirls where its own
+colors push it, and fades with the **Trail**.
+_Avoid_: feedback, echo, glow

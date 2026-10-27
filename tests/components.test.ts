@@ -7,6 +7,7 @@ import {
     BbHexagonWave,
     BbLiquidLines,
     BbNeonRails,
+    BbSmokeRing,
     BbStarTrail,
 } from "../index";
 import { frame, mount, unmountAll } from "./mount";
@@ -49,6 +50,7 @@ describe.each([
     ["bb-hexagon-wave", BbHexagonWave],
     ["bb-liquid-lines", BbLiquidLines],
     ["bb-neon-rails", BbNeonRails],
+    ["bb-smoke-ring", BbSmokeRing],
     ["bb-star-trail", BbStarTrail],
 ])("<%s>", (tag, Element) => {
     it("is registered as a BeautifulBackground", () => {
@@ -427,6 +429,280 @@ describe.each([
         const seen = styles(el, () => frame(el));
 
         expect([...seen].some((s) => s.startsWith("hsl("))).toBe(true);
+    });
+});
+
+describe("bb-smoke-ring", () => {
+    /** A pixel on the ring of a 300 x 200 canvas, whose radius is 40 px. */
+    const RING_X = 150 + 37;
+
+    /** The red, green and blue of the canvas at (x, y), in CSS px. */
+    function light(el: BbSmokeRing, x: number, y: number): number[] {
+        const dpr = el.canvas.width / el.width;
+        const { data } = el.ctx.getImageData(x * dpr, y * dpr, 1, 1);
+        return Array.from(data).slice(0, 3);
+    }
+
+    /** The red, green and blue of the whole canvas, summed. */
+    function allLight(el: BbSmokeRing): number {
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        return data.reduce((sum, value, i) => sum + (i % 4 < 3 ? value : 0));
+    }
+
+    /** All the light on a black background after `frames` frames. */
+    async function lightAfter(
+        frames: number,
+        attributes: Record<string, string> = {},
+        deltaTime: number = 1 / 60,
+    ): Promise<number> {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "bg-colors": "#000",
+            ...attributes,
+        });
+        for (let i = 0; i < frames; i++) frame(el, deltaTime);
+        return allLight(el);
+    }
+
+    it("shines in its ring color around the middle", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#ff0000",
+            "bg-colors": "#000",
+        });
+        for (let i = 0; i < 10; i++) frame(el);
+
+        const [red, green, blue] = light(el, RING_X, 100);
+        expect(red).toBeGreaterThan(50);
+        expect([green, blue]).toEqual([0, 0]);
+        expect(light(el, 150, 100)).toEqual([0, 0, 0]);
+        expect(light(el, 5, 5)).toEqual([0, 0, 0]);
+    });
+
+    it("adds its light to the background", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#ff0000",
+            "bg-colors": "#0000ff",
+        });
+        for (let i = 0; i < 10; i++) frame(el);
+
+        const [red, green, blue] = light(el, RING_X, 100);
+        expect(red).toBeGreaterThan(50);
+        expect([green, blue]).toEqual([0, 255]);
+    });
+
+    it("shines around the middle of a canvas bigger than its buffer", async () => {
+        // 800 x 400 is more than the buffer holds, so the smoke is stretched:
+        // the ring's radius is 80 px.
+        const el = await mount<BbSmokeRing>(
+            "bb-smoke-ring",
+            { "ring-colors": "#ff0000", "bg-colors": "#000" },
+            { width: 800, height: 400 },
+        );
+        for (let i = 0; i < 10; i++) frame(el);
+
+        expect(light(el, 400 + 75, 200)[0]).toBeGreaterThan(50);
+        expect(light(el, 400, 200)).toEqual([0, 0, 0]);
+    });
+
+    it("turns the way its smoke drifts", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#ffffff",
+            "bg-colors": "#000",
+            "trail-opacity": "0.05",
+        });
+        /** The direction from the middle to the middle of all light. */
+        function direction(): number {
+            const { width, height } = el.canvas;
+            const { data } = el.ctx.getImageData(0, 0, width, height);
+            let [x, y] = [0, 0];
+            for (let i = 0; i < data.length; i += 4) {
+                const pixel = i / 4;
+                x += data[i] * ((pixel % width) - width / 2);
+                y += data[i] * (Math.floor(pixel / width) - height / 2);
+            }
+            return Math.atan2(y, x);
+        }
+
+        for (let i = 0; i < 180; i++) frame(el);
+        const before = direction();
+        for (let i = 0; i < 360; i++) frame(el);
+        const turn = direction() - before;
+        const turned = Math.abs(Math.atan2(Math.sin(turn), Math.cos(turn)));
+        expect(turned).toBeGreaterThan(0.2);
+    });
+
+    it("runs through its ring colors", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#ff0000, #0000ff",
+            "bg-colors": "#000",
+        });
+        frame(el, 0.01);
+        const [red, , blue] = light(el, RING_X, 100);
+        expect(red).toBeGreaterThan(0);
+        expect(blue).toBe(0);
+
+        for (let i = 0; i < 100; i++) frame(el, 0.1);
+        expect(light(el, RING_X, 100)[2]).toBeGreaterThan(0);
+    });
+
+    it("shines in its default colors without ring colors", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "",
+            "bg-colors": "#000",
+        });
+        for (let i = 0; i < 10; i++) frame(el);
+
+        expect(Math.max(...light(el, RING_X, 100))).toBeGreaterThan(50);
+    });
+
+    it("lets its smoke drift out beyond the ring", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "ring-colors": "#0000ff",
+            "bg-colors": "#000",
+        });
+        frame(el);
+        expect(light(el, 150 + 56, 100)).toEqual([0, 0, 0]);
+
+        for (let i = 0; i < 180; i++) frame(el);
+        expect(light(el, 150 + 56, 100)[2]).toBeGreaterThan(10);
+    });
+
+    it("pushes its smoke left by its green and down by its red", async () => {
+        /**
+         * Which way the smoke leans after two seconds: left (+) or right (-),
+         * and up (+) or down (-), 50 px either side of the middle.
+         */
+        async function lean(color: string): Promise<number[]> {
+            const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+                "ring-colors": color,
+                "bg-colors": "#000",
+            });
+            for (let i = 0; i < 120; i++) frame(el);
+            const sum = (x: number, y: number): number =>
+                light(el, x, y).reduce((a, b) => a + b, 0);
+            // Pixels 100 and 199 lie equally far from the middle, at 150.
+            return [
+                sum(100, 100) - sum(199, 100),
+                sum(150, 50) - sum(150, 149),
+            ];
+        }
+
+        // Yellow is red with green, and green with red.
+        const [redSideways] = await lean("#ff0000");
+        const [, greenUpDown] = await lean("#00ff00");
+        const [yellowSideways, yellowUpDown] = await lean("#ffff00");
+        expect(yellowSideways).toBeGreaterThan(redSideways);
+        expect(yellowUpDown).toBeLessThan(greenUpDown);
+    });
+
+    it("fades its smoke faster with a higher trail opacity", async () => {
+        const fast = await lightAfter(120, { "trail-opacity": "0.05" });
+        const slow = await lightAfter(120, { "trail-opacity": "0.002" });
+        expect(fast).toBeLessThan(0.5 * slow);
+    });
+
+    it("looks the same at any frame rate", async () => {
+        const at60 = await lightAfter(120);
+        const at120 = await lightAfter(240, {}, 1 / 120);
+        // Not exactly: every step blurs the smoke a little.
+        expect(at120).toBeGreaterThan(0.8 * at60);
+        expect(at120).toBeLessThan(1.2 * at60);
+    });
+
+    it("plays at its speed", async () => {
+        const oneSecondAtDouble = await lightAfter(60, { speed: "2" });
+        const twoSeconds = await lightAfter(120, { speed: "1" });
+        expect(oneSecondAtDouble).toBeGreaterThan(0.8 * twoSeconds);
+        expect(oneSecondAtDouble).toBeLessThan(1.2 * twoSeconds);
+    });
+
+    it("swells its ring into waves", async () => {
+        /** The spread of the ring's light around a circle near its edge. */
+        async function unevenness(ringWobble: string): Promise<number> {
+            const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+                "bg-colors": "#000",
+                "ring-colors": "#ffffff",
+                "ring-wobble": ringWobble,
+                // Only the light of the last frame, without any smoke.
+                "trail-opacity": "1",
+            });
+            for (let i = 0; i < 60; i++) frame(el);
+            const around = Array.from({ length: 28 }, (_, k) => {
+                const angle = (k / 28) * 2 * Math.PI;
+                const x = Math.round(150 + 37 * Math.cos(angle));
+                const y = Math.round(100 + 37 * Math.sin(angle));
+                return light(el, x, y)[0];
+            });
+            return Math.max(...around) - Math.min(...around);
+        }
+
+        expect(await unevenness("0.1")).toBeGreaterThan(
+            2 * (await unevenness("0")),
+        );
+    });
+
+    it("shows no ring at size 0, and the ring again at a size", async () => {
+        // An odd size puts a pixel right in the middle of the ring.
+        const el = await mount<BbSmokeRing>(
+            "bb-smoke-ring",
+            { "ring-colors": "#ff0000", "bg-colors": "#000", "ring-size": "0" },
+            { width: 301, height: 201 },
+        );
+        for (let i = 0; i < 60; i++) frame(el);
+        expect(drewSomething(el)).toBe(false);
+
+        el.ringSize = 0.2;
+        for (let i = 0; i < 10; i++) frame(el);
+        expect(light(el, RING_X, 100)[0]).toBeGreaterThan(50);
+    });
+
+    it("starts over in the middle of its new size", async () => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "bg-colors": "#000",
+            "ring-colors": "#ffffff",
+        });
+        for (let i = 0; i < 10; i++) frame(el);
+
+        el.style.width = "600px";
+        window.dispatchEvent(new Event("resize"));
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        for (let i = 0; i < 10; i++) frame(el);
+        expect(light(el, 300 + 37, 100)[0]).toBeGreaterThan(50);
+    });
+
+    it.each([0, -1])("stands still at speed %d", async (speed) => {
+        const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+            "bg-colors": "#000",
+        });
+        for (let i = 0; i < 30; i++) frame(el);
+        el.speed = speed;
+        const before = allLight(el);
+
+        for (let i = 0; i < 30; i++) frame(el);
+        expect(before).toBeGreaterThan(0);
+        expect(allLight(el)).toBe(before);
+    });
+
+    it.each([
+        ["2", "1"],
+        ["-1", "0"],
+    ])("treats a trail opacity of %s as %s", async (outside, inside) => {
+        expect(await lightAfter(60, { "trail-opacity": outside })).toBe(
+            await lightAfter(60, { "trail-opacity": inside }),
+        );
+    });
+
+    it("moves on by no more than a moment after a long pause", async () => {
+        async function smoke(pause: number): Promise<number> {
+            const el = await mount<BbSmokeRing>("bb-smoke-ring", {
+                "bg-colors": "#000",
+            });
+            for (let i = 0; i < 30; i++) frame(el);
+            frame(el, pause);
+            return allLight(el);
+        }
+
+        expect(await smoke(0.5)).toBe(await smoke(1));
     });
 });
 

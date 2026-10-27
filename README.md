@@ -42,7 +42,7 @@
     </tr>
     <tr style="background-color: #f6f8fa">
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
-        <td></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula"><img src="assets/examples/smoke-ring.gif" alt="Smoke Ring"></a></td>
         <td></td>
     </tr>
 </table>
@@ -118,6 +118,7 @@ Each background fills its element, redraws at the new size when the window resiz
 | [Hexagon Wave](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar)    | `<bb-hexagon-wave>`   | A shaded grid of hexagons rolling like a wave                                        |
 | [Liquid Lines](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow)     | `<bb-liquid-lines>`   | Undulating lines with a sense of depth                                               |
 | [Neon Rails](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)      | `<bb-neon-rails>`     | Particles racing along a geometric grid, leaving neon trails                         |
+| [Smoke Ring](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula)                  | `<bb-smoke-ring>`     | A wavy ring of light giving off colored smoke that drifts outward and swirls         |
 | [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)         | `<bb-star-trail>`     | Orbiting stars with fading trails                                                    |
 
 The source of each one lives in [`src/components`](src/components). To build your own, extend `BeautifulBackground` and implement its `loop()`.

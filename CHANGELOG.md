@@ -23,6 +23,11 @@ setup, which the Contour Flow stories show with live controls.
   highest, so the colors flow along the lines, and waves of light run
   downhill. Particles start over somewhere new at the end of their life and
   old lines fade, so the picture never fills up.
+- `<bb-smoke-ring>` (`BbSmokeRing`): a wavy ring of light gives off smoke
+  that drifts outward and swirls where its own colors push it, after Vanta's
+  Halo but without WebGL, with `ring-colors`, `ring-size`, `ring-wobble` and
+  `speed`. The ring runs through its `ring-colors`, and its light adds to
+  the background, so it shows best on a dark one.
 
 ### Removed
 

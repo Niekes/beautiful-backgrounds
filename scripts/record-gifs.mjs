@@ -46,6 +46,7 @@ const STORIES = {
         "bb-neon-rails",
         "backgrounds-neon-rails--cyber-grid-network",
     ],
+    "smoke-ring": ["bb-smoke-ring", "backgrounds-smoke-ring--nebula"],
     "star-trail": ["bb-star-trail", "backgrounds-star-trail--galactic-vortex"],
 };
 
