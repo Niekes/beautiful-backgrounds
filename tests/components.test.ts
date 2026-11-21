@@ -12,7 +12,7 @@ import {
     BbSmokeRing,
     BbStarTrail,
 } from "../index";
-import { frame, mount, unmountAll } from "./mount";
+import { frame, mount, nextFrame, unmountAll } from "./mount";
 
 /** Whether anything but the background was drawn into the canvas. */
 function drewSomething(el: { ctx: CanvasRenderingContext2D }): boolean {
@@ -1151,13 +1151,14 @@ describe("bb-silk-waves", () => {
             { "bg-colors": "#000" },
             { width: 0, height: 0 },
         );
-        frame(el);
+        await nextFrame();
 
         el.style.width = "300px";
         el.style.height = "200px";
         window.dispatchEvent(new Event("resize"));
         await new Promise((resolve) => setTimeout(resolve, 150));
-        frame(el);
+        // The element's own animation loop, not a frame run by hand.
+        await nextFrame();
         expect(drewSomething(el)).toBe(true);
     });
 });
