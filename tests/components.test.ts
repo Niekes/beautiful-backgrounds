@@ -255,12 +255,15 @@ describe("bb-contour-flow", () => {
      */
     function lightByHeight(el: BbContourFlow, deltaTime: number): number[] {
         const light = new Map<number, number>();
-        vi.spyOn(el.ctx, "stroke").mockImplementation(() => {
-            const red = parseInt(String(el.ctx.strokeStyle).slice(1, 3), 16);
+        const stroke = vi.spyOn(el.ctx, "stroke").mockImplementation(() => {
+            const red = parseInt(
+                (el.ctx.strokeStyle as string).slice(1, 3),
+                16,
+            );
             light.set(255 - red, el.ctx.globalAlpha);
         });
         frame(el, deltaTime);
-        vi.mocked(el.ctx.stroke).mockRestore();
+        stroke.mockRestore();
         return [...light].sort(([a], [b]) => a - b).map(([, alpha]) => alpha);
     }
 
@@ -518,7 +521,7 @@ describe("bb-light-shafts", () => {
 
     /** The red of each column of the canvas, summed from top to bottom. */
     function redColumns(el: BbLightShafts): number[] {
-        const columns = new Array<number>(el.canvas.width).fill(0);
+        const columns = Array.from({ length: el.canvas.width }, () => 0);
         redPixels(el).forEach((red, i) => (columns[i % columns.length] += red));
         return columns;
     }
