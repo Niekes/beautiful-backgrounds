@@ -94,6 +94,9 @@ export class BbSilkWaves extends BeautifulBackground {
     }
 
     private drawSea(): void {
+        // Nothing to draw without a size, and at 0 px wide every color stop
+        // is NaN, which addColorStop throws on.
+        if (!this.width || !this.height) return;
         const swell = Math.max(0, this.swell) || 0;
         const sheen = Math.min(1, Math.max(0, this.sheen)) || 0;
         const reach = this.reach > 0 ? this.reach : REACH;
