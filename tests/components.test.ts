@@ -1144,6 +1144,22 @@ describe("bb-silk-waves", () => {
             );
         },
     );
+
+    it("draws once it gets a size, after starting hidden at 0x0", async () => {
+        const el = await mount<BbSilkWaves>(
+            "bb-silk-waves",
+            { "bg-colors": "#000" },
+            { width: 0, height: 0 },
+        );
+        frame(el);
+
+        el.style.width = "300px";
+        el.style.height = "200px";
+        window.dispatchEvent(new Event("resize"));
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        frame(el);
+        expect(drewSomething(el)).toBe(true);
+    });
 });
 
 describe("bb-star-trail", () => {
