@@ -77,3 +77,52 @@ export const Horizon: Story = {
         bgColors: "#001220, #003038",
     },
 };
+
+export const Velvet: Story = {
+    args: {
+        silkColor: "#7a0f22",
+        sheen: 0.15,
+        swell: 0.15,
+        speed: 0.5,
+        bgColors: "#0a0002, #1a0308",
+    },
+};
+
+export const StormSea: Story = {
+    args: {
+        silkColor: "#4a5a6a",
+        swell: 0.6,
+        speed: 2.5,
+        sheen: 0.9,
+        bgColors: "#05080b, #0f161d",
+    },
+};
+
+export const Frozen: Story = {
+    args: {
+        silkColor: "#a8d8ff",
+        speed: 0,
+        sheen: 1,
+        swell: 0.3,
+        bgColors: "#000814",
+    },
+};
+
+export const Jade: Story = {
+    args: {
+        silkColor: "#1f8a5b",
+        reach: 0.2,
+        swell: 0.1,
+        bgColors: "#00140c, #002418",
+    },
+};
+
+export const Champagne: Story = {
+    args: {
+        silkColor: "#f2b8a0",
+        reach: 3,
+        sheen: 0.95,
+        speed: 0.6,
+        bgColors: "#140806, #2a120e",
+    },
+};
