@@ -9,6 +9,11 @@ canvas.
 One animated effect, used as a custom element (`<bb-…>`) that fills its element.
 _Avoid_: component, effect, animation
 
+**Example**:
+A named set of attribute values for one **Background**, shown with live
+controls in the Storybook.
+_Avoid_: preset, variant, theme
+
 **Trail**:
 The fading of earlier frames, so moving things leave a streak. A trail
 opacity of 0 means nothing ever fades. A clean trail fades all the way out;

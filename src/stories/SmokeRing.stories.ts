@@ -85,3 +85,53 @@ export const Bloom: Story = {
         bgColors: "#1a0f2e",
     },
 };
+
+export const Eclipse: Story = {
+    args: {
+        ringColors: "#fff4d6, #ffb347, #ff6a00",
+        ringSize: 0.3,
+        ringWobble: 0,
+        trailOpacity: 0.012,
+        bgColors: "#000",
+    },
+};
+
+export const Jellyfish: Story = {
+    args: {
+        ringColors: "#ff7ad9, #b37aff, #7ad7ff",
+        ringSize: 0.12,
+        ringWobble: 0.3,
+        speed: 0.4,
+        bgColors: "#03001a, #0a0630",
+        bgAngle: 180,
+    },
+};
+
+export const Portal: Story = {
+    args: {
+        ringColors: "#00f0ff, #ff00e5",
+        ringSize: 0.6,
+        speed: 2,
+        bgColors: "#05000d",
+    },
+};
+
+export const Sonar: Story = {
+    args: {
+        ringColors: "#39ff88, #00b36b",
+        ringSize: 0.05,
+        ringWobble: 0,
+        speed: 3,
+        trailOpacity: 0.02,
+        bgColors: "#000a04",
+    },
+};
+
+export const Overgrowth: Story = {
+    args: {
+        ringColors: "#b6ff3b, #3bff8a, #e6ff3b",
+        ringWobble: 0.15,
+        trailOpacity: 0,
+        bgColors: "#020a02",
+    },
+};

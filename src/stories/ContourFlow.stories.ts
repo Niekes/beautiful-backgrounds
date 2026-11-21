@@ -134,3 +134,22 @@ export const PulseWaves: Story = {
         bgColors: "#001a1a",
     },
 };
+
+export const InkMap: Story = {
+    args: {
+        lineColors: "#1a1a1a",
+        lineOpacity: 0.12,
+        pulseStrength: 0,
+        bgColors: "#f4efe4",
+    },
+};
+
+export const Fjords: Story = {
+    args: {
+        terrainSize: 800,
+        particleAmount: 12000,
+        flowSpeed: 300,
+        lineColors: "#bfe6ff, #5fa8d3",
+        bgColors: "#020b14",
+    },
+};

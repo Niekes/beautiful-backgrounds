@@ -192,3 +192,24 @@ export const MatrixRed: Story = {
         speed: 12,
     },
 };
+
+export const Binary: Story = {
+    args: {
+        characters: "01",
+        fontSize: 12,
+        speed: 3,
+        fontColors: "#9fd8ff",
+        bgColors: "#000",
+    },
+};
+
+export const Astrolabe: Story = {
+    args: {
+        characters: "☉☽☿♀♁♂♃♄★✦",
+        fontSize: 40,
+        speed: 2,
+        cleanTrail: false,
+        fontColors: "#e8c46a, #fff1c2",
+        bgColors: "#020617, #0b1a3a",
+    },
+};

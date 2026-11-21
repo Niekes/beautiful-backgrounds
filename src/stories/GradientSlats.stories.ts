@@ -103,3 +103,11 @@ export const Mint: Story = {
         slatAngle: -30,
     },
 };
+
+export const Pinstripe: Story = {
+    args: {
+        slatAmount: 120,
+        speed: 0.3,
+        washColors: "#1b2a41, #324a5f, #8a99a8, #0c1821",
+    },
+};

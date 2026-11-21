@@ -78,3 +78,49 @@ export const Smear: Story = {
         trailOpacity: 0.2,
     },
 };
+
+export const Cathedral: Story = {
+    args: {
+        shaftColors: "#ff3b3b, #ffd23f, #3b8bff",
+        shaftAmount: 12,
+        speed: 0.2,
+        bgColors: "#000, #1a1208, #000",
+    },
+};
+
+export const Reef: Story = {
+    args: {
+        shaftColors: "#3fe0d0, #1a8fb0",
+        shaftAmount: 220,
+        speed: 0.5,
+        bgColors: "#00141a, #002a33",
+        bgAngle: 180,
+    },
+};
+
+export const Downpour: Story = {
+    args: {
+        shaftColors: "#1c2836, #34465a",
+        shaftAmount: 150,
+        speed: 6,
+        bgColors: "#05080c",
+    },
+};
+
+export const StageLights: Story = {
+    args: {
+        shaftColors: "#ff2fb3, #2fe8ff, #ffb02f",
+        shaftAmount: 8,
+        speed: 2,
+        bgColors: "#000",
+    },
+};
+
+export const Lanterns: Story = {
+    args: {
+        shaftColors: "#ff9a3c, #ff5e3a, #ffd36b",
+        shaftAmount: 30,
+        speed: 0.3,
+        bgColors: "#0a0300, #1c0a02, #0a0300",
+    },
+};
