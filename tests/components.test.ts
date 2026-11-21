@@ -4,6 +4,7 @@ import {
     BbAmbientRibbon,
     BbContourFlow,
     BbDigitalRain,
+    BbGradientSlats,
     BbHexagonWave,
     BbLightShafts,
     BbLiquidLines,
@@ -49,6 +50,7 @@ describe.each([
     ["bb-ambient-ribbon", BbAmbientRibbon],
     ["bb-contour-flow", BbContourFlow],
     ["bb-digital-rain", BbDigitalRain],
+    ["bb-gradient-slats", BbGradientSlats],
     ["bb-hexagon-wave", BbHexagonWave],
     ["bb-light-shafts", BbLightShafts],
     ["bb-liquid-lines", BbLiquidLines],
@@ -346,6 +348,120 @@ describe("bb-digital-rain", () => {
         el.width = 150;
         frame(el);
         expect(el.symbols).toHaveLength(5);
+    });
+});
+
+describe("bb-gradient-slats", () => {
+    /** The red, green and blue of the pixel at `x`, `y` in CSS px. */
+    function at(el: BbGradientSlats, x: number, y: number): number[] {
+        const dpr = el.canvas.width / el.width;
+        const { data } = el.ctx.getImageData(x * dpr, y * dpr, 1, 1);
+        return Array.from(data).slice(0, 3);
+    }
+
+    async function slats(
+        attributes: Record<string, string> = {},
+    ): Promise<BbGradientSlats> {
+        const el = await mount<BbGradientSlats>(
+            "bb-gradient-slats",
+            attributes,
+        );
+        frame(el, 0);
+        return el;
+    }
+
+    it("shows its wash color in the middle of a slat", async () => {
+        const el = await slats({
+            "wash-colors": "#ff0000",
+            "slat-amount": "2",
+        });
+        const [red, green, blue] = at(el, 75, 100);
+        expect(red).toBeGreaterThan(200);
+        expect(green).toBeLessThan(60);
+        expect(blue).toBeLessThan(60);
+    });
+
+    /**
+     * How many times the light drops from a slat's bright edge to the next
+     * slat's dark one, along a line through the middle of the canvas.
+     */
+    function edges(el: BbGradientSlats, across: "x" | "y"): number {
+        const steps = across === "x" ? el.width : el.height;
+        const light = Array.from({ length: steps }, (_, i) => {
+            const [r, g, b] =
+                across === "x"
+                    ? at(el, i, el.height / 2)
+                    : at(el, el.width / 2, i);
+            return r + g + b;
+        });
+        return light.filter((value, i) => i > 0 && value < light[i - 1] - 150)
+            .length;
+    }
+
+    it("cuts the wash into slat-amount upright slats", async () => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "5",
+        });
+        expect(edges(el, "x")).toBe(4);
+        expect(edges(el, "y")).toBe(0);
+    });
+
+    it.each(["1", "-3", "abc"])(
+        "keeps at least two slats at slat-amount %s",
+        async (amount) => {
+            const el = await slats({
+                "wash-colors": "#808080",
+                "slat-amount": amount,
+            });
+            expect(edges(el, "x")).toBe(1);
+        },
+    );
+
+    it("keeps its slats at least a pixel wide", async () => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "Infinity",
+        });
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("lays its slats down at a slat-angle of 90", async () => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "5",
+            "slat-angle": "90",
+        });
+        expect(edges(el, "x")).toBe(0);
+        expect(edges(el, "y")).toBe(4);
+    });
+
+    it("stands its slats upright at a slat-angle that is not a number", async () => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "5",
+            "slat-angle": "abc",
+        });
+        expect(edges(el, "x")).toBe(4);
+    });
+
+    it("shows its default colors without wash colors", async () => {
+        const el = await slats({ "wash-colors": "", "slat-amount": "2" });
+        const [red, , blue] = at(el, 75, 100);
+        expect(red + blue).toBeGreaterThan(150);
+        expect(at(el, 75, 100)).not.toEqual(at(el, 225, 100));
+    });
+
+    it("moves its wash, unless its speed is 0", async () => {
+        const wash = async (speed: string): Promise<number[]> => {
+            const el = await slats({ "slat-amount": "2", speed });
+            const before = at(el, 75, 100);
+            frame(el, 5);
+            return [...before, ...at(el, 75, 100)];
+        };
+        const [still, moving] = [await wash("0"), await wash("1")];
+        expect(still.slice(0, 3)).toEqual(still.slice(3));
+        expect(moving.slice(0, 3)).not.toEqual(moving.slice(3));
     });
 });
 

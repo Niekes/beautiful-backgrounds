@@ -54,3 +54,14 @@ _Avoid_: bar, crystal, beam, streak
 How far away a **Shaft** is. Nearer shafts are wider, brighter and drift
 faster than far ones.
 _Avoid_: layer, z, distance
+
+**Slat**:
+One of a row of even, parallel folds that a background is cut into, dark
+along one edge and nearly white along the other. It shows the **Wash**
+beneath it.
+_Avoid_: strip, stripe, bar, blind, pleat
+
+**Wash**:
+A few large, soft patches of color that slowly wander and blend into each
+other beneath the **Slats**.
+_Avoid_: color field, blobs
