@@ -2,6 +2,7 @@ export { BeautifulBackground } from "./src/BeautifulBackground";
 export { BbAmbientRibbon } from "./src/components/ambientRibbon";
 export { BbContourFlow } from "./src/components/contourFlow";
 export { BbDigitalRain } from "./src/components/digitalRain";
+export { BbGradientSlats } from "./src/components/gradientSlats";
 export { BbHexagonWave } from "./src/components/hexagonWave";
 export { BbLightShafts } from "./src/components/lightShafts";
 export { BbLiquidLines } from "./src/components/liquidLines";

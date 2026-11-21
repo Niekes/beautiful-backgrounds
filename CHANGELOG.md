@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `<bb-gradient-slats>` (`BbGradientSlats`): a slowly moving wash of colors
+  seen through a row of even slats, each dark along one edge and nearly
+  white along the other, with `wash-colors`, `slat-amount`, `slat-angle` and
+  `speed`. It paints over its background itself, so it has no trail.
+
 ## [2.0.0] - 2026-10-27
 
 A major release: `<bb-contour-flow>` replaces `<bb-concentric-pulse>`. Its

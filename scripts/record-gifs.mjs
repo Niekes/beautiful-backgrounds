@@ -34,6 +34,10 @@ const STORIES = {
         "bb-digital-rain",
         "backgrounds-digital-rain--classic-matrix-rain",
     ],
+    "gradient-slats": [
+        "bb-gradient-slats",
+        "backgrounds-gradient-slats--prism",
+    ],
     "hexagon-wave": [
         "bb-hexagon-wave",
         "backgrounds-hexagon-wave--honeycomb-pulsar",
