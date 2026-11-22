@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-11-22
+
+A new background, `<bb-glow-swirl>`.
+
+### Added
+
+- `<bb-glow-swirl>` (`BbGlowSwirl`): glowing sparks swirl out of a band
+  through the middle, steered by a slowly changing current, with
+  `swirl-colors`, `particle-amount`, `particle-size`, `spread`, `turns`,
+  `glow` and `speed`. It starts each frame clean; a lower `trail-opacity`
+  leaves streaks. Based on "Swirl" from Ambient Canvas Backgrounds by Sean
+  Free (Codrops).
+
 ## [2.2.1] - 2026-11-22
 
 Faster backgrounds: less work per frame, and none while off screen.
