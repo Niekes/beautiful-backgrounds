@@ -77,3 +77,15 @@ _Avoid_: shift, mirror, alternate
 A few large, soft patches of color that slowly wander and blend into each
 other beneath the **Slats**.
 _Avoid_: color field, blobs
+
+**Spark**:
+A glowing particle of a swirl. It starts in a band through the middle,
+follows the **Current**, fades in and out over its short life, and then
+starts over in the band.
+_Avoid_: particle, dot, firefly
+
+**Current**:
+The way a **Spark** steers at a point: an angle read from two **Terrains**
+drifting apart, so it slowly changes instead of sliding. Unlike **Flow**,
+it does not lead downhill.
+_Avoid_: flow, field, wind

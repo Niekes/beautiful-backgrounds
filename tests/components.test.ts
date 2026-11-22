@@ -4,6 +4,7 @@ import {
     BbAmbientRibbon,
     BbContourFlow,
     BbDigitalRain,
+    BbGlowSwirl,
     BbGradientSlats,
     BbHexagonWave,
     BbLightShafts,
@@ -50,6 +51,7 @@ describe.each([
     ["bb-ambient-ribbon", BbAmbientRibbon],
     ["bb-contour-flow", BbContourFlow],
     ["bb-digital-rain", BbDigitalRain],
+    ["bb-glow-swirl", BbGlowSwirl],
     ["bb-gradient-slats", BbGradientSlats],
     ["bb-hexagon-wave", BbHexagonWave],
     ["bb-light-shafts", BbLightShafts],
@@ -538,6 +540,118 @@ describe("bb-gradient-slats", () => {
         const [still, moving] = [await wash("0"), await wash("1")];
         expect(still.slice(0, 3)).toEqual(still.slice(3));
         expect(moving.slice(0, 3)).not.toEqual(moving.slice(3));
+    });
+});
+
+describe("bb-glow-swirl", () => {
+    async function swirl(
+        attributes: Record<string, string> = {},
+    ): Promise<BbGlowSwirl> {
+        const el = await mount<BbGlowSwirl>("bb-glow-swirl", attributes);
+        // Sparks fade in from nothing, so their first frame shows nothing.
+        for (let i = 0; i < 10; i++) frame(el);
+        return el;
+    }
+
+    /** Whether anything was drawn in the rows from `top` to `bottom`, in px. */
+    function drewIn(el: BbGlowSwirl, top: number, bottom: number): boolean {
+        const dpr = el.canvas.width / el.width;
+        const { data } = el.ctx.getImageData(
+            0,
+            top * dpr,
+            el.canvas.width,
+            (bottom - top) * dpr,
+        );
+        return data.some((value, i) => i % 4 === 3 && value > 0);
+    }
+
+    it("draws its sparks", async () => {
+        expect(drewSomething(await swirl())).toBe(true);
+    });
+
+    it.each(["0", "-5", "abc"])(
+        "draws nothing at particle-amount %s",
+        async (amount) => {
+            const el = await swirl({ "particle-amount": amount });
+            expect(drewSomething(el)).toBe(false);
+        },
+    );
+
+    it("starts its sparks in a band through the middle", async () => {
+        const el = await swirl({ spread: "0", glow: "0" });
+        // Ten frames move a spark at most about 21 px.
+        expect(drewIn(el, 80, 120)).toBe(true);
+        expect(drewIn(el, 0, 70)).toBe(false);
+        expect(drewIn(el, 130, 200)).toBe(false);
+    });
+
+    it("stands still at a speed that is not a number", async () => {
+        const el = await swirl({ speed: "abc", "trail-opacity": "0" });
+        const before = el.ctx.getImageData(0, 0, 300, 200).data.join();
+        frame(el);
+        expect(el.ctx.getImageData(0, 0, 300, 200).data.join()).toBe(before);
+    });
+
+    it.each(["spread", "particle-size", "turns"])(
+        "still swirls at a %s that is not a number",
+        async (name) => {
+            const el = await swirl({ [name]: "abc", glow: "0" });
+            const before = el.ctx.getImageData(0, 0, 300, 200).data.join();
+            for (let i = 0; i < 10; i++) frame(el);
+            expect(drewSomething(el)).toBe(true);
+            expect(el.ctx.getImageData(0, 0, 300, 200).data.join()).not.toBe(
+                before,
+            );
+        },
+    );
+
+    it("keeps drawing after its first sparks' lives are over", async () => {
+        const el = await swirl();
+        for (let i = 0; i < 100; i++) frame(el, 0.1);
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("shows its swirl colors, or its default colors without them", async () => {
+        const red = await swirl({ "swirl-colors": "#ff0000", glow: "0" });
+        const { data } = red.ctx.getImageData(
+            0,
+            0,
+            red.canvas.width,
+            red.canvas.height,
+        );
+        const drawn = data.filter((_, i) => i % 4 === 3).some((a) => a > 0);
+        expect(drawn).toBe(true);
+        expect(data.some((v, i) => i % 4 === 2 && v > 0)).toBe(false);
+
+        expect(drewSomething(await swirl({ "swirl-colors": "" }))).toBe(true);
+    });
+
+    it("glows around its sparks, unless its glow is 0", async () => {
+        /** How many pixels show any light. */
+        const lit = async (glow: string): Promise<number> => {
+            const el = await swirl({ glow });
+            const { data } = el.ctx.getImageData(0, 0, 300, 200);
+            return data.filter((v, i) => i % 4 === 3 && v > 0).length;
+        };
+        vi.spyOn(Math, "random").mockReturnValue(0.5);
+        const [glowing, plain, odd] = [
+            await lit("8"),
+            await lit("0"),
+            await lit("abc"),
+        ];
+        expect(glowing).toBeGreaterThan(plain * 2);
+        expect(odd).toBe(plain);
+    });
+
+    it("starts each frame clean, unless given a trail", async () => {
+        const after = async (attributes: Record<string, string>) => {
+            const el = await swirl(attributes);
+            el.particleAmount = 0;
+            frame(el);
+            return drewSomething(el);
+        };
+        expect(await after({})).toBe(false);
+        expect(await after({ "trail-opacity": "0.05" })).toBe(true);
     });
 });
 
