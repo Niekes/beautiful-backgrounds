@@ -44,9 +44,7 @@ type Shaft = {
     height: number;
     /** How fast it drifts to the right, in px per second. */
     speed: number;
-    /** Its light, blurred, drawn once. */
-    // ponytail: drawn at 1 px per CSS px, so a high-DPI screen shows it a
-    // little softer; draw it at devicePixelRatio if the far shafts look blurry.
+    /** Its light, blurred, drawn once, at 1 px per CSS px like the canvas. */
     sprite: HTMLCanvasElement;
 };
 
@@ -77,6 +75,8 @@ export class BbLightShafts extends BeautifulBackground {
     // background, so the light adds to it.
     trailOpacity: number = 1;
     cleanTrail: boolean = false;
+    // Blurred light: extra pixels only cost time.
+    protected maxPixelRatio: number = 1;
 
     private shafts: Shaft[] = [];
     /** The size, amount and colors the shafts were made for. */
