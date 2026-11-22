@@ -455,6 +455,41 @@ describe("bb-gradient-slats", () => {
         expect(at(el, 75, 100)).not.toEqual(at(el, 225, 100));
     });
 
+    it("shifts the wash differently in each slat at a slat-shift", async () => {
+        // Sample both sides of the border between the first two slats.
+        const border = async (shift: string): Promise<number[][]> => {
+            const el = await slats({
+                "slat-amount": "2",
+                "slat-shade": "0",
+                "slat-shift": shift,
+            });
+            return [at(el, 148, 100), at(el, 152, 100)];
+        };
+        const [left, right] = await border("0.5");
+        const [lined, up] = await border("0");
+        const gap = (a: number[], b: number[]): number =>
+            a.reduce((sum, v, i) => sum + Math.abs(v - b[i]), 0);
+        expect(gap(left, right)).toBeGreaterThan(gap(lined, up) + 30);
+    });
+
+    it.each(["0", "-1"])("shows no shade at slat-shade %s", async (shade) => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "5",
+            "slat-shade": shade,
+        });
+        expect(edges(el, "x")).toBe(0);
+    });
+
+    it("shades fully at a slat-shade that is not a number", async () => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "5",
+            "slat-shade": "abc",
+        });
+        expect(edges(el, "x")).toBe(4);
+    });
+
     it("moves its wash, unless its speed is 0", async () => {
         const wash = async (speed: string): Promise<number[]> => {
             const el = await slats({ "slat-amount": "2", speed });

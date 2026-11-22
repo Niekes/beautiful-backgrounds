@@ -62,9 +62,15 @@ _Avoid_: layer, z, distance
 
 **Slat**:
 One of a row of even, parallel folds that a background is cut into, dark
-along one edge and nearly white along the other. It shows the **Wash**
-beneath it.
+along one edge and nearly white along the other, as strongly as its shade
+says (none at all at 0). It shows the **Wash** beneath it, moved by its
+**Shift**.
 _Avoid_: strip, stripe, bar, blind, pleat
+
+**Shift**:
+How far a **Slat** moves the **Wash** it shows, along its length. Each slat
+has its own fixed shift, so neighbors don't line up, like ribbed glass.
+_Avoid_: offset, displacement, refraction
 
 **Wash**:
 A few large, soft patches of color that slowly wander and blend into each
