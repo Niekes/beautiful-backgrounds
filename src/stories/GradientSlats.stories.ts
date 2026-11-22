@@ -11,6 +11,8 @@ const meta: Meta = {
                 wash-colors=${args.washColors}
                 slat-amount=${args.slatAmount}
                 slat-angle=${args.slatAngle}
+                ?slat-flip=${args.slatFlip}
+                slat-shade=${args.slatShade}
                 speed=${args.speed}
                 style="width: 100%; height: 500px; border-radius: 15px"
             ></bb-gradient-slats>
@@ -20,12 +22,16 @@ const meta: Meta = {
         washColors: { control: "text" },
         slatAmount: { control: { type: "range", min: 2, max: 120, step: 1 } },
         slatAngle: { control: { type: "range", min: -90, max: 90, step: 1 } },
+        slatFlip: { control: "boolean" },
+        slatShade: { control: { type: "range", min: 0, max: 1, step: 0.01 } },
         speed: { control: { type: "range", min: 0, max: 10, step: 0.05 } },
     },
     args: {
         washColors: "#c41e3a, #e0218a, #6a2c9e, #3b4fa8, #f5c800",
         slatAmount: 27,
         slatAngle: 0,
+        slatFlip: false,
+        slatShade: 1,
         speed: 1,
     },
 };
@@ -109,5 +115,26 @@ export const Pinstripe: Story = {
         slatAmount: 120,
         speed: 0.3,
         washColors: "#1b2a41, #324a5f, #8a99a8, #0c1821",
+    },
+};
+
+export const FrostedGlass: Story = {
+    args: {
+        washColors: "#22d3ee, #4f46e5, #c4b5fd, #a5f3fc, #ffffff",
+        slatAmount: 5,
+        slatAngle: 90,
+        slatFlip: true,
+        slatShade: 0,
+        speed: 2,
+    },
+};
+
+export const Orchid: Story = {
+    args: {
+        washColors: "#3b0fd6, #a855f7, #e879f9, #1e1b8a, #ffffff",
+        slatAmount: 4,
+        slatFlip: true,
+        slatShade: 0,
+        speed: 2,
     },
 };

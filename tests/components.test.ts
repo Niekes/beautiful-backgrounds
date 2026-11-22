@@ -455,6 +455,61 @@ describe("bb-gradient-slats", () => {
         expect(at(el, 75, 100)).not.toEqual(at(el, 225, 100));
     });
 
+    it("shows the same wash in every slat, every other one upside down, at slat-flip", async () => {
+        const flip = async (on: boolean): Promise<number[][]> => {
+            const el = await slats({
+                "slat-amount": "2",
+                "slat-shade": "0",
+                ...(on ? { "slat-flip": "" } : {}),
+            });
+            // A point in the first slat, and the same point in the second
+            // slat turned half way round its middle.
+            return [at(el, 40, 50), at(el, 260, 150)];
+        };
+        const [first, second] = await flip(true);
+        first.forEach((v, i) =>
+            expect(Math.abs(v - second[i])).toBeLessThan(3),
+        );
+        const [plain, other] = await flip(false);
+        expect(plain).not.toEqual(other);
+    });
+
+    it("keeps the wash upright in lying slats at slat-flip", async () => {
+        const el = await slats({
+            "slat-amount": "2",
+            "slat-angle": "90",
+            "slat-shade": "0",
+            "slat-flip": "",
+        });
+        // A point in the top slat, and the same point in the bottom one
+        // turned half way round its middle.
+        const [top, bottom] = [at(el, 60, 20), at(el, 240, 180)];
+        top.forEach((v, i) => expect(Math.abs(v - bottom[i])).toBeLessThan(6));
+        // The top slat is the whole wash squeezed to half its height, the
+        // right way up, so it matches the plain wash at twice the height.
+        const plain = await slats({ "slat-amount": "2", "slat-shade": "0" });
+        const below = at(plain, 60, 40);
+        top.forEach((v, i) => expect(Math.abs(v - below[i])).toBeLessThan(6));
+    });
+
+    it.each(["0", "-1"])("shows no shade at slat-shade %s", async (shade) => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "5",
+            "slat-shade": shade,
+        });
+        expect(edges(el, "x")).toBe(0);
+    });
+
+    it("shades fully at a slat-shade that is not a number", async () => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "5",
+            "slat-shade": "abc",
+        });
+        expect(edges(el, "x")).toBe(4);
+    });
+
     it("moves its wash, unless its speed is 0", async () => {
         const wash = async (speed: string): Promise<number[]> => {
             const el = await slats({ "slat-amount": "2", speed });

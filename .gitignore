@@ -32,3 +32,6 @@ storybook-static
 
 # Test coverage
 coverage
+
+# Vitest browser failure screenshots
+.vitest
