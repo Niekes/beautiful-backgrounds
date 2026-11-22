@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-11-22
+
+Faster backgrounds: less work per frame, and none while off screen.
+
+### Changed
+
+- Every background pauses while it is scrolled out of view, as it already
+  did while the page is hidden.
+- Every background draws at most 2 canvas pixels per CSS px, so on screens
+  with a higher pixel ratio it draws fewer pixels. `<bb-gradient-slats>`,
+  `<bb-light-shafts>`, `<bb-silk-waves>` and `<bb-smoke-ring>`, which are
+  soft and look the same with fewer pixels, draw 1 per CSS px.
+- `<bb-gradient-slats>` keeps the parts of a frame that do not change and
+  reuses them, and `<bb-silk-waves>` no longer paints the same area twice.
+
 ## [2.2.0] - 2026-11-22
 
 `<bb-gradient-slats>` can now look like ribbed glass: flat panels that each
