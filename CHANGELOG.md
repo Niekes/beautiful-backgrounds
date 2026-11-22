@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-11-22
+
+`<bb-gradient-slats>` can now look like ribbed glass: flat panels that each
+show the same wash, every other one upside down.
+
+### Added
+
+- `<bb-gradient-slats>` `slat-flip`: every slat shows the whole wash
+  squeezed to fit it, every other one turned upside down, instead of its
+  own part of the wash. Lying slats keep the wash the right way up; at
+  slanted angles each slat shows a slanted strip of it. Off by default.
+- `<bb-gradient-slats>` `slat-shade`: how strongly each slat is shaded dark
+  to white, from 0 (flat) to 1 (as before, the default).
+- Two Gradient Slats examples that use them, Frosted Glass and Orchid.
+
 ## [2.1.0] - 2026-11-21
 
 A new background, `<bb-gradient-slats>`, and a fix for `<bb-silk-waves>`
