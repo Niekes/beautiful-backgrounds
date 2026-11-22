@@ -39,11 +39,11 @@ export class BbGradientSlats extends BeautifulBackground {
     slatAngle: number = 0;
 
     /**
-     * How far each slat moves the wash it shows along its length, at most,
-     * as a share of the slat's length: 0 lines every slat up.
+     * Whether each slat shows the whole wash squeezed to its width, every
+     * other one turned upside down, instead of its own part of the wash.
      */
-    @property({ type: Number, attribute: "slat-shift" })
-    slatShift: number = 0;
+    @property({ type: Boolean, attribute: "slat-flip" })
+    slatFlip: boolean = false;
 
     /** How strongly each slat is shaded dark to white, from 0 (flat) to 1. */
     @property({ type: Number, attribute: "slat-shade" })
@@ -60,33 +60,35 @@ export class BbGradientSlats extends BeautifulBackground {
     /** How far the wash has wandered, in seconds at speed 1. */
     private time: number = 0;
 
+    /** The wash colors as "r, g, b", read once a frame and not per slat. */
+    private rgbs: string[] = [];
+
     protected loop(deltaTime: number): void {
         this.time += deltaTime * (Math.max(0, this.speed) || 0);
-        this.drawWash(0, 0);
+        this.rgbs = this.colors().map((color) => toRgb(color).join(", "));
+        this.drawWash();
         this.drawSlats();
     }
 
-    /** Paints the wash over the whole canvas, moved by `dx`, `dy`. */
-    private drawWash(dx: number, dy: number): void {
+    private colors(): string[] {
+        return this.washColors.length > 0 ? this.washColors : DEFAULT_COLORS;
+    }
+
+    private drawWash(): void {
         const { ctx, width, height } = this;
-        const colors =
-            this.washColors.length > 0 ? this.washColors : DEFAULT_COLORS;
         const reach = REACH * Math.hypot(width, height);
 
-        ctx.fillStyle = colors[0];
+        ctx.fillStyle = this.colors()[0];
         ctx.fillRect(0, 0, width, height);
-        colors.forEach((color, i) => {
+        this.rgbs.forEach((rgb, i) => {
             // Each patch loops on its own slow path, crossing a quarter of the
             // canvas in about 10 s at speed 1, however many colors there are.
             const pace = 0.05 + 0.01 * (i % 3);
             const x =
-                dx +
                 width * (0.5 + WANDER * Math.sin(this.time * pace + i * 2.4));
             const y =
-                dy +
                 height *
-                    (0.5 + WANDER * Math.cos(this.time * pace * 1.3 + i * 1.7));
-            const rgb = toRgb(color).join(", ");
+                (0.5 + WANDER * Math.cos(this.time * pace * 1.3 + i * 1.7));
             const patch = ctx.createRadialGradient(x, y, 0, x, y, reach);
             patch.addColorStop(0, `rgba(${rgb}, 1)`);
             patch.addColorStop(1, `rgba(${rgb}, 0)`);
@@ -110,27 +112,16 @@ export class BbGradientSlats extends BeautifulBackground {
             Math.max(2, Math.floor(across)),
         );
         const slat = across / amount;
-        const shift = (Math.max(0, this.slatShift) || 0) * along;
         const strength = Math.min(1, Math.max(0, this.slatShade));
         const shade = Number.isNaN(strength) ? 1 : strength;
-        const base = ctx.getTransform();
 
         ctx.save();
         ctx.translate(width / 2, height / 2);
         ctx.rotate(angle);
         for (let i = 0; i < amount; i++) {
             const left = -across / 2 + i * slat;
-            if (shift > 0) {
-                // A fixed, uneven shift per slat, so neighbors never line up.
-                const by = shift * Math.sin(i * 2.4 + 1);
-                ctx.save();
-                ctx.beginPath();
-                ctx.rect(left, -along / 2, slat, along);
-                ctx.clip();
-                ctx.setTransform(base);
-                this.drawWash(-by * Math.sin(angle), by * Math.cos(angle));
-                ctx.restore();
-            }
+            if (this.slatFlip)
+                this.drawFlipped(left, slat, along, angle, i % 2 === 1);
             if (shade === 0) continue;
             const fill = ctx.createLinearGradient(left, 0, left + slat, 0);
             for (const [where, rgb, opacity] of SHADE) {
@@ -139,6 +130,34 @@ export class BbGradientSlats extends BeautifulBackground {
             ctx.fillStyle = fill;
             ctx.fillRect(left, -along / 2, slat, along);
         }
+        ctx.restore();
+    }
+
+    /** Squeezes the whole wash into one slat, turned upside down if asked. */
+    private drawFlipped(
+        left: number,
+        slat: number,
+        along: number,
+        angle: number,
+        turned: boolean,
+    ): void {
+        const { ctx, width, height } = this;
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(left, -along / 2, slat, along);
+        ctx.clip();
+        ctx.translate(left + slat / 2, 0);
+        // Turn back upright, so the wash keeps its own up and down on screen,
+        // and fit it to the slat's box on screen.
+        ctx.rotate(-angle + (turned ? Math.PI : 0));
+        const cos = Math.abs(Math.cos(angle));
+        const sin = Math.abs(Math.sin(angle));
+        ctx.scale(
+            (slat * cos + along * sin) / width,
+            (slat * sin + along * cos) / height,
+        );
+        ctx.translate(-width / 2, -height / 2);
+        this.drawWash();
         ctx.restore();
     }
 }

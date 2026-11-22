@@ -11,7 +11,7 @@ const meta: Meta = {
                 wash-colors=${args.washColors}
                 slat-amount=${args.slatAmount}
                 slat-angle=${args.slatAngle}
-                slat-shift=${args.slatShift}
+                ?slat-flip=${args.slatFlip}
                 slat-shade=${args.slatShade}
                 speed=${args.speed}
                 style="width: 100%; height: 500px; border-radius: 15px"
@@ -22,7 +22,7 @@ const meta: Meta = {
         washColors: { control: "text" },
         slatAmount: { control: { type: "range", min: 2, max: 120, step: 1 } },
         slatAngle: { control: { type: "range", min: -90, max: 90, step: 1 } },
-        slatShift: { control: { type: "range", min: 0, max: 1, step: 0.01 } },
+        slatFlip: { control: "boolean" },
         slatShade: { control: { type: "range", min: 0, max: 1, step: 0.01 } },
         speed: { control: { type: "range", min: 0, max: 10, step: 0.05 } },
     },
@@ -30,7 +30,7 @@ const meta: Meta = {
         washColors: "#c41e3a, #e0218a, #6a2c9e, #3b4fa8, #f5c800",
         slatAmount: 27,
         slatAngle: 0,
-        slatShift: 0,
+        slatFlip: false,
         slatShade: 1,
         speed: 1,
     },
@@ -123,7 +123,7 @@ export const FrostedGlass: Story = {
         washColors: "#22d3ee, #4f46e5, #c4b5fd, #a5f3fc, #ffffff",
         slatAmount: 5,
         slatAngle: 90,
-        slatShift: 0.3,
+        slatFlip: true,
         slatShade: 0,
         speed: 2,
     },
@@ -133,7 +133,7 @@ export const Orchid: Story = {
     args: {
         washColors: "#3b0fd6, #a855f7, #e879f9, #1e1b8a, #ffffff",
         slatAmount: 4,
-        slatShift: 0.4,
+        slatFlip: true,
         slatShade: 0,
         speed: 2,
     },

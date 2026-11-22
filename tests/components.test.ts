@@ -455,21 +455,41 @@ describe("bb-gradient-slats", () => {
         expect(at(el, 75, 100)).not.toEqual(at(el, 225, 100));
     });
 
-    it("shifts the wash differently in each slat at a slat-shift", async () => {
-        // Sample both sides of the border between the first two slats.
-        const border = async (shift: string): Promise<number[][]> => {
+    it("shows the same wash in every slat, every other one upside down, at slat-flip", async () => {
+        const flip = async (on: boolean): Promise<number[][]> => {
             const el = await slats({
                 "slat-amount": "2",
                 "slat-shade": "0",
-                "slat-shift": shift,
+                ...(on ? { "slat-flip": "" } : {}),
             });
-            return [at(el, 148, 100), at(el, 152, 100)];
+            // A point in the first slat, and the same point in the second
+            // slat turned half way round its middle.
+            return [at(el, 40, 50), at(el, 260, 150)];
         };
-        const [left, right] = await border("0.5");
-        const [lined, up] = await border("0");
-        const gap = (a: number[], b: number[]): number =>
-            a.reduce((sum, v, i) => sum + Math.abs(v - b[i]), 0);
-        expect(gap(left, right)).toBeGreaterThan(gap(lined, up) + 30);
+        const [first, second] = await flip(true);
+        first.forEach((v, i) =>
+            expect(Math.abs(v - second[i])).toBeLessThan(3),
+        );
+        const [plain, other] = await flip(false);
+        expect(plain).not.toEqual(other);
+    });
+
+    it("keeps the wash upright in lying slats at slat-flip", async () => {
+        const el = await slats({
+            "slat-amount": "2",
+            "slat-angle": "90",
+            "slat-shade": "0",
+            "slat-flip": "",
+        });
+        // A point in the top slat, and the same point in the bottom one
+        // turned half way round its middle.
+        const [top, bottom] = [at(el, 60, 20), at(el, 240, 180)];
+        top.forEach((v, i) => expect(Math.abs(v - bottom[i])).toBeLessThan(6));
+        // The top slat is the whole wash squeezed to half its height, the
+        // right way up, so it matches the plain wash at twice the height.
+        const plain = await slats({ "slat-amount": "2", "slat-shade": "0" });
+        const below = at(plain, 60, 40);
+        top.forEach((v, i) => expect(Math.abs(v - below[i])).toBeLessThan(6));
     });
 
     it.each(["0", "-1"])("shows no shade at slat-shade %s", async (shade) => {
