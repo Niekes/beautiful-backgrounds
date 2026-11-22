@@ -42,6 +42,12 @@ export abstract class BeautifulBackground extends LitElement {
     })
     public cleanTrail: boolean = true;
 
+    /**
+     * The most canvas pixels drawn per CSS px. Every pixel costs fill time,
+     * so soft backgrounds that look the same with fewer pixels set it lower.
+     */
+    protected maxPixelRatio: number = 2;
+
     private fadeMasks: CanvasPattern[] = [];
     private fadeTurn: number = 0;
 
@@ -182,7 +188,7 @@ export abstract class BeautifulBackground extends LitElement {
 
     protected resizeCanvas(): void {
         const rect = this.getBoundingClientRect();
-        const dpr = window.devicePixelRatio || 1;
+        const dpr = Math.min(window.devicePixelRatio || 1, this.maxPixelRatio);
 
         if (rect.width === this.width && rect.height === this.height) return;
 

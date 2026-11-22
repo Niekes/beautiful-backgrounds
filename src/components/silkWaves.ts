@@ -83,6 +83,8 @@ export class BbSilkWaves extends BeautifulBackground {
     // leaves no trail, and it covers the canvas's own background.
     trailOpacity: number = 1;
     cleanTrail: boolean = false;
+    // Smooth shading: extra pixels only cost time.
+    protected maxPixelRatio: number = 1;
 
     private time: number = 0;
 
@@ -110,18 +112,21 @@ export class BbSilkWaves extends BeautifulBackground {
 
         const ctx = this.ctx;
         this.fadeTrail();
-        for (let i = 0; i < ROWS; i++) {
-            const n2 = far2 + (1 - far2) * (i / ROWS);
-            this.paintRow(
-                ctx,
-                this.curve(n2, swell, reach),
-                h,
-                s,
-                l,
-                crest,
-                Math.min(1, n2 / FADE),
-            );
-        }
+        const rowN2s = Array.from(
+            { length: ROWS },
+            (_, i) => far2 + (1 - far2) * (i / ROWS),
+        );
+        const curves = rowN2s.map((n2) => this.curve(n2, swell, reach));
+        const alphas = rowN2s.map((n2) => Math.min(1, n2 / FADE));
+        curves.forEach((curve, i) => {
+            // Below the lowest point of an opaque next row, that row paints
+            // over this one anyway, so stop there instead of at the bottom.
+            const bottom =
+                alphas[i + 1] === 1
+                    ? Math.max(...curves[i + 1].ys) + 1
+                    : this.height + 1;
+            this.paintRow(ctx, curve, h, s, l, crest, alphas[i], bottom);
+        });
         ctx.globalAlpha = 1;
     }
 
@@ -150,7 +155,7 @@ export class BbSilkWaves extends BeautifulBackground {
 
     /**
      * Paints the sea's row over everything farther than it: its curve across
-     * the canvas, and everything below it down to the front.
+     * the canvas, and everything below it down to `bottom`.
      */
     private paintRow(
         ctx: CanvasRenderingContext2D,
@@ -160,6 +165,7 @@ export class BbSilkWaves extends BeautifulBackground {
         trough: number,
         crest: number,
         alpha: number,
+        bottom: number,
     ): void {
         const from = curve.xs[0];
         const to = curve.xs[COLUMNS];
@@ -180,8 +186,8 @@ export class BbSilkWaves extends BeautifulBackground {
             if (j === 0) ctx.moveTo(x, curve.ys[j]);
             else ctx.lineTo(x, curve.ys[j]);
         });
-        ctx.lineTo(to, this.height + 1);
-        ctx.lineTo(from, this.height + 1);
+        ctx.lineTo(to, bottom);
+        ctx.lineTo(from, bottom);
         ctx.closePath();
 
         ctx.globalAlpha = alpha;

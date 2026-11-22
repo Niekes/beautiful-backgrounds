@@ -45,6 +45,8 @@ export class BbGradientSlats extends BeautifulBackground {
     // The wash covers the whole canvas each frame, so there is no trail.
     trailOpacity: number = 1;
     cleanTrail: boolean = false;
+    // Blurry washes and smooth shades: extra pixels only cost time.
+    protected maxPixelRatio: number = 1;
 
     /** How far the wash has wandered, in seconds at speed 1. */
     private time: number = 0;

@@ -88,6 +88,8 @@ export class BbSmokeRing extends BeautifulBackground {
     // canvas shows the buffer whole, background included.
     trailOpacity: number = 0.005;
     cleanTrail: boolean = false;
+    // The smoke is stretched from a small buffer: extra pixels only cost time.
+    protected maxPixelRatio: number = 1;
 
     private time: number = 0;
     private columns: number = 0;

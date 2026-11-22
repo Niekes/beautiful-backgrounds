@@ -45,6 +45,13 @@ describe("BeautifulBackground", () => {
         expect(el.canvas.width).toBe(300);
     });
 
+    it("draws at most 2 px per CSS px, and soft backgrounds at most 1", async () => {
+        vi.stubGlobal("devicePixelRatio", 3);
+
+        expect((await mount<BbHexagonWave>(TAG)).canvas.width).toBe(600);
+        expect((await mount("bb-silk-waves")).canvas.width).toBe(300);
+    });
+
     it("follows the element's size after a window resize", async () => {
         vi.useFakeTimers();
         const el = await mount<BbHexagonWave>(TAG);
