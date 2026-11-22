@@ -439,6 +439,24 @@ describe("bb-gradient-slats", () => {
         expect(edges(el, "y")).toBe(4);
     });
 
+    it("redraws its slats when slat-amount changes", async () => {
+        const el = await slats({
+            "wash-colors": "#808080",
+            "slat-amount": "5",
+        });
+        el.slatAmount = 3;
+        frame(el, 0);
+        expect(edges(el, "x")).toBe(2);
+    });
+
+    it("keeps running after shrinking to 0 px", async () => {
+        const el = await slats();
+        el.style.width = el.style.height = "0";
+        (el as unknown as { resizeCanvas(): void }).resizeCanvas();
+        expect([el.canvas.width, el.canvas.height]).toEqual([0, 0]);
+        expect(() => frame(el, 0)).not.toThrow();
+    });
+
     it("stands its slats upright at a slat-angle that is not a number", async () => {
         const el = await slats({
             "wash-colors": "#808080",

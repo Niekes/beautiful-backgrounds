@@ -16,6 +16,8 @@ const SHADE = [
 const WANDER = 0.45;
 /** How far a patch's color reaches, as a share of the canvas's diagonal. */
 const REACH = 0.5;
+/** The wash is painted at this share of the canvas's size and stretched. */
+const WASH_SCALE = 1 / 8;
 
 /**
  * A slowly moving wash of colors seen through a row of even slats, each dark
@@ -50,6 +52,14 @@ export class BbGradientSlats extends BeautifulBackground {
 
     /** How far the wash has wandered, in seconds at speed 1. */
     private time: number = 0;
+    /** The wash, painted small and stretched over the canvas each frame. */
+    private wash: HTMLCanvasElement = document.createElement("canvas");
+    /** The wash colors as "r, g, b", and the colors they were made from. */
+    private washRgbs: string[] = [];
+    private washRgbsFor: string = "";
+    /** The slats, drawn once, and the settings they were drawn for. */
+    private slats: HTMLCanvasElement = document.createElement("canvas");
+    private slatsFor: string = "";
 
     protected loop(deltaTime: number): void {
         this.time += deltaTime * (Math.max(0, this.speed) || 0);
@@ -58,14 +68,35 @@ export class BbGradientSlats extends BeautifulBackground {
     }
 
     private drawWash(): void {
-        const { ctx, width, height } = this;
+        const { width, height, wash } = this;
         const colors =
             this.washColors.length > 0 ? this.washColors : DEFAULT_COLORS;
+        const colorsKey = colors.join(",");
+        if (this.washRgbsFor !== colorsKey) {
+            this.washRgbs = colors.map((color) => toRgb(color).join(", "));
+            this.washRgbsFor = colorsKey;
+        }
         const reach = REACH * Math.hypot(width, height);
+        const columns = Math.max(1, Math.ceil(width * WASH_SCALE));
+        const rows = Math.max(1, Math.ceil(height * WASH_SCALE));
+        if (wash.width !== columns) wash.width = columns;
+        if (wash.height !== rows) wash.height = rows;
 
+        const ctx = wash.getContext("2d")!;
+        // Painted in the canvas's own px, so the patches keep their paths.
+        ctx.setTransform(
+            columns / (width || 1),
+            0,
+            0,
+            rows / (height || 1),
+            0,
+            0,
+        );
+        // Cleared, so translucent colors build up over the canvas, not twice.
+        ctx.clearRect(0, 0, width, height);
         ctx.fillStyle = colors[0];
         ctx.fillRect(0, 0, width, height);
-        colors.forEach((color, i) => {
+        this.washRgbs.forEach((rgb, i) => {
             // Each patch loops on its own slow path, crossing a quarter of the
             // canvas in about 10 s at speed 1, however many colors there are.
             const pace = 0.05 + 0.01 * (i % 3);
@@ -74,17 +105,36 @@ export class BbGradientSlats extends BeautifulBackground {
             const y =
                 height *
                 (0.5 + WANDER * Math.cos(this.time * pace * 1.3 + i * 1.7));
-            const rgb = toRgb(color).join(", ");
             const patch = ctx.createRadialGradient(x, y, 0, x, y, reach);
             patch.addColorStop(0, `rgba(${rgb}, 1)`);
             patch.addColorStop(1, `rgba(${rgb}, 0)`);
             ctx.fillStyle = patch;
             ctx.fillRect(0, 0, width, height);
         });
+        this.ctx.drawImage(wash, 0, 0, width, height);
     }
 
+    /** Copies in the slats, drawing them first if their settings changed. */
     private drawSlats(): void {
-        const { ctx, width, height } = this;
+        const { width, height, slatAngle, slatAmount } = this;
+        const settings = `${width} ${height} ${slatAngle} ${slatAmount}`;
+        if (this.slatsFor !== settings) {
+            this.slats.width = this.canvas.width;
+            this.slats.height = this.canvas.height;
+            const ctx = this.slats.getContext("2d")!;
+            // The canvas's own scale, so the slats copy over pixel for pixel.
+            ctx.setTransform(this.ctx.getTransform());
+            this.paintSlats(ctx);
+            this.slatsFor = settings;
+        }
+        // A canvas shrunk to 0 px has no slats, and drawImage throws on it.
+        if (!this.slats.width || !this.slats.height) return;
+        this.ctx.drawImage(this.slats, 0, 0, width, height);
+    }
+
+    /** Paints the slats, each dark along one edge and nearly white along the other. */
+    private paintSlats(ctx: CanvasRenderingContext2D): void {
+        const { width, height } = this;
         const angle = ((this.slatAngle || 0) * Math.PI) / 180;
         const cos = Math.abs(Math.cos(angle));
         const sin = Math.abs(Math.sin(angle));
@@ -99,7 +149,6 @@ export class BbGradientSlats extends BeautifulBackground {
         );
         const slat = across / amount;
 
-        ctx.save();
         ctx.translate(width / 2, height / 2);
         ctx.rotate(angle);
         for (let i = 0; i < amount; i++) {
@@ -111,7 +160,6 @@ export class BbGradientSlats extends BeautifulBackground {
             ctx.fillStyle = shade;
             ctx.fillRect(left, -along / 2, slat, along);
         }
-        ctx.restore();
     }
 }
 

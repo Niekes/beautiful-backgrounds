@@ -51,6 +51,14 @@ export abstract class BeautifulBackground extends LitElement {
     private fadeMasks: CanvasPattern[] = [];
     private fadeTurn: number = 0;
 
+    /** Whether any of the element shows in the viewport. */
+    private onScreen: boolean = true;
+    /** Pauses the animation while the element is scrolled off screen. */
+    private screenObserver = new IntersectionObserver((entries) => {
+        this.onScreen = entries[entries.length - 1].isIntersecting;
+        this.handleVisibilityChange();
+    });
+
     protected debouncedResize: () => void;
 
     constructor() {
@@ -60,8 +68,9 @@ export abstract class BeautifulBackground extends LitElement {
         this.debouncedResize = debounce(this.resizeCanvas.bind(this), 100);
     }
 
+    /** Animates only while the page shows and the element is on screen. */
     protected handleVisibilityChange = (): void => {
-        if (document.visibilityState === "hidden") {
+        if (document.visibilityState === "hidden" || !this.onScreen) {
             this.stopAnimation();
         } else {
             this.startAnimation();
@@ -76,6 +85,7 @@ export abstract class BeautifulBackground extends LitElement {
         this.startAnimation();
 
         window.addEventListener("resize", this.debouncedResize);
+        this.screenObserver.observe(this);
         document.addEventListener(
             "visibilitychange",
             this.handleVisibilityChange,
@@ -85,6 +95,7 @@ export abstract class BeautifulBackground extends LitElement {
     disconnectedCallback(): void {
         super.disconnectedCallback();
         window.removeEventListener("resize", this.debouncedResize);
+        this.screenObserver.disconnect();
         document.removeEventListener(
             "visibilitychange",
             this.handleVisibilityChange,

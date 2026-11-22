@@ -90,6 +90,20 @@ describe("BeautifulBackground", () => {
         expect(el.animationFrameId).toBe(running);
     });
 
+    it("pauses while scrolled off screen, even when the page shows", async () => {
+        const el = await mount<BbHexagonWave>(TAG);
+        el.style.position = "absolute";
+        el.style.top = "10000px";
+        await vi.waitFor(() => expect(el.animationFrameId).toBeNull());
+
+        // The page showing again does not wake a background off screen.
+        document.dispatchEvent(new Event("visibilitychange"));
+        expect(el.animationFrameId).toBeNull();
+
+        el.style.top = "0";
+        await vi.waitFor(() => expect(el.animationFrameId).not.toBeNull());
+    });
+
     it("never runs a frame backwards in time", async () => {
         const el = await mount<BbHexagonWave>(TAG);
         const loop = vi.spyOn(
@@ -115,8 +129,13 @@ describe("BeautifulBackground", () => {
             el as unknown as { resizeCanvas(): void },
             "resizeCanvas",
         );
+        const disconnect = vi.spyOn(
+            IntersectionObserver.prototype,
+            "disconnect",
+        );
         el.remove();
         expect(el.animationFrameId).toBeNull();
+        expect(disconnect).toHaveBeenCalled();
 
         window.dispatchEvent(new Event("resize"));
         await new Promise((resolve) => setTimeout(resolve, 150));
