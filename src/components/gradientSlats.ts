@@ -39,8 +39,9 @@ export class BbGradientSlats extends BeautifulBackground {
     slatAngle: number = 0;
 
     /**
-     * Whether each slat shows the whole wash squeezed to its width, every
-     * other one turned upside down, instead of its own part of the wash.
+     * Whether each slat shows the whole wash squeezed to fit it, every other
+     * one turned upside down, instead of its own part of the wash. At angles
+     * other than 0 or 90, each slat shows a slanted strip of the wash.
      */
     @property({ type: Boolean, attribute: "slat-flip" })
     slatFlip: boolean = false;
