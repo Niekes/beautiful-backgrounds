@@ -91,7 +91,7 @@ export const Cathedral: Story = {
         shaftAmount: 12,
         speed: 0.2,
         bgColors: "#000, #1a1208, #000",
-        shaftAngle: -26
+        shaftAngle: -26,
     },
 };
 
