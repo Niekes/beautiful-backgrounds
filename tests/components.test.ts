@@ -69,6 +69,18 @@ describe.each([
     });
 });
 
+it.each(["bb-drifting-orbs", "bb-glow-swirl"])(
+    "<%s> keeps animating at zero height, and draws once it has one",
+    async (tag) => {
+        const el = await mount(tag, {}, { width: 300, height: 0 });
+        expect(() => frame(el)).not.toThrow();
+        el.style.height = "200px";
+        (el as unknown as { resizeCanvas(): void }).resizeCanvas();
+        for (let i = 0; i < 30; i++) frame(el);
+        expect(drewSomething(el)).toBe(true);
+    },
+);
+
 describe("bb-ambient-ribbon", () => {
     it("draws its ribbons", async () => {
         const el = await mount<BbAmbientRibbon>("bb-ambient-ribbon", {
@@ -555,19 +567,6 @@ describe("bb-drifting-orbs", () => {
         return el;
     }
 
-    it("keeps animating at zero height, and draws once it has one", async () => {
-        const el = await mount(
-            "bb-drifting-orbs",
-            {},
-            { width: 300, height: 0 },
-        );
-        expect(() => frame(el)).not.toThrow();
-        el.style.height = "200px";
-        (el as unknown as { resizeCanvas(): void }).resizeCanvas();
-        for (let i = 0; i < 30; i++) frame(el);
-        expect(drewSomething(el)).toBe(true);
-    });
-
     it("draws its orbs", async () => {
         expect(drewSomething(await orbs())).toBe(true);
     });
@@ -673,15 +672,6 @@ describe("bb-glow-swirl", () => {
         );
         return data.some((value, i) => i % 4 === 3 && value > 0);
     }
-
-    it("keeps animating at zero height, and draws once it has one", async () => {
-        const el = await mount("bb-glow-swirl", {}, { width: 300, height: 0 });
-        expect(() => frame(el)).not.toThrow();
-        el.style.height = "200px";
-        (el as unknown as { resizeCanvas(): void }).resizeCanvas();
-        for (let i = 0; i < 30; i++) frame(el);
-        expect(drewSomething(el)).toBe(true);
-    });
 
     it("draws its sparks", async () => {
         expect(drewSomething(await swirl())).toBe(true);

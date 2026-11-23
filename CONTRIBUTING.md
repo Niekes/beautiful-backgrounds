@@ -60,7 +60,8 @@ component never imports another one. fallow enforces this.
 2. Export it from `index.ts`.
 3. Add `src/stories/<Name>.stories.ts`. Every story is a smoke test as well.
 4. Cover it in `tests/components.test.ts`.
-5. Add it to the README, and record its GIF with `npm run gifs`.
+5. Add it to the README. If it joins the GIF gallery, add it to `STORIES` in
+   `scripts/record-gifs.mjs` and record its GIF with `npm run gifs`.
 
 ## Releasing
 
