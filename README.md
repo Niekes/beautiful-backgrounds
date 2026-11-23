@@ -43,7 +43,7 @@
     </tr>
     <tr style="background-color: #f6f8fa">
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-contour-flow--topographic-moss"><img src="assets/examples/contour-flow.gif" alt="Contour Flow"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--neon-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula"><img src="assets/examples/smoke-ring.gif" alt="Smoke Ring"></a></td>
     </tr>
     <tr style="background-color: #f6f8fa">
@@ -130,7 +130,7 @@ Each background fills its element, redraws at the new size when the window resiz
 | [Neon Rails](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)      | `<bb-neon-rails>`     | Particles racing along a geometric grid, leaving neon trails                         |
 | [Silk Waves](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-silk-waves--deep-tide)               | `<bb-silk-waves>`     | A sea of rolling waves in one color, shaded from its troughs to its crests           |
 | [Smoke Ring](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula)                  | `<bb-smoke-ring>`     | A wavy ring of light giving off colored smoke that drifts outward and swirls         |
-| [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)         | `<bb-star-trail>`     | Orbiting stars with fading trails                                                    |
+| [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--neon-vortex)             | `<bb-star-trail>`     | Orbiting stars with fading trails                                                    |
 
 Glow Swirl and Drifting Orbs are based on [Swirl](https://tympanus.net/Development/AmbientCanvasBackgrounds/index2.html) and [Shift](https://tympanus.net/Development/AmbientCanvasBackgrounds/index3.html) from [Ambient Canvas Backgrounds](https://github.com/crnacura/AmbientCanvasBackgrounds) by Sean Free, published on Codrops.
 

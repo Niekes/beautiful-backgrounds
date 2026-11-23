@@ -54,7 +54,7 @@ const STORIES = {
     ],
     "silk-waves": ["bb-silk-waves", "backgrounds-silk-waves--deep-tide"],
     "smoke-ring": ["bb-smoke-ring", "backgrounds-smoke-ring--nebula"],
-    "star-trail": ["bb-star-trail", "backgrounds-star-trail--galactic-vortex"],
+    "star-trail": ["bb-star-trail", "backgrounds-star-trail--neon-vortex"],
 };
 
 const ROOT = "storybook-static";
