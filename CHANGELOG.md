@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-11-23
+
+A new background, `<bb-drifting-orbs>`, and tilted light shafts.
+
+### Added
+
+- `<bb-drifting-orbs>` (`BbDriftingOrbs`): large, soft orbs of color drift,
+  fade in and out and slowly shift through their colors, all blurred
+  together, with `orb-colors`, `orb-amount`, `orb-size`, `orb-blur` and
+  `speed`. Based on "Shift" from Ambient Canvas Backgrounds by Sean Free
+  (Codrops).
+- `<bb-light-shafts>`: `shaft-angle` leans the shafts from upright, in
+  degrees, clockwise. A negative `speed` drifts them the other way.
+
+### Fixed
+
+- `<bb-star-trail>` and `<bb-neon-rails>`: the first particles no longer
+  all fade in together; they start at a random point in their life.
+- `<bb-glow-swirl>`: no longer stops animating for good after being sized
+  to zero.
+
+### Changed
+
+- New examples for Silk Waves (Ultraviolet, Lagoon) and Light Shafts
+  (Meteor Shower), and Star Trail leads with Neon Vortex.
+- Storybook lists the backgrounds alphabetically.
+
 ## [2.3.1] - 2026-11-23
 
 `<bb-star-trail>` resizes without streaks.
