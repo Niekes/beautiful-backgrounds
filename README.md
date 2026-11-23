@@ -34,21 +34,21 @@
     <tr style="background-color: #f6f8fa">
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow"><img src="assets/examples/ambient-ribbon.gif" alt="Ambient Ribbon"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-gradient-slats--frosted-glass"><img src="assets/examples/gradient-slats.gif" alt="Gradient Slats"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network"><img src="assets/examples/neon-rails.gif" alt="Neon Rails"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-drifting-orbs--pastel-dream"><img src="assets/examples/drifting-orbs.gif" alt="Drifting Orbs"></a></td>
     </tr>
     <tr style="background-color: #f6f8fa">
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network"><img src="assets/examples/neon-rails.gif" alt="Neon Rails"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar"><img src="assets/examples/hexagon-wave.gif" alt="Hexagon Wave"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow"><img src="assets/examples/liquid-lines.gif" alt="Liquid Lines"></a></td>
+    </tr>
+    <tr style="background-color: #f6f8fa">
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-contour-flow--topographic-moss"><img src="assets/examples/contour-flow.gif" alt="Contour Flow"></a></td>
-    </tr>
-    <tr style="background-color: #f6f8fa">
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--neon-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula"><img src="assets/examples/smoke-ring.gif" alt="Smoke Ring"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-light-shafts--crystal"><img src="assets/examples/light-shafts.gif" alt="Light Shafts"></a></td>
     </tr>
     <tr style="background-color: #f6f8fa">
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-light-shafts--crystal"><img src="assets/examples/light-shafts.gif" alt="Light Shafts"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-silk-waves--deep-tide"><img src="assets/examples/silk-waves.gif" alt="Silk Waves"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain"><img src="assets/examples/digital-rain.gif" alt="Digital Rain"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-glow-swirl--galaxy"><img src="assets/examples/glow-swirl.gif" alt="Glow Swirl"></a></td>
     </tr>
 </table>
@@ -121,6 +121,7 @@ Each background fills its element, redraws at the new size when the window resiz
 | [Ambient Ribbon](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow)  | `<bb-ambient-ribbon>` | Flowing ribbons of light with control over waves and rotation                        |
 | [Contour Flow](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-contour-flow--topographic-moss)    | `<bb-contour-flow>`   | Topographic contour lines, drawn by particles flowing downhill and colored by height |
 | [Digital Rain](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain) | `<bb-digital-rain>`   | Matrix-style falling characters                                                      |
+| [Drifting Orbs](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-drifting-orbs--pastel-dream)      | `<bb-drifting-orbs>`  | Large, soft orbs of color drifting and blurring together as their colors shift       |
 | [Glow Swirl](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-glow-swirl--galaxy)                  | `<bb-glow-swirl>`     | Glowing sparks swirling out of a band through the middle                             |
 | [Gradient Slats](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-gradient-slats--frosted-glass)   | `<bb-gradient-slats>` | A slowly moving wash of colors seen through a row of shaded slats                    |
 | [Hexagon Wave](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar)    | `<bb-hexagon-wave>`   | A shaded grid of hexagons rolling like a wave                                        |
@@ -129,9 +130,9 @@ Each background fills its element, redraws at the new size when the window resiz
 | [Neon Rails](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)      | `<bb-neon-rails>`     | Particles racing along a geometric grid, leaving neon trails                         |
 | [Silk Waves](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-silk-waves--deep-tide)               | `<bb-silk-waves>`     | A sea of rolling waves in one color, shaded from its troughs to its crests           |
 | [Smoke Ring](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula)                  | `<bb-smoke-ring>`     | A wavy ring of light giving off colored smoke that drifts outward and swirls         |
-| [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)         | `<bb-star-trail>`     | Orbiting stars with fading trails                                                    |
+| [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--neon-vortex)             | `<bb-star-trail>`     | Orbiting stars with fading trails                                                    |
 
-Glow Swirl is based on [Swirl](https://tympanus.net/Development/AmbientCanvasBackgrounds/index2.html) from [Ambient Canvas Backgrounds](https://github.com/crnacura/AmbientCanvasBackgrounds) by Sean Free, published on Codrops.
+Glow Swirl and Drifting Orbs are based on [Swirl](https://tympanus.net/Development/AmbientCanvasBackgrounds/index2.html) and [Shift](https://tympanus.net/Development/AmbientCanvasBackgrounds/index3.html) from [Ambient Canvas Backgrounds](https://github.com/crnacura/AmbientCanvasBackgrounds) by Sean Free, published on Codrops.
 
 The source of each one lives in [`src/components`](src/components). To build your own, extend `BeautifulBackground` and implement its `loop()`.
 

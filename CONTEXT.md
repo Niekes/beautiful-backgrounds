@@ -90,6 +90,12 @@ drifting apart, so it slowly changes instead of sliding. Unlike **Flow**,
 it does not lead downhill.
 _Avoid_: flow, field, wind
 
+**Orb**:
+A large, soft disc of color that drifts in a straight line and fades in and
+out over its short life. It takes its color from where and when it starts,
+so nearby orbs match and the colors slowly shift over time.
+_Avoid_: circle, blob, bubble
+
 **Star**:
 A small light that circles the middle of a star trail, fades in and out
 over its life and draws a short streak that fades with the **Trail**. When

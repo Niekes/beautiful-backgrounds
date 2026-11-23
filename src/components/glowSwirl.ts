@@ -93,10 +93,11 @@ export class BbGlowSwirl extends BeautifulBackground {
         this.terrains = [createTerrain(), createTerrain()];
         this.shades = gradient(this.colors(), SHADES);
         this.sparks = Array.from({ length: this.amount() }, () => this.spawn());
-        this.layer.width = this.canvas.width;
-        this.layer.height = this.canvas.height;
-        this.halo.width = Math.ceil(this.width / GLOW_SCALE);
-        this.halo.height = Math.ceil(this.height / GLOW_SCALE);
+        // At least 1px: drawing a canvas of size 0 throws and stops the animation.
+        this.layer.width = Math.max(1, this.canvas.width);
+        this.layer.height = Math.max(1, this.canvas.height);
+        this.halo.width = Math.max(1, Math.ceil(this.width / GLOW_SCALE));
+        this.halo.height = Math.max(1, Math.ceil(this.height / GLOW_SCALE));
         this.builtFor = this.settings();
     }
 
