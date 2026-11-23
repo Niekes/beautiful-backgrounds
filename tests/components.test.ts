@@ -1045,7 +1045,7 @@ describe.each([
 
     it("keeps its particle amount, replacing particles that die", async () => {
         const now = vi.spyOn(Date, "now").mockReturnValue(0);
-        // The first particles start mid-life by a random share of it: none.
+        // The first particles start at a random age: with random at 0, age 0.
         vi.spyOn(Math, "random").mockReturnValue(0);
         const el = await mount<InstanceType<typeof Element>>(tag, {
             "particle-amount": "5",
@@ -1066,6 +1066,30 @@ describe.each([
         frame(el);
         expect(particles()).toHaveLength(5);
         expect(particles()).not.toContain(first);
+    });
+
+    it("starts only its first particles at a random age", async () => {
+        const now = vi.spyOn(Date, "now").mockReturnValue(0);
+        // Every head start is nearly the whole lifespan of 10 ms.
+        vi.spyOn(Math, "random").mockReturnValue(0.99);
+        const el = await mount<InstanceType<typeof Element>>(tag, {
+            "particle-amount": "5",
+            "particle-lifespan-min": "10",
+            "particle-lifespan-max": "10",
+        });
+        const particles = (): unknown[] =>
+            (el as unknown as { particles: [] }).particles;
+        const first = [...particles()];
+
+        now.mockReturnValue(1);
+        frame(el);
+        const replacements = [...particles()];
+        expect(replacements.some((p) => first.includes(p))).toBe(false);
+
+        // New ones are born now, so 5 ms later they are all still alive.
+        now.mockReturnValue(6);
+        frame(el);
+        expect(particles()).toEqual(replacements);
     });
 
     it("picks random colors from its hue range by default", async () => {
