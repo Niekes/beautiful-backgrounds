@@ -125,8 +125,9 @@ export class BbDriftingOrbs extends BeautifulBackground {
     }
 
     private fitLayers(): void {
-        const width = Math.ceil(this.width / SCALE);
-        const height = Math.ceil(this.height / SCALE);
+        // At least 1px: drawing a canvas of size 0 throws and stops the animation.
+        const width = Math.max(1, Math.ceil(this.width / SCALE));
+        const height = Math.max(1, Math.ceil(this.height / SCALE));
         for (const canvas of [this.layer, this.haze]) {
             // Setting the size clears the canvas, so only when it changed.
             if (canvas.width !== width) canvas.width = width;
@@ -137,13 +138,14 @@ export class BbDriftingOrbs extends BeautifulBackground {
     private spawn(): Orb {
         const x = Math.random() * this.width;
         const y = Math.random() * this.height;
-        // Each height is about 0.5 ± 0.25, so this is about -1 to 1.
+        // Each height is about 0.5 ± 0.25, so this is -1 to 1 once clamped.
         const spot = (this.terrain(x / PATCH, y / PATCH) - 0.5) * 4;
-        const at = this.time / CYCLE + spot * SPOT_SHIFT;
+        const cycle =
+            this.time / CYCLE + Math.min(1, Math.max(-1, spot)) * SPOT_SHIFT;
         const angle = Math.random() * 2 * Math.PI;
         // 0.1 to 1.1 px per frame at 60 fps, like the original.
         const pace = (0.1 + Math.random()) * 60;
-        const max = this.radius();
+        const largest = this.radius();
         return {
             x,
             y,
@@ -151,8 +153,10 @@ export class BbDriftingOrbs extends BeautifulBackground {
             vy: Math.sin(angle) * pace,
             age: 0,
             life: 2.5 + Math.random() * 3.3,
-            radius: max / 3 + Math.random() * ((max * 2) / 3),
-            color: this.shades[Math.floor((at - Math.floor(at)) * SHADES)],
+            radius: largest / 3 + Math.random() * ((largest * 2) / 3),
+            color: this.shades[
+                Math.floor((cycle - Math.floor(cycle)) * SHADES)
+            ],
         };
     }
 
