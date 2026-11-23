@@ -34,6 +34,7 @@ const STORIES = {
         "bb-digital-rain",
         "backgrounds-digital-rain--classic-matrix-rain",
     ],
+    "drifting-orbs": ["bb-drifting-orbs", "backgrounds-drifting-orbs--default"],
     "glow-swirl": ["bb-glow-swirl", "backgrounds-glow-swirl--galaxy"],
     "gradient-slats": [
         "bb-gradient-slats",
