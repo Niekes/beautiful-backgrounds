@@ -4,6 +4,7 @@ import {
     BbAmbientRibbon,
     BbContourFlow,
     BbDigitalRain,
+    BbDriftingOrbs,
     BbGlowSwirl,
     BbGradientSlats,
     BbHexagonWave,
@@ -51,6 +52,7 @@ describe.each([
     ["bb-ambient-ribbon", BbAmbientRibbon],
     ["bb-contour-flow", BbContourFlow],
     ["bb-digital-rain", BbDigitalRain],
+    ["bb-drifting-orbs", BbDriftingOrbs],
     ["bb-glow-swirl", BbGlowSwirl],
     ["bb-gradient-slats", BbGradientSlats],
     ["bb-hexagon-wave", BbHexagonWave],
@@ -66,6 +68,18 @@ describe.each([
         expect(document.createElement(tag)).toBeInstanceOf(BeautifulBackground);
     });
 });
+
+it.each(["bb-drifting-orbs", "bb-glow-swirl"])(
+    "<%s> keeps animating at zero height, and draws once it has one",
+    async (tag) => {
+        const el = await mount(tag, {}, { width: 300, height: 0 });
+        expect(() => frame(el)).not.toThrow();
+        el.style.height = "200px";
+        (el as unknown as { resizeCanvas(): void }).resizeCanvas();
+        for (let i = 0; i < 30; i++) frame(el);
+        expect(drewSomething(el)).toBe(true);
+    },
+);
 
 describe("bb-ambient-ribbon", () => {
     it("draws its ribbons", async () => {
@@ -543,6 +557,100 @@ describe("bb-gradient-slats", () => {
     });
 });
 
+describe("bb-drifting-orbs", () => {
+    async function orbs(
+        attributes: Record<string, string> = {},
+    ): Promise<BbDriftingOrbs> {
+        const el = await mount<BbDriftingOrbs>("bb-drifting-orbs", attributes);
+        // Orbs fade in from nothing, so their first frame shows nothing.
+        for (let i = 0; i < 30; i++) frame(el);
+        return el;
+    }
+
+    it("draws its orbs", async () => {
+        expect(drewSomething(await orbs())).toBe(true);
+    });
+
+    /** How many pixels show any light. */
+    function lit(el: BbDriftingOrbs): number {
+        const { width, height } = el.canvas;
+        const { data } = el.ctx.getImageData(0, 0, width, height);
+        return data.filter((v, i) => i % 4 === 3 && v > 0).length;
+    }
+
+    it.each(["0", "-5", "abc"])(
+        "draws nothing at orb-amount %s",
+        async (amount) => {
+            const el = await orbs({ "orb-amount": amount });
+            expect(drewSomething(el)).toBe(false);
+        },
+    );
+
+    it("shows its orb colors, or its default colors without them", async () => {
+        const red = await orbs({ "orb-colors": "#ff0000" });
+        const { data } = red.ctx.getImageData(0, 0, 300, 200);
+        expect(data.some((v, i) => i % 4 === 0 && v > 0)).toBe(true);
+        expect(data.some((v, i) => i % 4 === 2 && v > 0)).toBe(false);
+
+        expect(drewSomething(await orbs({ "orb-colors": "" }))).toBe(true);
+    });
+
+    it("blurs its orbs, unless its blur is 0", async () => {
+        vi.spyOn(Math, "random").mockReturnValue(0.5);
+        const small = { "orb-amount": "1", "orb-size": "30" };
+        const blurred = lit(await orbs({ ...small, "orb-blur": "50" }));
+        const sharp = lit(await orbs({ ...small, "orb-blur": "0" }));
+        const odd = lit(await orbs({ ...small, "orb-blur": "abc" }));
+        expect(blurred).toBeGreaterThan(sharp * 2);
+        expect(odd).toBe(sharp);
+    });
+
+    it("stands still at a speed that is not a number", async () => {
+        const el = await orbs({ speed: "abc", "trail-opacity": "0" });
+        const before = el.ctx.getImageData(0, 0, 300, 200).data.join();
+        frame(el);
+        expect(el.ctx.getImageData(0, 0, 300, 200).data.join()).toBe(before);
+    });
+
+    it.each(["orb-size", "orb-blur"])(
+        "still draws at a %s that is not a number",
+        async (name) => {
+            expect(drewSomething(await orbs({ [name]: "abc" }))).toBe(true);
+        },
+    );
+
+    it("keeps drawing after its first orbs' lives are over", async () => {
+        const el = await orbs();
+        for (let i = 0; i < 100; i++) frame(el, 0.1);
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("keeps its orbs when it resizes, instead of fading in again", async () => {
+        vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+        const el = await orbs();
+        for (let i = 0; i < 60; i++) frame(el);
+
+        el.style.width = "600px";
+        window.dispatchEvent(new Event("resize"));
+        vi.advanceTimersByTime(100);
+        vi.useRealTimers();
+        frame(el);
+
+        // New orbs start unseen, so a rebuild would draw nothing here.
+        expect(el.width).toBe(600);
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("makes new orbs when its settings change", async () => {
+        const el = await orbs({ "orb-colors": "#ff0000" });
+        el.orbColors = ["#0000ff"];
+        await el.updateComplete;
+        for (let i = 0; i < 30; i++) frame(el);
+        const { data } = el.ctx.getImageData(0, 0, 300, 200);
+        expect(data.some((v, i) => i % 4 === 0 && v > 0)).toBe(false);
+    });
+});
+
 describe("bb-glow-swirl", () => {
     async function swirl(
         attributes: Record<string, string> = {},
@@ -923,8 +1031,22 @@ describe.each([
     ["bb-neon-rails", BbNeonRails],
     ["bb-star-trail", BbStarTrail],
 ])("%s", (tag, Element) => {
+    it("shows its particles at once, as if it had been running", async () => {
+        // Time stands still, so only a head start in age can show a particle.
+        vi.spyOn(Date, "now").mockReturnValue(1000);
+        const el = await mount<InstanceType<typeof Element>>(tag, {
+            "particle-amount": "200",
+        });
+        // A star's first move only finds its place, so it draws from the second.
+        frame(el);
+        frame(el);
+        expect(drewSomething(el)).toBe(true);
+    });
+
     it("keeps its particle amount, replacing particles that die", async () => {
         const now = vi.spyOn(Date, "now").mockReturnValue(0);
+        // The first particles start at a random age: with random at 0, age 0.
+        vi.spyOn(Math, "random").mockReturnValue(0);
         const el = await mount<InstanceType<typeof Element>>(tag, {
             "particle-amount": "5",
             "particle-lifespan-min": "10",
@@ -944,6 +1066,30 @@ describe.each([
         frame(el);
         expect(particles()).toHaveLength(5);
         expect(particles()).not.toContain(first);
+    });
+
+    it("starts only its first particles at a random age", async () => {
+        const now = vi.spyOn(Date, "now").mockReturnValue(0);
+        // Every head start is nearly the whole lifespan of 10 ms.
+        vi.spyOn(Math, "random").mockReturnValue(0.99);
+        const el = await mount<InstanceType<typeof Element>>(tag, {
+            "particle-amount": "5",
+            "particle-lifespan-min": "10",
+            "particle-lifespan-max": "10",
+        });
+        const particles = (): unknown[] =>
+            (el as unknown as { particles: [] }).particles;
+        const first = [...particles()];
+
+        now.mockReturnValue(1);
+        frame(el);
+        const replacements = [...particles()];
+        expect(replacements.some((p) => first.includes(p))).toBe(false);
+
+        // New ones are born now, so 5 ms later they are all still alive.
+        now.mockReturnValue(6);
+        frame(el);
+        expect(particles()).toEqual(replacements);
     });
 
     it("picks random colors from its hue range by default", async () => {

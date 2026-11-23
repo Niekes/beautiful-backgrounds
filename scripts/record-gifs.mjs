@@ -30,9 +30,9 @@ const STORIES = {
         "bb-contour-flow",
         "backgrounds-contour-flow--topographic-moss",
     ],
-    "digital-rain": [
-        "bb-digital-rain",
-        "backgrounds-digital-rain--classic-matrix-rain",
+    "drifting-orbs": [
+        "bb-drifting-orbs",
+        "backgrounds-drifting-orbs--pastel-dream",
     ],
     "glow-swirl": ["bb-glow-swirl", "backgrounds-glow-swirl--galaxy"],
     "gradient-slats": [
@@ -54,7 +54,7 @@ const STORIES = {
     ],
     "silk-waves": ["bb-silk-waves", "backgrounds-silk-waves--ultraviolet"],
     "smoke-ring": ["bb-smoke-ring", "backgrounds-smoke-ring--nebula"],
-    "star-trail": ["bb-star-trail", "backgrounds-star-trail--galactic-vortex"],
+    "star-trail": ["bb-star-trail", "backgrounds-star-trail--neon-vortex"],
 };
 
 const ROOT = "storybook-static";

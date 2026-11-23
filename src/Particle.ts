@@ -37,7 +37,7 @@ export default class Particle {
         this.y = options.y ?? 0;
         this.px = this.x;
         this.py = this.y;
-        this.born = Date.now();
+        this.born = Date.now() - (options.age ?? 0);
         this.fadeInDuration = this.lifespan * 0.25;
         this.fadeOutDuration = this.lifespan * 0.5;
     }
@@ -202,6 +202,8 @@ export interface ParticleOptions {
     gridAngle: number;
     x?: number;
     y?: number;
+    /** How old it already is, in ms, so it can start mid-life. */
+    age?: number;
 }
 
 type Point = { x: number; y: number };

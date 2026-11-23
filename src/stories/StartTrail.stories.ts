@@ -103,6 +103,24 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
+export const NeonVortex: Story = {
+    args: {
+        bgColors: "#000000, #000000",
+        particleColors: "#ff00ff, #00ffff, #ff0080, #0080ff",
+        particleAmount: 3500,
+        particleSizeMin: 0.8,
+        particleSizeMax: 2.5,
+        particleSpeedMin: 0.1,
+        particleSpeedMax: 0.2,
+        particleForce: 40,
+        particleLifespanMin: 2000,
+        particleLifespanMax: 8000,
+        particleRadiusMin: 100,
+        particleRadiusMax: 350,
+        trailOpacity: 0.075,
+    },
+};
+
 export const GalacticVortex: Story = {
     args: {
         bgColors: "#000, #030",
@@ -282,24 +300,6 @@ export const FireflyForest: Story = {
         particleRadiusMin: 20,
         particleRadiusMax: 400,
         trailOpacity: 0.217,
-    },
-};
-
-export const NeonVortex: Story = {
-    args: {
-        bgColors: "#000000, #000000",
-        particleColors: "#ff00ff, #00ffff, #ff0080, #0080ff",
-        particleAmount: 3500,
-        particleSizeMin: 0.8,
-        particleSizeMax: 2.5,
-        particleSpeedMin: 0.1,
-        particleSpeedMax: 0.2,
-        particleForce: 40,
-        particleLifespanMin: 2000,
-        particleLifespanMax: 8000,
-        particleRadiusMin: 100,
-        particleRadiusMax: 350,
-        trailOpacity: 0.075,
     },
 };
 
