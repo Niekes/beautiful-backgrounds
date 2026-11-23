@@ -79,7 +79,8 @@ export abstract class ParticleBackground extends BeautifulBackground {
 
         // Initialize background to prevent white flash
         this.drawBackground(this.ctx);
-        this.replenish();
+        // Mid-life, so they don't all fade in together as if born at once.
+        this.replenish(true);
     }
 
     protected loop(deltaTime: number): void {
@@ -96,14 +97,16 @@ export abstract class ParticleBackground extends BeautifulBackground {
         });
     }
 
-    protected createParticle(): Particle {
+    protected createParticle(midLife: boolean = false): Particle {
+        const lifespan = getRandomFloat(
+            this.particleLifespanMin,
+            this.particleLifespanMax,
+        );
         return new Particle({
             size: getRandomFloat(this.particleSizeMin, this.particleSizeMax),
             speed: getRandomFloat(this.particleSpeedMin, this.particleSpeedMax),
-            lifespan: getRandomFloat(
-                this.particleLifespanMin,
-                this.particleLifespanMax,
-            ),
+            lifespan,
+            age: midLife ? Math.random() * lifespan : 0,
             color: this.particleColor(),
             gridSides: this.gridSides,
             gridSize: this.gridSize,
@@ -118,9 +121,9 @@ export abstract class ParticleBackground extends BeautifulBackground {
     /** Where a new particle starts. */
     protected abstract placement(): ParticlePlacement;
 
-    private replenish(): void {
+    private replenish(midLife: boolean = false): void {
         while (this.particles.length < this.particleAmount) {
-            this.particles.push(this.createParticle());
+            this.particles.push(this.createParticle(midLife));
         }
     }
 

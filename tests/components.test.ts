@@ -1031,8 +1031,22 @@ describe.each([
     ["bb-neon-rails", BbNeonRails],
     ["bb-star-trail", BbStarTrail],
 ])("%s", (tag, Element) => {
+    it("shows its particles at once, as if it had been running", async () => {
+        // Time stands still, so only a head start in age can show a particle.
+        vi.spyOn(Date, "now").mockReturnValue(1000);
+        const el = await mount<InstanceType<typeof Element>>(tag, {
+            "particle-amount": "200",
+        });
+        // A star's first move only finds its place, so it draws from the second.
+        frame(el);
+        frame(el);
+        expect(drewSomething(el)).toBe(true);
+    });
+
     it("keeps its particle amount, replacing particles that die", async () => {
         const now = vi.spyOn(Date, "now").mockReturnValue(0);
+        // The first particles start mid-life by a random share of it: none.
+        vi.spyOn(Math, "random").mockReturnValue(0);
         const el = await mount<InstanceType<typeof Element>>(tag, {
             "particle-amount": "5",
             "particle-lifespan-min": "10",
