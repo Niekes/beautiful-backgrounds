@@ -55,7 +55,7 @@ export const PastelDream: Story = {
     },
 };
 
-export const Default: Story = {};
+export const ChromaMist: Story = {};
 
 export const OldFilm: Story = {
     args: {

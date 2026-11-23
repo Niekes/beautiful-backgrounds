@@ -30,10 +30,6 @@ const STORIES = {
         "bb-contour-flow",
         "backgrounds-contour-flow--topographic-moss",
     ],
-    "digital-rain": [
-        "bb-digital-rain",
-        "backgrounds-digital-rain--classic-matrix-rain",
-    ],
     "drifting-orbs": [
         "bb-drifting-orbs",
         "backgrounds-drifting-orbs--pastel-dream",

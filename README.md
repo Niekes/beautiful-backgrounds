@@ -34,21 +34,21 @@
     <tr style="background-color: #f6f8fa">
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-ambient-ribbon--signature-flow"><img src="assets/examples/ambient-ribbon.gif" alt="Ambient Ribbon"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-gradient-slats--frosted-glass"><img src="assets/examples/gradient-slats.gif" alt="Gradient Slats"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network"><img src="assets/examples/neon-rails.gif" alt="Neon Rails"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-drifting-orbs--pastel-dream"><img src="assets/examples/drifting-orbs.gif" alt="Drifting Orbs"></a></td>
     </tr>
     <tr style="background-color: #f6f8fa">
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network"><img src="assets/examples/neon-rails.gif" alt="Neon Rails"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-hexagon-wave--honeycomb-pulsar"><img src="assets/examples/hexagon-wave.gif" alt="Hexagon Wave"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow"><img src="assets/examples/liquid-lines.gif" alt="Liquid Lines"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-contour-flow--topographic-moss"><img src="assets/examples/contour-flow.gif" alt="Contour Flow"></a></td>
     </tr>
     <tr style="background-color: #f6f8fa">
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-contour-flow--topographic-moss"><img src="assets/examples/contour-flow.gif" alt="Contour Flow"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex"><img src="assets/examples/star-trail.gif" alt="Star Trail"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula"><img src="assets/examples/smoke-ring.gif" alt="Smoke Ring"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-light-shafts--crystal"><img src="assets/examples/light-shafts.gif" alt="Light Shafts"></a></td>
     </tr>
     <tr style="background-color: #f6f8fa">
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-light-shafts--crystal"><img src="assets/examples/light-shafts.gif" alt="Light Shafts"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-silk-waves--deep-tide"><img src="assets/examples/silk-waves.gif" alt="Silk Waves"></a></td>
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain"><img src="assets/examples/digital-rain.gif" alt="Digital Rain"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-glow-swirl--galaxy"><img src="assets/examples/glow-swirl.gif" alt="Glow Swirl"></a></td>
     </tr>
 </table>
