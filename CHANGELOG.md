@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.1] - 2026-11-23
+
+`<bb-star-trail>` resizes without streaks.
+
+### Fixed
+
+- `<bb-star-trail>`: after a resize, every star briefly drew a long line
+  across the canvas. The stars now move with the new middle without a
+  streak.
+
+### Changed
+
+- The README links to the CodePen collection.
+
 ## [2.3.0] - 2026-11-22
 
 A new background, `<bb-glow-swirl>`.
