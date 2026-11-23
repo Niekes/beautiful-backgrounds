@@ -90,7 +90,7 @@ export const LavaLamp: Story = {
     args: {
         orbColors: "#ff2d75, #ff7a1a",
         orbAmount: 25,
-        orbSize: 500,
+        orbSize: 240,
         orbBlur: 30,
         speed: 0.6,
         bgColors: "#1a0410",
@@ -113,6 +113,7 @@ export const MintBreeze: Story = {
         speed: 0.6,
         bgColors: "#0a1f1a",
         orbAmount: 10,
+        orbSize: 50,
     },
 };
 
