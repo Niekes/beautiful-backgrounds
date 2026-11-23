@@ -52,7 +52,7 @@ const STORIES = {
         "bb-neon-rails",
         "backgrounds-neon-rails--cyber-grid-network",
     ],
-    "silk-waves": ["bb-silk-waves", "backgrounds-silk-waves--deep-tide"],
+    "silk-waves": ["bb-silk-waves", "backgrounds-silk-waves--ultraviolet"],
     "smoke-ring": ["bb-smoke-ring", "backgrounds-smoke-ring--nebula"],
     "star-trail": ["bb-star-trail", "backgrounds-star-trail--galactic-vortex"],
 };

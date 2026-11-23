@@ -47,7 +47,7 @@
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-light-shafts--crystal"><img src="assets/examples/light-shafts.gif" alt="Light Shafts"></a></td>
     </tr>
     <tr style="background-color: #f6f8fa">
-        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-silk-waves--deep-tide"><img src="assets/examples/silk-waves.gif" alt="Silk Waves"></a></td>
+        <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-silk-waves--ultraviolet"><img src="assets/examples/silk-waves.gif" alt="Silk Waves"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-digital-rain--classic-matrix-rain"><img src="assets/examples/digital-rain.gif" alt="Digital Rain"></a></td>
         <td><a target="_blank" href="https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-glow-swirl--galaxy"><img src="assets/examples/glow-swirl.gif" alt="Glow Swirl"></a></td>
     </tr>
@@ -127,7 +127,7 @@ Each background fills its element, redraws at the new size when the window resiz
 | [Light Shafts](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-light-shafts--crystal)             | `<bb-light-shafts>`   | Upright shafts of soft light drifting sideways, the nearer ones faster               |
 | [Liquid Lines](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-liquid-lines--serpentine-flow)     | `<bb-liquid-lines>`   | Undulating lines with a sense of depth                                               |
 | [Neon Rails](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-neon-rails--cyber-grid-network)      | `<bb-neon-rails>`     | Particles racing along a geometric grid, leaving neon trails                         |
-| [Silk Waves](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-silk-waves--deep-tide)               | `<bb-silk-waves>`     | A sea of rolling waves in one color, shaded from its troughs to its crests           |
+| [Silk Waves](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-silk-waves--ultraviolet)             | `<bb-silk-waves>`     | A sea of rolling waves in one color, shaded from its troughs to its crests           |
 | [Smoke Ring](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-smoke-ring--nebula)                  | `<bb-smoke-ring>`     | A wavy ring of light giving off colored smoke that drifts outward and swirls         |
 | [Star Trail](https://niekes.github.io/beautiful-backgrounds/?path=/story/backgrounds-star-trail--galactic-vortex)         | `<bb-star-trail>`     | Orbiting stars with fading trails                                                    |
 
