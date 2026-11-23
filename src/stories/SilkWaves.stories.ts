@@ -42,7 +42,16 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-export const DeepTide: Story = {};
+export const Ultraviolet: Story = {
+    args: {
+        silkColor: "#3a0e8c",
+        swell: 0.28,
+        sheen: 0.75,
+        reach: 0.8,
+        speed: 0.8,
+        bgColors: "#05010f, #140630",
+    },
+};
 
 export const MoltenGold: Story = {
     args: {
@@ -98,13 +107,14 @@ export const StormSea: Story = {
     },
 };
 
-export const Frozen: Story = {
+export const Lagoon: Story = {
     args: {
-        silkColor: "#a8d8ff",
-        speed: 0,
-        sheen: 1,
-        swell: 0.3,
-        bgColors: "#000814",
+        silkColor: "#1d6466",
+        swell: 0.22,
+        sheen: 0.6,
+        reach: 1.6,
+        speed: 0.7,
+        bgColors: "#001a1f, #003a40",
     },
 };
 
