@@ -10,6 +10,7 @@ const meta: Meta = {
             <bb-light-shafts
                 shaft-colors=${args.shaftColors}
                 shaft-amount=${args.shaftAmount}
+                shaft-angle=${args.shaftAngle}
                 speed=${args.speed}
                 bg-colors=${args.bgColors}
                 bg-angle=${args.bgAngle}
@@ -24,7 +25,8 @@ const meta: Meta = {
         shaftAmount: {
             control: { type: "range", min: 0, max: 400, step: 1 },
         },
-        speed: { control: { type: "range", min: 0, max: 10, step: 0.1 } },
+        shaftAngle: { control: { type: "range", min: -90, max: 90, step: 1 } },
+        speed: { control: { type: "range", min: -10, max: 10, step: 0.1 } },
         bgColors: { control: "text" },
         bgAngle: { control: { type: "range", min: 0, max: 360, step: 1 } },
         trailOpacity: {
@@ -35,6 +37,7 @@ const meta: Meta = {
     args: {
         shaftColors: "#47d1d1, #475ed1, #a347d1",
         shaftAmount: 100,
+        shaftAngle: 0,
         speed: 1,
         bgColors: "#000, #141a3a, #000",
         bgAngle: 90,
@@ -71,11 +74,14 @@ export const Ghost: Story = {
     },
 };
 
-export const Smear: Story = {
+export const MeteorShower: Story = {
     args: {
+        shaftColors: "#ffd36b, #ff6a3d, #ff2f6d",
         shaftAmount: 40,
-        speed: 10,
+        shaftAngle: 30,
+        speed: -8,
         trailOpacity: 0.2,
+        bgColors: "#05010a, #14041c",
     },
 };
 
@@ -85,6 +91,7 @@ export const Cathedral: Story = {
         shaftAmount: 12,
         speed: 0.2,
         bgColors: "#000, #1a1208, #000",
+        shaftAngle: -26,
     },
 };
 

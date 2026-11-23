@@ -67,9 +67,16 @@ export class BbLightShafts extends BeautifulBackground {
     @property({ type: Number, attribute: "shaft-amount" })
     shaftAmount: number = 100;
 
-    /** How fast the shafts drift: 2 is twice as fast, 0 stands still. */
+    /**
+     * How fast the shafts drift: 2 is twice as fast, 0 stands still, and
+     * below 0 they drift the other way.
+     */
     @property({ type: Number, attribute: "speed" })
     speed: number = 1;
+
+    /** How far the shafts lean from upright, in degrees, clockwise. */
+    @property({ type: Number, attribute: "shaft-angle" })
+    shaftAngle: number = 0;
 
     // Without a trail, like Crystal Parallax, and on the canvas's own
     // background, so the light adds to it.
@@ -79,13 +86,23 @@ export class BbLightShafts extends BeautifulBackground {
     protected maxPixelRatio: number = 1;
 
     private shafts: Shaft[] = [];
-    /** The size, amount and colors the shafts were made for. */
+    /** The tilted area the shafts drift in, big enough to cover the canvas. */
+    private field = { width: 0, height: 0, angle: 0 };
+    /** The size, angle, amount and colors the shafts were made for. */
     private builtFor: string = "";
 
     protected initialize(): void {
         const colors =
             this.shaftColors.length > 0 ? this.shaftColors : DEFAULT_COLORS;
         const shades = gradient(colors, SHADES);
+        const angle = ((this.shaftAngle || 0) * Math.PI) / 180;
+        const cos = Math.abs(Math.cos(angle));
+        const sin = Math.abs(Math.sin(angle));
+        this.field = {
+            width: this.width * cos + this.height * sin,
+            height: this.width * sin + this.height * cos,
+            angle,
+        };
         this.shafts = Array.from({ length: this.shaftAmount }, () =>
             this.shaft(shades[Math.floor(Math.random() * SHADES)]),
         );
@@ -93,19 +110,24 @@ export class BbLightShafts extends BeautifulBackground {
     }
 
     protected loop(deltaTime: number): void {
-        // A new size, amount or colors start the shafts over.
+        // A new size, angle, amount or colors start the shafts over.
         if (this.builtFor !== this.settings()) this.initialize();
 
         const ctx = this.ctx;
-        const step = deltaTime * Math.max(0, this.speed);
+        const step = deltaTime * (this.speed || 0);
+        const { field } = this;
         this.fadeTrail();
+        ctx.save();
         ctx.globalCompositeOperation = "lighter";
+        // The field's middle on the canvas's middle, turned by its angle.
+        ctx.translate(this.width / 2, this.height / 2);
+        ctx.rotate(field.angle);
+        ctx.translate(-field.width / 2, -field.height / 2);
         for (const shaft of this.shafts) {
-            // Past the right edge, it comes back in from the left.
-            const span = this.width + shaft.sprite.width;
-            shaft.x =
-                ((shaft.x + shaft.speed * step + shaft.sprite.width) % span) -
-                shaft.sprite.width;
+            // Past one edge, it comes back in from the other.
+            const span = field.width + shaft.sprite.width;
+            const moved = shaft.x + shaft.speed * step + shaft.sprite.width;
+            shaft.x = (((moved % span) + span) % span) - shaft.sprite.width;
             ctx.drawImage(
                 shaft.sprite,
                 shaft.x,
@@ -114,15 +136,15 @@ export class BbLightShafts extends BeautifulBackground {
                 shaft.height,
             );
         }
-        ctx.globalCompositeOperation = "source-over";
+        ctx.restore();
     }
 
     private settings(): string {
-        const { width, height, shaftAmount, shaftColors } = this;
-        return `${width} ${height} ${shaftAmount} ${shaftColors.join(",")}`;
+        const { width, height, shaftAngle, shaftAmount, shaftColors } = this;
+        return `${width} ${height} ${shaftAngle} ${shaftAmount} ${shaftColors.join(",")}`;
     }
 
-    /** A new shaft in `color`, somewhere on the canvas, at a random depth. */
+    /** A new shaft in `color`, somewhere on the field, at a random depth. */
     private shaft(color: string): Shaft {
         const depth = Math.random();
         const width = byDepth(WIDTH, depth);
@@ -145,9 +167,9 @@ export class BbLightShafts extends BeautifulBackground {
         ctx.fillRect(margin, 0, width, SPRITE_HEIGHT);
 
         return {
-            x: getRandomFloat(-sprite.width, this.width),
-            y: getRandomFloat(0, LOWEST_TOP * this.height),
-            height: this.height * getRandomFloat(...HEIGHT),
+            x: getRandomFloat(-sprite.width, this.field.width),
+            y: getRandomFloat(0, LOWEST_TOP * this.field.height),
+            height: this.field.height * getRandomFloat(...HEIGHT),
             speed: byDepth(SPEED, depth),
             sprite,
         };
