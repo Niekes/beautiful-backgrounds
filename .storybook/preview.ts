@@ -20,6 +20,11 @@ const preview: Preview = {
             showPanel: true,
             panelPosition: "bottom",
             selectedPanel: "storybook/controls/panel",
+            // Backgrounds A to Z after the intro; examples keep their file order.
+            storySort: {
+                method: "alphabetical",
+                order: ["Beautiful Backgrounds", "Backgrounds"],
+            },
         },
     },
 };
