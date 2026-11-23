@@ -22,6 +22,7 @@
 
 <p align="center">
   <a href="https://niekes.github.io/beautiful-backgrounds/">Storybook</a> ·
+  <a href="https://codepen.io/collection/aMPozo">CodePen</a> ·
   <a href="#using-beautiful-backgrounds">Getting started</a> ·
   <a href="#backgrounds">Backgrounds</a> ·
   <a href="#sponsor-beautiful-backgrounds">Sponsor</a>
@@ -52,7 +53,7 @@
     </tr>
 </table>
 
-Every background has live controls in the [Storybook](https://niekes.github.io/beautiful-backgrounds/).
+Every background has live controls in the [Storybook](https://niekes.github.io/beautiful-backgrounds/), and you can remix them in the [CodePen collection](https://codepen.io/collection/aMPozo).
 
 ## Sponsor beautiful-backgrounds
 

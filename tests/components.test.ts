@@ -954,6 +954,35 @@ describe.each([
 
         expect([...seen].some((s) => s.startsWith("hsl("))).toBe(true);
     });
+
+    it("draws no streaks across the canvas when it resizes", async () => {
+        // Only the resize debounce: a faked animation frame could draw first.
+        vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+        const el = await mount<InstanceType<typeof Element>>(tag, {
+            "particle-amount": "20",
+        });
+        frame(el);
+        frame(el);
+
+        el.style.width = "600px";
+        window.dispatchEvent(new Event("resize"));
+        vi.advanceTimersByTime(100);
+        vi.useRealTimers();
+
+        const lengths: number[] = [];
+        let from = [0, 0];
+        vi.spyOn(el.ctx, "moveTo").mockImplementation((x, y) => {
+            from = [x, y];
+        });
+        vi.spyOn(el.ctx, "lineTo").mockImplementation((x, y) => {
+            lengths.push(Math.hypot(x - from[0], y - from[1]));
+        });
+        frame(el);
+
+        // The middle moved 150px; one frame of motion is at most 10px.
+        expect(lengths).toHaveLength(20);
+        expect(Math.max(...lengths)).toBeLessThan(50);
+    });
 });
 
 describe("bb-smoke-ring", () => {

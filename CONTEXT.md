@@ -89,3 +89,9 @@ The way a **Spark** steers at a point: an angle read from two **Terrains**
 drifting apart, so it slowly changes instead of sliding. Unlike **Flow**,
 it does not lead downhill.
 _Avoid_: flow, field, wind
+
+**Star**:
+A small light that circles the middle of a star trail, fades in and out
+over its life and draws a short streak that fades with the **Trail**. When
+the background changes size, its circle moves with the middle.
+_Avoid_: particle, dot

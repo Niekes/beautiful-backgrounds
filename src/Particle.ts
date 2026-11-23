@@ -14,6 +14,8 @@ export default class Particle {
     private px: number;
     private py: number;
     private initialized: boolean = false;
+    private centerX: number = 0;
+    private centerY: number = 0;
     private born: number;
     private fadeInDuration: number;
     private fadeOutDuration: number;
@@ -41,6 +43,12 @@ export default class Particle {
     }
 
     circularMove(centerX: number, centerY: number, deltaTime: number): void {
+        // A new middle (first move or a resize): jump to it without a streak.
+        if (centerX !== this.centerX || centerY !== this.centerY) {
+            this.initialized = false;
+            this.centerX = centerX;
+            this.centerY = centerY;
+        }
         this.angle += this.speed * deltaTime;
         this.radius += this.force * deltaTime;
 
