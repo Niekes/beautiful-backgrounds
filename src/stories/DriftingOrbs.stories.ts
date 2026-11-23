@@ -47,15 +47,24 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
+export const PastelDream: Story = {
+    args: {
+        orbColors: "#ffc8dd, #bde0fe, #cdb4db, #caffbf",
+        orbBlur: 60,
+        bgColors: "#fdf6ff",
+    },
+};
+
 export const Default: Story = {};
 
-export const Sunset: Story = {
+export const OldFilm: Story = {
     args: {
-        orbColors: "#7a1f3d, #c2452d, #e8833a, #5b2a86",
-        orbAmount: 60,
-        orbSize: 450,
-        speed: 0.5,
-        bgColors: "#12060c",
+        orbColors: "#3b2a1a, #8a6a44, #d9c3a0",
+        orbAmount: 200,
+        orbSize: 200,
+        orbBlur: 40,
+        speed: 0.3,
+        bgColors: "#120c07",
     },
 };
 
@@ -88,14 +97,6 @@ export const LavaLamp: Story = {
     },
 };
 
-export const PastelDream: Story = {
-    args: {
-        orbColors: "#ffc8dd, #bde0fe, #cdb4db, #caffbf",
-        orbBlur: 60,
-        bgColors: "#fdf6ff",
-    },
-};
-
 export const Ember: Story = {
     args: {
         orbColors: "#5a0a0a, #a3200f, #e0700f",
@@ -111,6 +112,7 @@ export const MintBreeze: Story = {
         orbColors: "#3ddc97, #8ff0c8, #2bb3a3, #e8fff6",
         speed: 0.6,
         bgColors: "#0a1f1a",
+        orbAmount: 10,
     },
 };
 
