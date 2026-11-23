@@ -51,8 +51,8 @@ colors push it, and fades with the **Trail**.
 _Avoid_: feedback, echo, glow
 
 **Shaft**:
-An upright band of soft light that fades out at its top and bottom and
-drifts sideways.
+A band of soft light, upright or tilted, that fades out at both ends and
+drifts sideways across itself, either way.
 _Avoid_: bar, crystal, beam, streak
 
 **Depth**:

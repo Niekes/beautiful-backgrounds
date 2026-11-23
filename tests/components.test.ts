@@ -838,8 +838,37 @@ describe("bb-light-shafts", () => {
         expect(await drift(240, {}, 1 / 120)).toBeCloseTo(await drift(120), 1);
     });
 
-    it.each(["0", "-1"])("stands still at speed %s", async (speed) => {
-        expect(await drift(60, { speed })).toBe(0);
+    it("tilts its shafts by its shaft angle", async () => {
+        /** How many columns of the canvas a lone shaft lights. */
+        const lit = async (angle: string): Promise<number> =>
+            redColumns(await lone(0.3, { "shaft-angle": angle })).filter(
+                (red) => red > 0,
+            ).length;
+        const upright = await lit("0");
+        expect(upright).toBeLessThan(80);
+        expect(await lit("90")).toBeGreaterThan(150);
+        expect(await lit("abc")).toBe(upright);
+    });
+
+    it("stands still at speed 0", async () => {
+        expect(await drift(60, { speed: "0" })).toBe(0);
+    });
+
+    it("drifts the other way at a negative speed", async () => {
+        const right = await drift(60, { speed: "1" });
+        expect(await drift(60, { speed: "-1" })).toBeCloseTo(-right, 1);
+    });
+
+    it("brings shafts that drift out on the left back in on the right", async () => {
+        // Starts just past the left edge; it drifts 21 px a second.
+        const el = await lone(0, { speed: "-1" });
+        const left = () => redColumns(el).slice(0, 100);
+        const right = () => redColumns(el).slice(200);
+        expect(Math.max(...right())).toBe(0);
+
+        for (let i = 0; i < 3; i++) frame(el, 1);
+        expect(Math.max(...right())).toBeGreaterThan(0);
+        expect(Math.max(...left())).toBe(0);
     });
 
     it("starts over across its new size", async () => {
