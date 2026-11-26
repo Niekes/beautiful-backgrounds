@@ -225,8 +225,9 @@ export abstract class BeautifulBackground extends LitElement {
 
         let lastTime = performance.now();
         const animate = (now: number) => {
-            // The first frame's timestamp can lie before performance.now().
-            const deltaTime = Math.max(0, now - lastTime) / 1000;
+            // The first frame's timestamp can lie before performance.now(), and a
+            // throttled tab can deliver one huge step: keep it within 0.1s.
+            const deltaTime = Math.min(Math.max(0, now - lastTime) / 1000, 0.1);
             lastTime = now;
             this.loop(deltaTime);
             this.animationFrameId = requestAnimationFrame(animate);
