@@ -55,7 +55,7 @@
         "coverage": "vp test run --coverage",
         "fmt": "vp fmt",
         "lint:code": "vp lint && vp fmt --check",
-        "lint:fallow": "fallow dead-code --ci --format ${FALLOW_FORMAT:-human} && fallow health --ci --coverage-gaps --min-score 98 --format ${FALLOW_FORMAT:-human} && fallow dupes --ci --format ${FALLOW_FORMAT:-human}",
+        "lint:fallow": "fallow dead-code --ci --format ${FALLOW_FORMAT:-human} && fallow health --ci --coverage-gaps --min-score 100 --format ${FALLOW_FORMAT:-human} && fallow dupes --ci --format ${FALLOW_FORMAT:-human}",
         "lint": "npm run lint:code && npm run lint:fallow",
         "verify": "npm run lint && npm run typecheck && npm run coverage",
         "hooks:install": "fallow hooks install --target git && fallow hooks install --target agent --agent claude",
