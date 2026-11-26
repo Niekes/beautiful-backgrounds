@@ -44,10 +44,9 @@ describe("Particle", () => {
     });
 
     it("fades in, stays and fades out over its lifespan", () => {
-        const now = vi.spyOn(Date, "now").mockReturnValue(0);
         const particle = new Particle(base);
-        const opacity = (age: number): number => {
-            now.mockReturnValue(age);
+        const opacity = (seconds: number): number => {
+            particle.grow(seconds);
             let alpha = 0;
             const ctx = recordingContext();
             Object.defineProperty(ctx, "globalAlpha", {
@@ -59,19 +58,26 @@ describe("Particle", () => {
             return alpha;
         };
 
-        expect(opacity(125)).toBe(0.5);
-        expect(opacity(400)).toBe(1);
-        expect(opacity(750)).toBe(0.5);
+        expect(opacity(0.125)).toBe(0.5);
+        expect(opacity(0.275)).toBe(1);
+        expect(opacity(0.35)).toBe(0.5);
     });
 
     it("dies once its lifespan is over", () => {
+        const particle = new Particle(base);
+
+        particle.grow(1);
+        expect(particle.isDead()).toBe(false);
+        particle.grow(0.001);
+        expect(particle.isDead()).toBe(true);
+    });
+
+    it("ages only by animation time, not by the clock", () => {
         const now = vi.spyOn(Date, "now").mockReturnValue(0);
         const particle = new Particle(base);
 
-        now.mockReturnValue(1000);
+        now.mockReturnValue(60_000);
         expect(particle.isDead()).toBe(false);
-        now.mockReturnValue(1001);
-        expect(particle.isDead()).toBe(true);
     });
 
     describe("circularMove", () => {
@@ -147,6 +153,22 @@ describe("Particle", () => {
 
             particle.railMove(0, 0, 0.5);
             expect(segment(particle).slice(2)).toEqual([15, 0]);
+        });
+
+        it("stays on the grid after a step longer than a rail", () => {
+            // Turns alternate between +x and +y: a staircase.
+            let turn = 0;
+            vi.spyOn(Math, "random").mockImplementation(() =>
+                turn++ % 2 ? 0.25 : 0,
+            );
+            const particle = new Particle({ ...base, speed: -1 });
+            particle.railMove(0, 0, 0);
+
+            // Five and a half rails at once ends halfway along the sixth.
+            particle.railMove(0, 0, 2.75);
+            const [x, y] = segment(particle).slice(2);
+            expect(x).toBeCloseTo(30);
+            expect(y).toBeCloseTo(25);
         });
     });
 });

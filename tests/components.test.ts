@@ -1061,10 +1061,11 @@ describe.each([
     ["bb-star-trail", BbStarTrail],
 ])("%s", (tag, Element) => {
     it("shows its particles at once, as if it had been running", async () => {
-        // Time stands still, so only a head start in age can show a particle.
-        vi.spyOn(Date, "now").mockReturnValue(1000);
         const el = await mount<InstanceType<typeof Element>>(tag, {
             "particle-amount": "200",
+            // Fading in takes days, so only a head start in age shows a particle.
+            "particle-lifespan-min": "1e9",
+            "particle-lifespan-max": "1e9",
         });
         // A star's first move only finds its place, so it draws from the second.
         frame(el);
@@ -1073,7 +1074,6 @@ describe.each([
     });
 
     it("keeps its particle amount, replacing particles that die", async () => {
-        const now = vi.spyOn(Date, "now").mockReturnValue(0);
         // The first particles start at a random age: with random at 0, age 0.
         vi.spyOn(Math, "random").mockReturnValue(0);
         const el = await mount<InstanceType<typeof Element>>(tag, {
@@ -1086,19 +1086,16 @@ describe.each([
             (el as unknown as { particles: [] }).particles;
         const first = particles()[0];
 
-        now.mockReturnValue(5);
-        const seen = styles(el, () => frame(el));
+        const seen = styles(el, () => frame(el, 0.005));
         expect(seen).toContain("#ff00ff");
         expect(particles()[0]).toBe(first);
 
-        now.mockReturnValue(20);
-        frame(el);
+        frame(el, 0.015);
         expect(particles()).toHaveLength(5);
         expect(particles()).not.toContain(first);
     });
 
     it("starts only its first particles at a random age", async () => {
-        const now = vi.spyOn(Date, "now").mockReturnValue(0);
         // Every head start is nearly the whole lifespan of 10 ms.
         vi.spyOn(Math, "random").mockReturnValue(0.99);
         const el = await mount<InstanceType<typeof Element>>(tag, {
@@ -1110,14 +1107,12 @@ describe.each([
             (el as unknown as { particles: [] }).particles;
         const first = [...particles()];
 
-        now.mockReturnValue(1);
-        frame(el);
+        frame(el, 0.001);
         const replacements = [...particles()];
         expect(replacements.some((p) => first.includes(p))).toBe(false);
 
         // New ones are born now, so 5 ms later they are all still alive.
-        now.mockReturnValue(6);
-        frame(el);
+        frame(el, 0.005);
         expect(particles()).toEqual(replacements);
     });
 

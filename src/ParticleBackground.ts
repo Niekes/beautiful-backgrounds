@@ -86,6 +86,7 @@ export abstract class ParticleBackground extends BeautifulBackground {
     protected loop(deltaTime: number): void {
         this.fadeTrail();
 
+        this.particles.forEach((particle) => particle.grow(deltaTime));
         this.particles = this.particles.filter(
             (particle) => !particle.isDead(),
         );

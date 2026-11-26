@@ -16,7 +16,7 @@ export default class Particle {
     private initialized: boolean = false;
     private centerX: number = 0;
     private centerY: number = 0;
-    private born: number;
+    private age: number; // ms of animation time, so it stands still while hidden
     private fadeInDuration: number;
     private fadeOutDuration: number;
 
@@ -37,7 +37,7 @@ export default class Particle {
         this.y = options.y ?? 0;
         this.px = this.x;
         this.py = this.y;
-        this.born = Date.now() - (options.age ?? 0);
+        this.age = options.age ?? 0;
         this.fadeInDuration = this.lifespan * 0.25;
         this.fadeOutDuration = this.lifespan * 0.5;
     }
@@ -72,8 +72,13 @@ export default class Particle {
         ctx.globalAlpha = 1;
     }
 
+    /** Ages the particle by one frame. */
+    grow(deltaTime: number): void {
+        this.age += deltaTime * 1000;
+    }
+
     isDead(): boolean {
-        return Date.now() - this.born > this.lifespan;
+        return this.age > this.lifespan;
     }
 
     // Grid/Rail properties
@@ -93,7 +98,7 @@ export default class Particle {
         const pxPerFrame = Math.abs(this.speed) * 20;
         this.railProgress += (pxPerFrame / this.gridSize) * deltaTime;
 
-        if (this.railProgress >= 1) {
+        while (this.railProgress >= 1) {
             this.railProgress -= 1;
             this.railFromX = this.railToX;
             this.railFromY = this.railToY;
@@ -175,7 +180,7 @@ export default class Particle {
     }
 
     private calculateOpacity(): number {
-        const age = Date.now() - this.born;
+        const age = this.age;
 
         if (age < this.fadeInDuration) {
             return age / this.fadeInDuration;

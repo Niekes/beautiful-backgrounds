@@ -123,6 +123,25 @@ describe("BeautifulBackground", () => {
         expect(loop).toHaveBeenCalledWith(0);
     });
 
+    it("never runs a frame longer than 0.1s", async () => {
+        const el = await mount<BbHexagonWave>(TAG);
+        const loop = vi.spyOn(
+            el as unknown as { loop(deltaTime: number): void },
+            "loop",
+        );
+        const visibility = vi.spyOn(document, "visibilityState", "get");
+        visibility.mockReturnValue("hidden");
+        document.dispatchEvent(new Event("visibilitychange"));
+
+        // The next frame comes a minute after the animation (re)started.
+        vi.spyOn(performance, "now").mockReturnValue(-60_000);
+        visibility.mockReturnValue("visible");
+        document.dispatchEvent(new Event("visibilitychange"));
+        await nextFrame();
+
+        expect(loop).toHaveBeenCalledWith(0.1);
+    });
+
     it("stops animating and listening once removed", async () => {
         const el = await mount<BbHexagonWave>(TAG);
         const resize = vi.spyOn(
