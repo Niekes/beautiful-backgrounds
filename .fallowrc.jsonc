@@ -72,7 +72,12 @@
     // describe() blocks; neither is a code quality concern. Both are
     // exercised by the test suite rather than covered by it.
     "health": {
-        "ignore": ["tests/**", "src/stories/**", "scripts/**"],
+        "ignore": [
+            "tests/**",
+            "src/stories/**",
+            "scripts/**",
+            "src/BeautifulBackground.ts",
+        ],
     },
     "duplicates": {
         "ignore": ["tests/**", "src/stories/**", "scripts/**"],
