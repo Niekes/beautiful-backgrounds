@@ -3,6 +3,7 @@ import {
     BeautifulBackground,
     BbAmbientRibbon,
     BbContourFlow,
+    BbDigitalGlitch,
     BbDigitalRain,
     BbDriftingOrbs,
     BbGlowSwirl,
@@ -51,6 +52,7 @@ afterEach(() => {
 describe.each([
     ["bb-ambient-ribbon", BbAmbientRibbon],
     ["bb-contour-flow", BbContourFlow],
+    ["bb-digital-glitch", BbDigitalGlitch],
     ["bb-digital-rain", BbDigitalRain],
     ["bb-drifting-orbs", BbDriftingOrbs],
     ["bb-glow-swirl", BbGlowSwirl],
@@ -367,6 +369,67 @@ describe("bb-digital-rain", () => {
         el.width = 150;
         frame(el);
         expect(el.symbols).toHaveLength(5);
+    });
+});
+
+describe("bb-digital-glitch", () => {
+    it("draws one cell per font size in each direction", async () => {
+        const el = await mount<BbDigitalGlitch>("bb-digital-glitch", {
+            "font-size": "30",
+            "font-colors": "#ff0000",
+        });
+        frame(el);
+        frame(el, 0.5);
+        for (let i = 0; i < 50; i++) frame(el, 0.1);
+        expect(el.columns).toBe(10);
+        const seen = styles(el, () => frame(el));
+        expect(seen).toContain("#ff0000");
+        expect(drewSomething(el)).toBe(true);
+    });
+
+    it("adds and drops columns when the width changes", async () => {
+        const el = await mount<BbDigitalGlitch>("bb-digital-glitch", {
+            "font-size": "30",
+        });
+        el.width = 600;
+        frame(el);
+        expect(el.columns).toBe(20);
+
+        el.width = 150;
+        frame(el);
+        expect(el.columns).toBe(5);
+    });
+
+    it("renders lucide icons when requested", async () => {
+        const el = await mount<BbDigitalGlitch>("bb-digital-glitch", {
+            "font-size": "30",
+            icons: "star",
+            characters: "",
+        });
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        frame(el);
+        expect(
+            (el as unknown as { glyphPool: { kind: string }[] }).glyphPool.some(
+                (glyph) => glyph.kind === "icon",
+            ),
+        ).toBe(true);
+
+        el.icons = "star, ,does-not-exist";
+        el.characters = "AB";
+        await el.updateComplete;
+        frame(el);
+
+        el.fontSize = 20;
+        await el.updateComplete;
+        frame(el);
+        expect(
+            (el as unknown as { glyphPool: { kind: string }[] }).glyphPool.some(
+                (glyph) => glyph.kind === "icon",
+            ),
+        ).toBe(true);
+        const seen = styles(el, () => frame(el));
+        expect(drewSomething(el)).toBe(true);
+        expect([...seen].length).toBeGreaterThan(0);
     });
 });
 

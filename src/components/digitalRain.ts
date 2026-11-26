@@ -1,12 +1,11 @@
 import { customElement, property } from "lit/decorators.js";
-import { randomColor } from "../utils/color";
+
+import { TextBackground } from "../TextBackground";
 import Symbol from "../Symbol";
 import { getRandomInt } from "../utils/number";
-import { BeautifulBackground } from "../BeautifulBackground";
-import { stringToArrayConverter } from "../utils/lit";
 
 @customElement("bb-digital-rain")
-export class BbDigitalRain extends BeautifulBackground {
+export class BbDigitalRain extends TextBackground {
     @property({ type: Number, attribute: "speed" })
     speed: number = 10; // rows per second
 
@@ -19,39 +18,9 @@ export class BbDigitalRain extends BeautifulBackground {
     @property({ type: Number, attribute: "font-size" })
     fontSize: number = 24;
 
-    @property({ type: Number, attribute: "font-color-hue-start" })
-    fontColorHueStart: number = 60;
-
-    @property({ type: Number, attribute: "font-color-hue-end" })
-    fontColorHueEnd: number = 150;
-
-    @property({ type: Number, attribute: "font-color-saturation-start" })
-    fontColorSaturationStart: number = 90;
-
-    @property({ type: Number, attribute: "font-color-saturation-end" })
-    fontColorSaturationEnd: number = 100;
-
-    @property({ type: Number, attribute: "font-color-lightness-start" })
-    fontColorLightnessStart: number = 50;
-
-    @property({ type: Number, attribute: "font-color-lightness-end" })
-    fontColorLightnessEnd: number = 50;
-
-    @property({
-        type: Array,
-        attribute: "font-colors",
-        converter: stringToArrayConverter,
-    })
-    fontColors: string[] = [];
-
     // Properties inherited from BB class
     public columns: number = 0;
     public symbols: Symbol[] = [];
-
-    constructor() {
-        super();
-        this.fontColorHueEnd = this.fontColorHueStart + 90;
-    }
 
     protected initialize(): void {
         this.symbols = [];
@@ -114,16 +83,7 @@ export class BbDigitalRain extends BeautifulBackground {
     }
 
     private symbolColor(): string {
-        if (this.fontColors.length > 0) {
-            return this.fontColors[
-                Math.floor(Math.random() * this.fontColors.length)
-            ];
-        }
-        return randomColor(
-            [this.fontColorHueStart, this.fontColorHueEnd],
-            [this.fontColorSaturationStart, this.fontColorSaturationEnd],
-            [this.fontColorLightnessStart, this.fontColorLightnessEnd],
-        );
+        return this.randomFontColor();
     }
 
     protected createSymbol(index: number): Symbol {
