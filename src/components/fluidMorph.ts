@@ -16,6 +16,7 @@ const VIEWBOX_WIDTH = 1440;
 const VIEWBOX_HEIGHT = 800;
 const SAMPLES = 300;
 const MAX_STEP = 0.1;
+const MORPH_SECONDS = 4;
 
 const PATHS_DATA: readonly (readonly [string, string])[] = [
     [
@@ -87,8 +88,20 @@ function easeInOut(t: number): number {
 
 @customElement("bb-fluid-morph")
 export class BbFluidMorph extends BeautifulBackground {
-    @property({ type: Number, attribute: "duration" })
-    duration: number = 4;
+    /**
+     * How fast the shapes morph: 2 is twice as fast, 0 stands still, and
+     * below 0 they morph the other way.
+     */
+    @property({ type: Number, attribute: "speed" })
+    speed: number = 1;
+
+    /** How much longer each third of the shapes takes to morph, in seconds. */
+    @property({ type: Number, attribute: "variation" })
+    variation: number = 0.5;
+
+    /** How long each shape waits before it starts, in seconds. */
+    @property({ type: Number, attribute: "stagger" })
+    stagger: number = 0.2;
 
     @property({
         type: Array,
@@ -112,7 +125,9 @@ export class BbFluidMorph extends BeautifulBackground {
 
     protected loop(deltaTime: number): void {
         if (!this.width || !this.height) return;
-        const step = Math.min(Math.max(0, deltaTime), MAX_STEP);
+        const step =
+            Math.min(Math.max(0, deltaTime), MAX_STEP) *
+            (Number.isFinite(this.speed) ? this.speed : 0);
         this.time += step;
         this.draw();
     }
@@ -130,17 +145,16 @@ export class BbFluidMorph extends BeautifulBackground {
         const scaleY = this.height / VIEWBOX_HEIGHT;
 
         this.sampled.forEach((path, index) => {
-            const variance = (index % 3) * 0.5;
-            const pathDuration = Math.max(0.001, this.duration + variance);
-            const delay = (index % 4) * 0.2;
-
-            let t = 0;
-            if (this.time > delay) {
-                const cycle = pathDuration * 2;
-                let phase = ((this.time - delay) % cycle) / pathDuration;
-                if (phase > 1) phase = 2 - phase;
-                t = easeInOut(phase);
-            }
+            const pathSeconds = Math.max(
+                0.001,
+                MORPH_SECONDS + (index % 3) * Math.max(0, this.variation || 0),
+            );
+            const delay = (index % 4) * (this.stagger || 0);
+            const cycle = pathSeconds * 2;
+            // Mirror signed time so a negative speed retraces the same phases.
+            const waited = Math.max(0, Math.abs(this.time) - delay);
+            const phase = (waited % cycle) / pathSeconds;
+            const t = easeInOut(phase > 1 ? 2 - phase : phase);
 
             ctx.beginPath();
             path.start.forEach((point, i) => {

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `<bb-fluid-morph>`: organic shapes morph smoothly between two silhouettes,
+  with `speed`, `variation`, `stagger` and `colors`. A negative `speed` plays
+  the morph backwards.
+
 ## [2.4.0] - 2026-11-23
 
 A new background, `<bb-drifting-orbs>`, and tilted light shafts.

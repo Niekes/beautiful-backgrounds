@@ -9,6 +9,11 @@ canvas.
 One animated effect, used as a custom element (`<bb-…>`) that fills its element.
 _Avoid_: component, effect, animation
 
+**Speed**:
+How fast a background runs: 1 is its normal pace, 2 is twice as fast, 0 stands
+still, and less than 0 runs it backwards.
+_Avoid_: duration, rate
+
 **Example**:
 A named set of attribute values for one **Background**, shown with live
 controls in the Storybook.
